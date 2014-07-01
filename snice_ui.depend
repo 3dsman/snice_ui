@@ -1,0 +1,465 @@
+# depslib dependency file v1.0
+1397721489 source:c:\users\seb\documents\projets\snice_ui\test_ui.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"snice_UI.h"
+	"test_UI.h"
+
+1230464374 "
+
+1340325874 c:\users\seb\documents\projets\snice_ui\test_ui.h
+	"include/glfw.h"
+
+1340434710 lfw.h"
+
+1340805294 c:\users\seb\documents\projets\snice_ui\src\snice_ui.h
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	"viewport.h"
+	"UI_window.h"
+	"widget/button.h"
+	"mylist.h"
+	"tgafile.h"
+	"widget/label.h"
+	"widget/text_box.h"
+	"widget/slider.h"
+	"widget/sub_menu.h"
+	"widget/menu.h"
+
+1340805294 nu.h"
+
+1339833284 c:\users\seb\documents\projets\snice_ui\src\viewport.h
+	"UI_base.h"
+
+1340434456 c:\users\seb\documents\projets\snice_ui\src\ui_base.h
+	"mylist.h"
+	"tgafile.h"
+
+1339833270 c:\users\seb\documents\projets\snice_ui\src\mylist.h
+
+1339833274 c:\users\seb\documents\projets\snice_ui\src\tgafile.h
+	"stdio.h"
+
+1340435140 
+
+1339453062 c:\users\seb\documents\projets\snice_ui\src\ui_window.h
+	"UI_base.h"
+
+1339452124 c:\users\seb\documents\projets\snice_ui\src\widget\button.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1339275002 bel.h"
+
+1339273918 c:\users\seb\documents\projets\snice_ui\src\widget\ui_widget.h
+	"UI_base.h"
+	"xml/tinyxml.h"
+
+1339273918 ml.h"
+
+1331678530 c:\users\seb\documents\projets\snice_ui\src\xml\tinyxml.h
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<string>
+	<iostream>
+	"tinystr.h"
+
+1331678536 c:\users\seb\documents\projets\snice_ui\src\xml\tinystr.h
+	"tinyxml.h"
+	<assert.h>
+
+1339224280 c:\users\seb\documents\projets\snice_ui\src\widget\label.h
+	"widget/UI_widget.h"
+
+1339975042 _widget.h"
+
+1340434996 c:\users\seb\documents\projets\snice_ui\src\widget\text_box.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1340434870 c:\users\seb\documents\projets\snice_ui\src\widget\slider.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1340578592 c:\users\seb\documents\projets\snice_ui\src\widget\sub_menu.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+	"mylist.h"
+
+1340806202 c:\users\seb\documents\projets\snice_ui\src\widget\menu.h
+	"widget/UI_widget.h"
+	"widget/button.h"
+	"mylist.h"
+
+1339839192 c:\users\seb\documents\projets\snice_ui\src\include\glfw.h
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1397721147 source:c:\users\seb\documents\projets\snice_ui\src\dialog\ui_dialog.cpp
+	"UI_dialog.h"
+
+1340151986 .h"
+
+1334215640 c:\users\seb\documents\projets\snice_ui\src\dialog\ui_dialog.h
+	"UI_window.h"
+	"widget/label.h"
+
+1230464378 source:c:\users\seb\documents\projets\snice_ui\src\mylist.cpp
+	"mylist.h"
+
+1340325540 source:c:\users\seb\documents\projets\snice_ui\src\snice_ui.cpp
+	"snice_UI.h"
+	"include/glfw.h"
+
+1334220560 source:c:\users\seb\documents\projets\snice_ui\src\tgafile.cpp
+	<stdio.h>
+	<malloc.h>
+	<memory.h>
+	"tgafile.h"
+	"snice_UI.h"
+
+1334220560 h"
+
+1340435140 source:c:\users\seb\documents\projets\snice_ui\src\ui_base.cpp
+	"include/glfw.h"
+	"UI_base.h"
+	<stdlib.h>
+	<string.h>
+
+1340151986 source:c:\users\seb\documents\projets\snice_ui\src\ui_window.cpp
+	"include/glfw.h"
+	"widget/label.h"
+	"UI_window.h"
+
+1339839920 source:c:\users\seb\documents\projets\snice_ui\src\viewport.cpp
+	"snice_UI.h"
+	"viewport.h"
+	<stdio.h>
+
+1340434710 source:c:\users\seb\documents\projets\snice_ui\src\widget\button.cpp
+	"../snice_UI.h"
+	"widget/button.h"
+	"include/glfw.h"
+
+1339275002 source:c:\users\seb\documents\projets\snice_ui\src\widget\label.cpp
+	<stdarg.h>
+	"../snice_UI.h"
+	"widget/label.h"
+
+1340434932 source:c:\users\seb\documents\projets\snice_ui\src\widget\slider.cpp
+	"widget/slider.h"
+	"../snice_UI.h"
+
+1340434932 UI.h"
+
+1340578592 source:c:\users\seb\documents\projets\snice_ui\src\widget\sub_menu.cpp
+	"../snice_UI.h"
+	"widget/sub_menu.h"
+
+1340578592 b_menu.h"
+
+1340435060 source:c:\users\seb\documents\projets\snice_ui\src\widget\text_box.cpp
+	"../snice_UI.h"
+	"widget/text_box.h"
+
+1340435060 xt_box.h"
+
+1339975042 source:c:\users\seb\documents\projets\snice_ui\src\widget\ui_widget.cpp
+	"widget/UI_widget.h"
+
+1230464374 source:c:\users\seb\documents\projets\snice_ui\src\xml\tinystr.cpp
+	"tinyxml.h"
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"tinystr.h"
+
+1230464374 source:c:\users\seb\documents\projets\snice_ui\src\xml\tinyxml.cpp
+	<ctype.h>
+	"tinyxml.h"
+	<sstream>
+
+1230464374 source:c:\users\seb\documents\projets\snice_ui\src\xml\tinyxmlerror.cpp
+	"tinyxml.h"
+
+1230464374 source:c:\users\seb\documents\projets\snice_ui\src\xml\tinyxmlparser.cpp
+	"tinyxml.h"
+	<ctype.h>
+
+1397721147 source:/home/seb/projets/snice_ui/src/dialog/UI_dialog.cpp
+	"UI_dialog.h"
+
+1334215640 /home/seb/projets/snice_ui/src/dialog/UI_dialog.h
+	"UI_window.h"
+	"widget/label.h"
+
+1230460778 source:/home/seb/projets/snice_ui/src/mylist.cpp
+	"mylist.h"
+
+1339833270 /home/seb/projets/snice_ui/src/mylist.h
+
+1398325681 source:/home/seb/projets/snice_ui/src/snice_UI.cpp
+	"snice_UI.h"
+	"include/glfw.h"
+
+1398760895 /home/seb/projets/snice_ui/src/snice_UI.h
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	"viewport.h"
+	"UI_window.h"
+	"widget/button.h"
+	"mylist.h"
+	"tgafile.h"
+	"widget/label.h"
+	"widget/text_box.h"
+	"widget/slider.h"
+	"widget/progress.h"
+	"widget/sub_menu.h"
+	"widget/menu.h"
+
+1339833284 /home/seb/projets/snice_ui/src/viewport.h
+	"UI_base.h"
+
+1398326701 /home/seb/projets/snice_ui/src/UI_base.h
+	"mylist.h"
+	"tgafile.h"
+	<fstream>
+	<iostream>
+	<sstream>
+	<string.h>
+
+1339833274 /home/seb/projets/snice_ui/src/tgafile.h
+	"stdio.h"
+
+1397809603 /home/seb/projets/snice_ui/src/UI_window.h
+	"UI_base.h"
+
+1398326496 /home/seb/projets/snice_ui/src/widget/button.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1397810191 /home/seb/projets/snice_ui/src/widget/label.h
+	"widget/UI_widget.h"
+
+1398412979 /home/seb/projets/snice_ui/src/widget/text_box.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1397844095 /home/seb/projets/snice_ui/src/widget/slider.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1340578592 /home/seb/projets/snice_ui/src/widget/sub_menu.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+	"mylist.h"
+
+1340806202 /home/seb/projets/snice_ui/src/widget/menu.h
+	"widget/UI_widget.h"
+	"widget/button.h"
+	"mylist.h"
+
+1339839192 /home/seb/projets/snice_ui/src/include/glfw.h
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1334220560 source:/home/seb/projets/snice_ui/src/tgafile.cpp
+	<stdio.h>
+	<malloc.h>
+	<memory.h>
+	"tgafile.h"
+	"snice_UI.h"
+
+1397809401 source:/home/seb/projets/snice_ui/src/UI_base.cpp
+	"include/glfw.h"
+	"UI_base.h"
+	<stdlib.h>
+	<string.h>
+
+1397809632 source:/home/seb/projets/snice_ui/src/UI_window.cpp
+	"include/glfw.h"
+	"widget/label.h"
+	"UI_window.h"
+
+1339839920 source:/home/seb/projets/snice_ui/src/viewport.cpp
+	"snice_UI.h"
+	"viewport.h"
+	<stdio.h>
+
+1398326521 source:/home/seb/projets/snice_ui/src/widget/button.cpp
+	"../snice_UI.h"
+	"widget/button.h"
+	"include/glfw.h"
+
+1398412979 source:/home/seb/projets/snice_ui/src/widget/label.cpp
+	<stdarg.h>
+	"../snice_UI.h"
+	"widget/label.h"
+
+1397844242 source:/home/seb/projets/snice_ui/src/widget/slider.cpp
+	"widget/slider.h"
+	"../snice_UI.h"
+
+1397844257 source:/home/seb/projets/snice_ui/src/widget/sub_menu.cpp
+	"../snice_UI.h"
+	"widget/sub_menu.h"
+
+1398413342 source:/home/seb/projets/snice_ui/src/widget/text_box.cpp
+	"../snice_UI.h"
+	"widget/text_box.h"
+
+1339975042 source:/home/seb/projets/snice_ui/src/widget/UI_widget.cpp
+	"widget/UI_widget.h"
+
+1230460774 source:/home/seb/projets/snice_ui/src/xml/tinystr.cpp
+	"tinyxml.h"
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	"tinystr.h"
+
+1331674930 /home/seb/projets/snice_ui/src/xml/tinyxml.h
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<string>
+	<iostream>
+	"tinystr.h"
+
+1331674936 /home/seb/projets/snice_ui/src/xml/tinystr.h
+	"tinyxml.h"
+	<assert.h>
+
+1230460774 source:/home/seb/projets/snice_ui/src/xml/tinyxml.cpp
+	<ctype.h>
+	"tinyxml.h"
+	<sstream>
+
+1230460774 source:/home/seb/projets/snice_ui/src/xml/tinyxmlerror.cpp
+	"tinyxml.h"
+
+1230460774 source:/home/seb/projets/snice_ui/src/xml/tinyxmlparser.cpp
+	"tinyxml.h"
+	<ctype.h>
+
+1397809603 /home/seb/projets/snice_ui/src//UI_window.h
+	"UI_base.h"
+
+1397809441 /home/seb/projets/snice_ui/src//UI_base.h
+	"mylist.h"
+	"tgafile.h"
+	<fstream>
+	<iostream>
+	<sstream>
+	<string.h>
+
+1339833270 /home/seb/projets/snice_ui/src//mylist.h
+
+1339833274 /home/seb/projets/snice_ui/src//tgafile.h
+	"stdio.h"
+
+1397810191 /home/seb/projets/snice_ui/src//widget/label.h
+	"widget/UI_widget.h"
+
+1339273918 /home/seb/projets/snice_ui/src//widget/UI_widget.h
+	"UI_base.h"
+	"xml/tinyxml.h"
+
+1331674930 /home/seb/projets/snice_ui/src//xml/tinyxml.h
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	<string>
+	<iostream>
+	"tinystr.h"
+
+1331674936 /home/seb/projets/snice_ui/src//xml/tinystr.h
+	"tinyxml.h"
+	<assert.h>
+
+1397809883 /home/seb/projets/snice_ui/src//widget/button.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1339839192 /home/seb/projets/snice_ui/src//include/glfw.h
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1340434870 /home/seb/projets/snice_ui/src//widget/slider.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1340578592 /home/seb/projets/snice_ui/src//widget/sub_menu.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+	"mylist.h"
+
+1397808759 /home/seb/projets/snice_ui/src//widget/text_box.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+
+1398761674 source:/home/seb/projets/snice_ui/test_UI.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"snice_UI.h"
+	"test_UI.h"
+	<GLFW/glfw3.h>
+
+1340805294 /home/seb/projets/snice_ui/src//snice_UI.h
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	"viewport.h"
+	"UI_window.h"
+	"widget/button.h"
+	"mylist.h"
+	"tgafile.h"
+	"widget/label.h"
+	"widget/text_box.h"
+	"widget/slider.h"
+	"widget/sub_menu.h"
+	"widget/menu.h"
+
+1339833284 /home/seb/projets/snice_ui/src//viewport.h
+	"UI_base.h"
+
+1340806202 /home/seb/projets/snice_ui/src//widget/menu.h
+	"widget/UI_widget.h"
+	"widget/button.h"
+	"mylist.h"
+
+1398239797 /home/seb/projets/snice_ui/test_UI.h
+	<GLFW/glfw3.h>
+
+1339273918 /home/seb/projets/snice_ui/src/widget/UI_widget.h
+	"UI_base.h"
+	"xml/tinyxml.h"
+
+1398761949 source:/home/seb/projets/snice_ui/src/widget/progress.cpp
+	"../snice_UI.h"
+	"widget/progress.h"
+
+1398761921 /home/seb/projets/snice_ui/src/widget/progress.h
+	"widget/UI_widget.h"
+	"widget/label.h"
+

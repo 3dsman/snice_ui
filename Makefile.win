@@ -1,0 +1,81 @@
+# Project: test_UI
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = build/test_UI.o build/mylist.o build/tgafile.o build/UI_base.o build/viewport.o build/button.o build/label.o build/UI_widget.o build/tinystr.o build/tinyxml.o build/tinyxmlerror.o build/tinyxmlparser.o build/snice_UI.o build/UI_window.o build/text_box.o build/slider.o build/sub_menu.o build/menu.o $(RES)
+LINKOBJ  = build/test_UI.o build/mylist.o build/tgafile.o build/UI_base.o build/viewport.o build/button.o build/label.o build/UI_widget.o build/tinystr.o build/tinyxml.o build/tinyxmlerror.o build/tinyxmlparser.o build/snice_UI.o build/UI_window.o build/text_box.o build/slider.o build/sub_menu.o build/menu.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -L"E:/projets/snice_ui/src/lib" -lglfw -lopengl32 -ltinyxmld  
+INCS =  -I"C:/Dev-Cpp/include"  -I"E:/projets/snice_ui/src" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include"  -I"E:/projets/snice_ui/src" 
+BIN  = bin/test_UI.exe
+CXXFLAGS = $(CXXINCS)   -fexceptions -fexpensive-optimizations -O3
+CFLAGS = $(INCS)   -fexceptions -fexpensive-optimizations -O3
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before bin/test_UI.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "bin\test_UI.exe" $(LIBS)
+
+build/test_UI.o: test_UI.cpp
+	$(CPP) -c test_UI.cpp -o build/test_UI.o $(CXXFLAGS)
+
+build/mylist.o: src/mylist.cpp
+	$(CPP) -c src/mylist.cpp -o build/mylist.o $(CXXFLAGS)
+
+build/tgafile.o: src/tgafile.cpp
+	$(CPP) -c src/tgafile.cpp -o build/tgafile.o $(CXXFLAGS)
+
+build/UI_base.o: src/UI_base.cpp
+	$(CPP) -c src/UI_base.cpp -o build/UI_base.o $(CXXFLAGS)
+
+build/viewport.o: src/viewport.cpp
+	$(CPP) -c src/viewport.cpp -o build/viewport.o $(CXXFLAGS)
+
+build/button.o: src/widget/button.cpp
+	$(CPP) -c src/widget/button.cpp -o build/button.o $(CXXFLAGS)
+
+build/label.o: src/widget/label.cpp
+	$(CPP) -c src/widget/label.cpp -o build/label.o $(CXXFLAGS)
+
+build/UI_widget.o: src/widget/UI_widget.cpp
+	$(CPP) -c src/widget/UI_widget.cpp -o build/UI_widget.o $(CXXFLAGS)
+
+build/tinystr.o: src/xml/tinystr.cpp
+	$(CPP) -c src/xml/tinystr.cpp -o build/tinystr.o $(CXXFLAGS)
+
+build/tinyxml.o: src/xml/tinyxml.cpp
+	$(CPP) -c src/xml/tinyxml.cpp -o build/tinyxml.o $(CXXFLAGS)
+
+build/tinyxmlerror.o: src/xml/tinyxmlerror.cpp
+	$(CPP) -c src/xml/tinyxmlerror.cpp -o build/tinyxmlerror.o $(CXXFLAGS)
+
+build/tinyxmlparser.o: src/xml/tinyxmlparser.cpp
+	$(CPP) -c src/xml/tinyxmlparser.cpp -o build/tinyxmlparser.o $(CXXFLAGS)
+
+build/snice_UI.o: src/snice_UI.cpp
+	$(CPP) -c src/snice_UI.cpp -o build/snice_UI.o $(CXXFLAGS)
+
+build/UI_window.o: src/UI_window.cpp
+	$(CPP) -c src/UI_window.cpp -o build/UI_window.o $(CXXFLAGS)
+
+build/text_box.o: src/widget/text_box.cpp
+	$(CPP) -c src/widget/text_box.cpp -o build/text_box.o $(CXXFLAGS)
+
+build/slider.o: src/widget/slider.cpp
+	$(CPP) -c src/widget/slider.cpp -o build/slider.o $(CXXFLAGS)
+
+build/sub_menu.o: src/widget/sub_menu.cpp
+	$(CPP) -c src/widget/sub_menu.cpp -o build/sub_menu.o $(CXXFLAGS)
+
+build/menu.o: src/widget/menu.cpp
+	$(CPP) -c src/widget/menu.cpp -o build/menu.o $(CXXFLAGS)

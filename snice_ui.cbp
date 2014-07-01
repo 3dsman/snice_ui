@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="snice_ui" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="windows">
+				<Option output="bin/snice_ui" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/" />
+				<Option object_output="build/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="C:/Users/seb/Documents/projets/snice_ui/src" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="glfw" />
+					<Add library="opengl32" />
+					<Add directory="C:/Users/seb/Documents/projets/snice_ui/src/lib/" />
+				</Linker>
+			</Target>
+			<Target title="linux">
+				<Option output="bin/snice_ui" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin" />
+				<Option object_output="build" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option use_console_runner="0" />
+				<Linker>
+					<Add library="glfw3" />
+					<Add library="GL" />
+					<Add library="GLU" />
+					<Add library="pthread" />
+					<Add library="X11" />
+					<Add library="Xcursor" />
+					<Add library="Xi" />
+					<Add library="Xxf86vm" />
+					<Add library="Xrandr" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="." />
+			<Add directory="./src" />
+		</Compiler>
+		<Unit filename="TODO.h" />
+		<Unit filename="src/UI_base.cpp" />
+		<Unit filename="src/UI_base.h" />
+		<Unit filename="src/UI_window.cpp" />
+		<Unit filename="src/UI_window.h" />
+		<Unit filename="src/dialog/UI_dialog.cpp" />
+		<Unit filename="src/dialog/UI_dialog.h" />
+		<Unit filename="src/dialog/color_picker.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/dialog/color_picker.h" />
+		<Unit filename="src/dialog/file_picker.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/dialog/file_picker.h" />
+		<Unit filename="src/include/glfw.h" />
+		<Unit filename="src/mylist.cpp" />
+		<Unit filename="src/mylist.h" />
+		<Unit filename="src/snice_UI.cpp" />
+		<Unit filename="src/snice_UI.h" />
+		<Unit filename="src/tgafile.cpp" />
+		<Unit filename="src/tgafile.h" />
+		<Unit filename="src/viewport.cpp" />
+		<Unit filename="src/viewport.h" />
+		<Unit filename="src/viewports_array.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/viewports_array.h" />
+		<Unit filename="src/widget/UI_widget.cpp" />
+		<Unit filename="src/widget/UI_widget.h" />
+		<Unit filename="src/widget/button.cpp" />
+		<Unit filename="src/widget/button.h" />
+		<Unit filename="src/widget/color_band.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/color_band.h" />
+		<Unit filename="src/widget/color_display.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/color_display.h" />
+		<Unit filename="src/widget/color_select_display.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/color_select_display.h" />
+		<Unit filename="src/widget/file_selector.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/file_selector.h" />
+		<Unit filename="src/widget/label.cpp" />
+		<Unit filename="src/widget/label.h" />
+		<Unit filename="src/widget/menu.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/menu.h" />
+		<Unit filename="src/widget/progress.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/progress.h" />
+		<Unit filename="src/widget/slided_panel.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/slided_panel.h" />
+		<Unit filename="src/widget/slider.cpp" />
+		<Unit filename="src/widget/slider.h" />
+		<Unit filename="src/widget/sub_menu.cpp" />
+		<Unit filename="src/widget/sub_menu.h" />
+		<Unit filename="src/widget/text_box.cpp" />
+		<Unit filename="src/widget/text_box.h" />
+		<Unit filename="src/widget/timeline.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/widget/timeline.h" />
+		<Unit filename="src/xml/tinystr.cpp" />
+		<Unit filename="src/xml/tinystr.h" />
+		<Unit filename="src/xml/tinyxml.cpp" />
+		<Unit filename="src/xml/tinyxml.h" />
+		<Unit filename="src/xml/tinyxmlerror.cpp" />
+		<Unit filename="src/xml/tinyxmlparser.cpp" />
+		<Unit filename="test_UI.cpp" />
+		<Unit filename="test_UI.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
