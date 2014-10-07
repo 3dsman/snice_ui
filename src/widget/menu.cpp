@@ -45,14 +45,6 @@
 /////////////////////////////////////////////
 // Functions
 /////////////////////////////////////////////
-/*
-option::option(char* l, menu* submenu)
-{
-	strncpy( label, l, 64 );
-	label[64] = '\0';
-	//id = i;
-	this->subMenu = submenu;
-}*/
 
 W_menu::W_menu(int x, int y, int w, int h, string l, float red, float green, float blue)
 	   :W_button(x, y, w, h, l)
@@ -158,7 +150,7 @@ void W_menu::SetOption(int v)
 	}
 }
 
-void W_menu::SetOption(char * text)
+void W_menu::SetOption(string text)
 {
 	if (childMenu)
 	{
@@ -182,11 +174,9 @@ void W_menu::LoadXML(TiXmlElement* element)
 {
 	const char * textElement = element->Attribute("Option");
 
-	char option[256];
 	// i look if there is no problem
-	if ((textElement!=NULL)&&(strlen(textElement)<255)){
-		strcpy(option, textElement);
-		SetOption(option);
+	if ((textElement!=NULL)){
+		SetOption(textElement);
 	};
 }
 

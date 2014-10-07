@@ -76,7 +76,7 @@ public:
 
 	void SetOption(int v);
 
-	void SetOption(char * text);
+	void SetOption(string text);
 
 	void Flush(); // delete all options
 
