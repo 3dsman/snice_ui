@@ -84,15 +84,21 @@ void W_textbox::SetLabel(string l)
 
 void W_textbox::SetLabel()
 {
-    char buttontext[256];
-	if (action) {width = max(initialWidth,(prompt.size() + contents.size() + 3) * font.charWidth);};
+    //char buttontext[256];
+    string texte = contents;
+	if (action) {
+        width = max(initialWidth,(prompt.size() + contents.size() + 3) * font.charWidth);
+        texte.insert(curPos,"|");
+	};
 
 	if (prompt.size())
-	   sprintf(buttontext, "%s: %s", prompt.c_str(), contents.c_str());
-	else
-	   sprintf(buttontext, "%s", contents.c_str());
+        texte = prompt+": "+texte;
+	   //sprintf(buttontext, "%s: %s", prompt.c_str(), contents.c_str());
+	//else
+	   //sprintf(buttontext, "%s", contents.c_str());
 
-	SetLabel(&buttontext[0]);
+	//SetLabel(&buttontext[0]);
+	SetLabel(texte);
 }
 
 void W_textbox::SetContent(const string c)
@@ -295,26 +301,11 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
         		position = min(max(position,0),contents.size());
 
 
-        		// delete the cursor of the chain
-        		for (unsigned int i = curPos ; i < (contents.size()); ++i)
-        		{
-        			contents[i] = contents[i+1];
-        		}
-
         		//if the clic was after the cursor the clic is on the next character
         		if (position > curPos)
         			curPos = position-1 ;
         		else
         			curPos = position ;
-
-        		//move to the right all the characters between end and cursor
-        		for (unsigned int j = contents.size() ; j >= curPos; --j)
-        		{
-        			contents[j+1] = contents[j];
-        		}
-
-        		//replace the character at the cursor position by the cursor
-        		contents[curPos] = '|';
         	}
         	else
         	{
@@ -322,11 +313,6 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
         		curPos = contents.size();
         		action = true;
 
-        		if (curPos < 255)
-        		{
-        			contents[curPos+1] = contents[curPos];
-        			contents[curPos] = '|';
-        		}
         	}
 
         	SetLabel();
@@ -336,12 +322,6 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
         {
             if (action)
             {
-
-        		// delete the cursor of the chain
-        		for (unsigned int i = curPos ; i < (contents.size()); ++i)
-        		{
-        			contents[i] = contents[i+1];
-        		}
 
         		//if the chain is empty and must contain a number then write "0"
         		if ((number)&&(contents[0] == 0))
@@ -362,18 +342,9 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
     return 0;
 
 }
-/*
-UI_base* W_textbox::OnLButtonUpIntercept(int x, int y)
-{
 
-}
-*/
 UI_base* W_textbox::OnMouseMove(int x, int y, int prevx, int prevy)
 {
-	/*if (action == true)
-	{
- 		SetLabel();
-	}*/
 	if (pInterceptChild) return this;
 	return 0;
 }
@@ -389,25 +360,17 @@ UI_base* W_textbox::OnKeyPressed(int key)
     				{
     					if (curPos>0)
     					{
-    						//replace all the char from cursor by the next one in the string
-    						for (unsigned int i = curPos-1 ; i < (contents.size()); ++i)
-    						{
-    							contents[i] = contents[i+1];
-    						}
+    						contents.erase(curPos-1,1);
     						curPos--;
     					}
     					break;
     				}
 
-    		case SNICEUI_KEY_DEL :
+    		case SNICEUI_KEY_DELETE :
     				{
     					if ((curPos + 1) < contents.size())
     					{
-    						//replace all the char from after cursor by the next one in the string
-    						for (unsigned short i = curPos+1 ; i < contents.size(); ++i)
-    						{
-    							contents[i] = contents[i+1];
-    						}
+    						contents.erase(curPos,1);
     					}
     					break;
     				}
@@ -416,13 +379,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
     				{
     					// move the cursor to the left
     					if (curPos>0)
-    					{
-    						//replace the cursor by the previous char
-    						contents[curPos] = contents[curPos-1];
-    						//and replace the previous char by the cursor
     						curPos--;
-    						contents[curPos] = '|';
-    					}
     					break;
     				}
 
@@ -430,13 +387,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
     				{
     					// move the cursor to the right
     					if ((curPos + 1) < contents.size())
-    					{
-    						//replace the cursor by the next char
-    						contents[curPos] = contents[curPos+1];
-    						//and replace the next char by the cursor
     						curPos++;
-    						contents[curPos] = '|';
-    					}
     					break;
     				}
 
@@ -444,12 +395,12 @@ UI_base* W_textbox::OnKeyPressed(int key)
     		case SNICEUI_KEY_KP_ENTER:
     			{
     				// delete the cursor of the chain
-    				for (unsigned short i = curPos ; i < (contents.size()); ++i)
+    				/*for (unsigned short i = curPos ; i < (contents.size()); ++i)
     				{
     					contents[i] = contents[i+1];
-    				}
+    				}*/
     				//if the chain is empty and must contain a number then write "0"
-    				if ((number)&&(contents[0] == 0))
+    				if ((number)&&(contents.size()==0))
     				   contents = "0";
 
     				// put the width at his initial size
@@ -553,7 +504,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
 
 UI_base* W_textbox::OnCharPressed(int character)
 {
-
+//printf("%s", character);
 	if((action)&&( character > 0 && character < 256 )&&
     (( character >= 48 && character <= 57 )||((character == '.')&&decimal)||((character == '-')&&integ)||(!number)))
 		{
@@ -561,13 +512,14 @@ UI_base* W_textbox::OnCharPressed(int character)
 			//if ((contents.size()) < 255)
 				//{
 					//move to the right all the characters between end and cursor (cursor include)
-					for (unsigned int i = contents.size() ; i >= curPos; --i)
+					/*for (unsigned int i = contents.size() ; i >= curPos; --i)
 					{
 						contents[i+1] = contents[i];
-					}
+					}*/
+					contents.insert(curPos, 1, (char) character);
 
 					//replace the next cursor character by the input character
-					contents[curPos] = (char) character;
+					//contents[curPos] = (char) character;
 
 					//and increment the cursor position
 					curPos++;

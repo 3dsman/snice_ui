@@ -62,10 +62,6 @@ public:
 
 	virtual ~W_progress();
 
-	void Action(bool a);
-
-	void Speed(float s);
-
 	void SetName(string l);
 
 	void SetLabel(string l);
@@ -81,6 +77,14 @@ public:
 	float GetValue();
 
 	void SetValue(float v);
+
+	float GetAction();
+
+	void SetAction(bool a);
+
+    float GetSpeed();
+
+    void SetSpeed(float s);
 
 	void LoadXML(TiXmlElement* element);
 

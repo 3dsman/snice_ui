@@ -93,15 +93,12 @@ void Snice_UI::KeyPressed( int button, int action)
     viewport->OnKeyPressed(button);
 }
 
-void Snice_UI::CharPressed( int character, int action)
+void Snice_UI::CharPressed( unsigned int character)
 {
-    if( action == SNICEUI_PRESS )
-	{
-		viewport->OnCharPressed(character);
-	}
+    viewport->OnCharPressed(character);
 }
 
-Texture textures[20];	// Storage For Textures
+//Texture textures[20];	// Storage For Textures
 GLuint base;				// Base Display List For The Font
 
 //////////////////////////////////////////////////
@@ -150,7 +147,7 @@ GLvoid BuildFont(GLvoid)									// Build Our Font Display List
 ////////////////////////////////////////
 int InitSniceUI()
 {
-    /*
+/*
 	//if (!LoadTGA(&textures[0],"Data/Fontanti.tga"))			{return false;}
 	if (!LoadTGA(&textures[1],"Data/shadow.tga"))			{return false;}
 //	if (!LoadTGA(&textures[2],"Data/input.tga"))			{return false;}
@@ -200,7 +197,8 @@ int InitSniceUI()
 		}
 	}
 	*/
-	UI_base::InitTextures();
+	if (!UI_base::InitTextures())
+	printf("error init textures");
 	// Built the System font
 	//BuildFont();
 
@@ -211,6 +209,7 @@ int InitSniceUI()
 // DrawCursor().
 // Draw the cursor
 ////////////////////////////////////////
+/*
 void DrawCursor()
 {
 	// color the cursor
@@ -227,10 +226,15 @@ void DrawCursor()
 	// otherwise display the normal cursor
 	// else glBindTexture(GL_TEXTURE_2D, textures[4].texID);
 	//else glBindTexture(GL_TEXTURE_2D, textures[12].texID);
-	glBindTexture(GL_TEXTURE_2D, textures[12].texID);
+
+//TODO probleme de texture avec le curseur, sniceui n'est pas derivé d'uibase
+//solution: deplacer la gestion des textures de curseur dans les viewports (c'est en plus plus logique...)
+
+	glBindTexture(GL_TEXTURE_2D, UI_base::textures.cursor.texID);
 
 	// if it's over a compatible input, fit the cursor in the input
 	// int cursorsize = 6;
+	*/
 	/*int cursorsize = 8;
 
 	// draw the cursor
@@ -271,7 +275,8 @@ void DrawCursor()
 
 	// glRotatef(-rotation,0.0f,0.0f,1.0f);
 	glTranslated(-iMousePosx, -iMousePosy, 0);
-*/
+*//*
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 }
+*/

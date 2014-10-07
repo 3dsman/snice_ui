@@ -45,10 +45,11 @@
 // Functions
 /////////////////////////////////////////////
 
-Option::Option(const char* l, W_subMenu* submenu)
+Option::Option(const string l, W_subMenu* submenu)
 {
-	strncpy( label, l, 64 );
-	label[64] = '\0';
+	//strncpy( label, l, 64 );
+	//label[64] = '\0';
+	label = l;
 
 	optionSubMenu = submenu;
 /*	if(optionSubMenu)
@@ -59,7 +60,7 @@ Option::Option(const char* l, W_subMenu* submenu)
 	// align files to the left
 	else
 	{*/
-		optionLabel = new W_label(5,-4, 0, 1,"%s", label);
+		optionLabel = new W_label(5,-4, 0, 1,"%s", label.c_str());
 	/*}*/
 }
 
@@ -82,10 +83,10 @@ W_subMenu::~W_subMenu()
 	//pViewports->setIntercept(NULL);
 }
 
-void W_subMenu::AddOption(const char *l, W_subMenu * optionsubMenu)
+void W_subMenu::AddOption(const string l, W_subMenu * optionsubMenu)
 {
 	int subMenumax = 64*font.charWidth+25;
-	int stringSize = strlen(l)*font.charWidth;
+	int stringSize = l.length()*font.charWidth;
 
 	if (optionsubMenu)
 	{
@@ -407,7 +408,7 @@ UI_base* W_subMenu::OnMouseMove(int x, int y, int prevx, int prevy)
     return this;
 }
 
-char* W_subMenu::GetString()
+string W_subMenu::GetString()
 {
 	if (pSelectedOption)
 	{
@@ -458,11 +459,12 @@ bool W_subMenu::SetOption(int v)
 }
 
 
-bool W_subMenu::SetOption(char * text)
+bool W_subMenu::SetOption(string text)
 {
 	options.ToFirst();
 	do{
-		if (!strcmp(((Option*)(options.GetCurrentObjectPointer()))->label, text))// || ((((option*)(options.GetCurrentObjectPointer()))->optionSubMenu)&&((( (option*)(options.GetCurrentObjectPointer()) )->optionSubMenu)->setOption(text))))
+		//if (!strcmp(((Option*)(options.GetCurrentObjectPointer()))->label, text.c_str()))// || ((((option*)(options.GetCurrentObjectPointer()))->optionSubMenu)&&((( (option*)(options.GetCurrentObjectPointer()) )->optionSubMenu)->setOption(text))))
+		if (((Option*)(options.GetCurrentObjectPointer()))->label == text.c_str())
 		{
 			pSelectedOption = (Option*)(options.GetCurrentObjectPointer());
 			return true;
@@ -558,7 +560,7 @@ void W_subMenu::SaveXML(TiXmlElement* element)
 
 			TiXmlElement optionElement( "Option" );
 
-			optionElement.SetAttribute( "Label", pCurrentOption->label );
+			optionElement.SetAttribute( "Label", pCurrentOption->label.c_str() );
 			//optionElement.SetAttribute( "id", pCurrentOption->id );
 
 			element->InsertEndChild( optionElement );
@@ -575,9 +577,9 @@ void W_subMenu::SaveXML(TiXmlElement* element)
 	}
 }
 
-void W_subMenu::Set(char* order)
+void W_subMenu::Set(string order)
 {
-	printf("->%s=%s\n", refName.c_str(), order);
+	printf("->%s=%s\n", refName.c_str(), order.c_str());
 	SetOption(order);
 	//if (pParentUI_base)pParentUI_base->Callback(this,1);
 };

@@ -28,13 +28,13 @@ Viewport* pViewport;
 W_button* pValid;
 W_button* pUnvalid;
 W_button* ppouet;
+W_button* progressToggle;
 W_textbox* textbox;
 W_slider* slider;
 W_progress* progress;
 UI_window* pwind;
 W_subMenu* submenu;
 W_subMenu* submenu2;
-W_subMenu* submenu3;
 W_menu* menu;
 
 bool active = true;		// Window Active Flag Set To TRUE By Default
@@ -65,6 +65,12 @@ void test3(W_button* caller)
 {
     caller->killMe = true;
 };
+
+void buttonHa(W_button* caller)
+{
+    progress->SetAction(!progress->GetAction());
+};
+
 
 void test4(W_button* caller)
 {
@@ -116,6 +122,7 @@ static void init(int argc, char * argv[])
 			cout<<"GL_EXTENSIONS = "<< glGetString(GL_EXTENSIONS)<<"\n";
 			}
 		}
+
 	// Set OpenGL and GLFW variables
     //glfwSetWindowTitle("TEST_UI");	// Set title
     //glfwEnable( GLFW_KEY_REPEAT );	// Authorise key repeat
@@ -141,6 +148,11 @@ void create_interface()
 
 	pwind->OnClose(testwin);
 
+	progress = new W_progress(100,-90,150,20,"hihi");
+	pwind->AddChild(progress);
+	progress->SetAction(true);
+	progress->SetSpeed(-0.1);
+
 	pValid = new W_button(490,100, 120,20, "COOL");
 	pViewport->AddChild(pValid);
 	//pValid->OnMouseOver(test);
@@ -152,22 +164,21 @@ void create_interface()
 	pUnvalid->OnMouseOver(test2);
 	pUnvalid->OnMouseOut(test);
 
-	ppouet = new W_button(100,-100, 50,20, "Ha");
+	ppouet = new W_button(100,-110, 50,20, "Ha");
 	pwind->AddChild(ppouet);
 	ppouet->OnMouseOver(test3);
 
-	textbox = new W_textbox(100,50, 50,20, "tutu","titi");
+	progressToggle = new W_button(150,-110, 50,20, "toggle");
+	pwind->AddChild(progressToggle);
+	progressToggle->OnClick(buttonHa);
+
+	textbox = new W_textbox(100,50, 150,20, "tutu","titi");
 	pViewport->AddChild(textbox);
 	textbox->OnSetContent(textboxContent);
 
 	slider = new W_slider(100, -60, 150, 20, "Ha", 120, 100, 200, 0);
 	pwind->AddChild(slider);
 	slider->OnSetValue(sliderValue);
-
-	progress = new W_progress(100,-90,150,20,"hihi");
-	pwind->AddChild(progress);
-	progress->Action(true);
-	progress->Speed(-0.1);
 	//pViewport->AddChild(slider);
 
 	submenu2 = new W_subMenu(100,10,100);
@@ -176,20 +187,18 @@ void create_interface()
 	submenu2->AddOption("ccccc");
 	submenu2->OnPickOption(pickOption);
 
-	submenu3 = new W_subMenu(200,100, 100);
-    submenu3->AddOption("ddddd");
-	submenu3->AddOption("eeeee", submenu2);
-	submenu3->AddOption("fffff");
-	submenu3->OnPickOption(pickOption);
-
 	submenu = new W_subMenu(200,100, 100);
-	pViewport->AddChild(submenu);
-	submenu->AddOption("ggggg", submenu3);
-	submenu->AddOption("hhhhh");
-	submenu->AddOption("iiiii");
+    submenu->AddOption("ddddd");
+	submenu->AddOption("eeeee", submenu2);
+	submenu->AddOption("fffff");
 	submenu->OnPickOption(pickOption);
 
-	//menu = new W_menu(100,-150, 50,20, "menu");
+	menu = new W_menu(110,100, 150,20, "menu");
+	menu->AddOption("ggggg", submenu);
+	menu->AddOption("hhhhh");
+	menu->AddOption("iiiii");
+	menu->OnPickOption(pickOption);
+	pViewport->AddChild(menu);
 
 }
 
@@ -261,9 +270,9 @@ void ProcessKey(GLFWwindow* wind, int key, int scancode, int action, int mods)
 // ProcessChar( int key, int action ).
 // Process the keys from the keyboard
 //////////////////////////////////////////////////
-void ProcessChar(GLFWwindow* wind,  int character, int action )
+void ProcessChar(GLFWwindow* wind,  unsigned int character )
 {
-    pSnice_UI->CharPressed(character,action);
+    pSnice_UI->CharPressed(character);
 }
 
 //////////////////////////////////////////////////
@@ -300,7 +309,7 @@ int main(int argc, char *argv[])
     glfwSetWindowSizeCallback( my_window, ProcessReshape );// Called in case the window size change
     //glfwSetFramebufferSizeCallback( my_window, ProcessReshape);
     glfwSetKeyCallback( my_window, ProcessKey );			// Called in case a keyboard key is pressed
-	//glfwSetCharCallback( my_window, ProcessChar );			// Called in case a keyboard key is pressed
+	glfwSetCharCallback( my_window, ProcessChar );			// Called in case a keyboard key is pressed
 	glfwSetMouseButtonCallback( my_window, ProcessMouseButton );	// Called in case a mouse button is pressed
 	glfwSetCursorPosCallback( my_window, ProcessMousePos );			// Called in case the mouse is moved
 	//glfwSetMousePosCallback( pSnice_UI->MouseMove );			// Called in case the mouse is moved
@@ -308,14 +317,14 @@ int main(int argc, char *argv[])
     // Main loop
     while ( !glfwWindowShouldClose(my_window ) )
 	{
-
         pSnice_UI->Draw();
 
         glfwSwapBuffers(my_window);
 
         //process the events (keyboard, mouse,...)
         glfwPollEvents();
-        break;
+
+        //break;
 	}
     // Close window and terminate GLFW
 	if (pSnice_UI){delete pSnice_UI;pSnice_UI = NULL;}

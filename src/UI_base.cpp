@@ -450,7 +450,7 @@ void UI_base::OnMove(void (*function)(UI_base* caller, int x, int y))
 
 bool UI_base::SetTexture(Texture *texture, char* path)
 {
-    if (!LoadTGA(texture,path)){return false;}
+    if (!LoadTGA(texture,path)){printf("a texture is missing" );return false;}
     glGenTextures(1, &texture->texID);				// Create The Texture
     glBindTexture(GL_TEXTURE_2D, texture->texID);
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
@@ -463,7 +463,7 @@ bool UI_base::SetTexture(Texture *texture, char* path)
 bool UI_base::SetFont( char* path, int charWidth)
 {
     font.charWidth = charWidth;
-    if (!SetTexture(&font.texture, path))			{return false;}
+    if (!SetTexture(&font.texture, path)){return false;}
 
     font.fontList = glGenLists(256);									// Creating 256 Display Lists
 	glBindTexture(GL_TEXTURE_2D, font.texture.texID);		// Select Our Font Texture
@@ -499,6 +499,7 @@ bool UI_base::InitTextures()
 	if (!SetTexture(&textures.progress,"Data/progress.tga")){return false;} //old index 11
 	if (!SetTexture(&textures.shadow,"Data/shadow.tga")){return false;} //old index 1
 	if (!SetTexture(&textures.cursor,"Data/cursor.tga")){return false;} //old index 12
+//if (!SetTexture(&font.texture,"Data/Fontanti.tga")){return false;} //old index 12
 
 	if (!SetFont("Data/Fontanti.tga", 7)){return false;} //old index 0
 	return true;

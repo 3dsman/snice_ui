@@ -35,72 +35,128 @@
 // for printable keys (such as A-Z, 0-9 etc), and values above 256
 // represent special (non-printable) keys (e.g. F1, Page Up etc).
 // Thanks to GLFW for theses definition.
-#define SNICEUI_KEY_UNKNOWN      -1
-#define SNICEUI_KEY_SPACE        32
-#define SNICEUI_KEY_SPECIAL      256
-#define SNICEUI_KEY_ESC          (SNICEUI_KEY_SPECIAL+1)
-#define SNICEUI_KEY_F1           (SNICEUI_KEY_SPECIAL+2)
-#define SNICEUI_KEY_F2           (SNICEUI_KEY_SPECIAL+3)
-#define SNICEUI_KEY_F3           (SNICEUI_KEY_SPECIAL+4)
-#define SNICEUI_KEY_F4           (SNICEUI_KEY_SPECIAL+5)
-#define SNICEUI_KEY_F5           (SNICEUI_KEY_SPECIAL+6)
-#define SNICEUI_KEY_F6           (SNICEUI_KEY_SPECIAL+7)
-#define SNICEUI_KEY_F7           (SNICEUI_KEY_SPECIAL+8)
-#define SNICEUI_KEY_F8           (SNICEUI_KEY_SPECIAL+9)
-#define SNICEUI_KEY_F9           (SNICEUI_KEY_SPECIAL+10)
-#define SNICEUI_KEY_F10          (SNICEUI_KEY_SPECIAL+11)
-#define SNICEUI_KEY_F11          (SNICEUI_KEY_SPECIAL+12)
-#define SNICEUI_KEY_F12          (SNICEUI_KEY_SPECIAL+13)
-#define SNICEUI_KEY_F13          (SNICEUI_KEY_SPECIAL+14)
-#define SNICEUI_KEY_F14          (SNICEUI_KEY_SPECIAL+15)
-#define SNICEUI_KEY_F15          (SNICEUI_KEY_SPECIAL+16)
-#define SNICEUI_KEY_F16          (SNICEUI_KEY_SPECIAL+17)
-#define SNICEUI_KEY_F17          (SNICEUI_KEY_SPECIAL+18)
-#define SNICEUI_KEY_F18          (SNICEUI_KEY_SPECIAL+19)
-#define SNICEUI_KEY_F19          (SNICEUI_KEY_SPECIAL+20)
-#define SNICEUI_KEY_F20          (SNICEUI_KEY_SPECIAL+21)
-#define SNICEUI_KEY_F21          (SNICEUI_KEY_SPECIAL+22)
-#define SNICEUI_KEY_F22          (SNICEUI_KEY_SPECIAL+23)
-#define SNICEUI_KEY_F23          (SNICEUI_KEY_SPECIAL+24)
-#define SNICEUI_KEY_F24          (SNICEUI_KEY_SPECIAL+25)
-#define SNICEUI_KEY_F25          (SNICEUI_KEY_SPECIAL+26)
-#define SNICEUI_KEY_UP           (SNICEUI_KEY_SPECIAL+27)
-#define SNICEUI_KEY_DOWN         (SNICEUI_KEY_SPECIAL+28)
-#define SNICEUI_KEY_LEFT         (SNICEUI_KEY_SPECIAL+29)
-#define SNICEUI_KEY_RIGHT        (SNICEUI_KEY_SPECIAL+30)
-#define SNICEUI_KEY_LSHIFT       (SNICEUI_KEY_SPECIAL+31)
-#define SNICEUI_KEY_RSHIFT       (SNICEUI_KEY_SPECIAL+32)
-#define SNICEUI_KEY_LCTRL        (SNICEUI_KEY_SPECIAL+33)
-#define SNICEUI_KEY_RCTRL        (SNICEUI_KEY_SPECIAL+34)
-#define SNICEUI_KEY_LALT         (SNICEUI_KEY_SPECIAL+35)
-#define SNICEUI_KEY_RALT         (SNICEUI_KEY_SPECIAL+36)
-#define SNICEUI_KEY_TAB          (SNICEUI_KEY_SPECIAL+37)
-#define SNICEUI_KEY_ENTER        (SNICEUI_KEY_SPECIAL+38)
-#define SNICEUI_KEY_BACKSPACE    (SNICEUI_KEY_SPECIAL+39)
-#define SNICEUI_KEY_INSERT       (SNICEUI_KEY_SPECIAL+40)
-#define SNICEUI_KEY_DEL          (SNICEUI_KEY_SPECIAL+41)
-#define SNICEUI_KEY_PAGEUP       (SNICEUI_KEY_SPECIAL+42)
-#define SNICEUI_KEY_PAGEDOWN     (SNICEUI_KEY_SPECIAL+43)
-#define SNICEUI_KEY_HOME         (SNICEUI_KEY_SPECIAL+44)
-#define SNICEUI_KEY_END          (SNICEUI_KEY_SPECIAL+45)
-#define SNICEUI_KEY_KP_0         (SNICEUI_KEY_SPECIAL+46)
-#define SNICEUI_KEY_KP_1         (SNICEUI_KEY_SPECIAL+47)
-#define SNICEUI_KEY_KP_2         (SNICEUI_KEY_SPECIAL+48)
-#define SNICEUI_KEY_KP_3         (SNICEUI_KEY_SPECIAL+49)
-#define SNICEUI_KEY_KP_4         (SNICEUI_KEY_SPECIAL+50)
-#define SNICEUI_KEY_KP_5         (SNICEUI_KEY_SPECIAL+51)
-#define SNICEUI_KEY_KP_6         (SNICEUI_KEY_SPECIAL+52)
-#define SNICEUI_KEY_KP_7         (SNICEUI_KEY_SPECIAL+53)
-#define SNICEUI_KEY_KP_8         (SNICEUI_KEY_SPECIAL+54)
-#define SNICEUI_KEY_KP_9         (SNICEUI_KEY_SPECIAL+55)
-#define SNICEUI_KEY_KP_DIVIDE    (SNICEUI_KEY_SPECIAL+56)
-#define SNICEUI_KEY_KP_MULTIPLY  (SNICEUI_KEY_SPECIAL+57)
-#define SNICEUI_KEY_KP_SUBTRACT  (SNICEUI_KEY_SPECIAL+58)
-#define SNICEUI_KEY_KP_ADD       (SNICEUI_KEY_SPECIAL+59)
-#define SNICEUI_KEY_KP_DECIMAL   (SNICEUI_KEY_SPECIAL+60)
-#define SNICEUI_KEY_KP_EQUAL     (SNICEUI_KEY_SPECIAL+61)
-#define SNICEUI_KEY_KP_ENTER     (SNICEUI_KEY_SPECIAL+62)
-#define SNICEUI_KEY_LAST         SNICEUI_KEY_KP_ENTER
+#define 	SNICEUI_KEY_UNKNOWN   -1
+#define 	SNICEUI_KEY_SPACE   32
+#define 	SNICEUI_KEY_APOSTROPHE   39 /* ' */
+#define 	SNICEUI_KEY_COMMA   44 /* , */
+#define 	SNICEUI_KEY_MINUS   45 /* - */
+#define 	SNICEUI_KEY_PERIOD   46 /* . */
+#define 	SNICEUI_KEY_SLASH   47 /* / */
+#define 	SNICEUI_KEY_0   48
+#define 	SNICEUI_KEY_1   49
+#define 	SNICEUI_KEY_2   50
+#define 	SNICEUI_KEY_3   51
+#define 	SNICEUI_KEY_4   52
+#define 	SNICEUI_KEY_5   53
+#define 	SNICEUI_KEY_6   54
+#define 	SNICEUI_KEY_7   55
+#define 	SNICEUI_KEY_8   56
+#define 	SNICEUI_KEY_9   57
+#define 	SNICEUI_KEY_SEMICOLON   59 /* ; */
+#define 	SNICEUI_KEY_EQUAL   61 /* = */
+#define 	SNICEUI_KEY_A   65
+#define 	SNICEUI_KEY_B   66
+#define 	SNICEUI_KEY_C   67
+#define 	SNICEUI_KEY_D   68
+#define 	SNICEUI_KEY_E   69
+#define 	SNICEUI_KEY_F   70
+#define 	SNICEUI_KEY_G   71
+#define 	SNICEUI_KEY_H   72
+#define 	SNICEUI_KEY_I   73
+#define 	SNICEUI_KEY_J   74
+#define 	SNICEUI_KEY_K   75
+#define 	SNICEUI_KEY_L   76
+#define 	SNICEUI_KEY_M   77
+#define 	SNICEUI_KEY_N   78
+#define 	SNICEUI_KEY_O   79
+#define 	SNICEUI_KEY_P   80
+#define 	SNICEUI_KEY_Q   81
+#define 	SNICEUI_KEY_R   82
+#define 	SNICEUI_KEY_S   83
+#define 	SNICEUI_KEY_T   84
+#define 	SNICEUI_KEY_U   85
+#define 	SNICEUI_KEY_V   86
+#define 	SNICEUI_KEY_W   87
+#define 	SNICEUI_KEY_X   88
+#define 	SNICEUI_KEY_Y   89
+#define 	SNICEUI_KEY_Z   90
+#define 	SNICEUI_KEY_LEFT_BRACKET   91 /* [ */
+#define 	SNICEUI_KEY_BACKSLASH   92 /* \ */
+#define 	SNICEUI_KEY_RIGHT_BRACKET   93 /* ] */
+#define 	SNICEUI_KEY_GRAVE_ACCENT   96 /* ` */
+#define 	SNICEUI_KEY_WORLD_1   161 /* non-US #1 */
+#define 	SNICEUI_KEY_WORLD_2   162 /* non-US #2 */
+#define 	SNICEUI_KEY_ESCAPE   256
+#define 	SNICEUI_KEY_ENTER   257
+#define 	SNICEUI_KEY_TAB   258
+#define 	SNICEUI_KEY_BACKSPACE   259
+#define 	SNICEUI_KEY_INSERT   260
+#define 	SNICEUI_KEY_DELETE   261
+#define 	SNICEUI_KEY_RIGHT   262
+#define 	SNICEUI_KEY_LEFT   263
+#define 	SNICEUI_KEY_DOWN   264
+#define 	SNICEUI_KEY_UP   265
+#define 	SNICEUI_KEY_PAGE_UP   266
+#define 	SNICEUI_KEY_PAGE_DOWN   267
+#define 	SNICEUI_KEY_HOME   268
+#define 	SNICEUI_KEY_END   269
+#define 	SNICEUI_KEY_CAPS_LOCK   280
+#define 	SNICEUI_KEY_SCROLL_LOCK   281
+#define 	SNICEUI_KEY_NUM_LOCK   282
+#define 	SNICEUI_KEY_PRINT_SCREEN   283
+#define 	SNICEUI_KEY_PAUSE   284
+#define 	SNICEUI_KEY_F1   290
+#define 	SNICEUI_KEY_F2   291
+#define 	SNICEUI_KEY_F3   292
+#define 	SNICEUI_KEY_F4   293
+#define 	SNICEUI_KEY_F5   294
+#define 	SNICEUI_KEY_F6   295
+#define 	SNICEUI_KEY_F7   296
+#define 	SNICEUI_KEY_F8   297
+#define 	SNICEUI_KEY_F9   298
+#define 	SNICEUI_KEY_F10   299
+#define 	SNICEUI_KEY_F11   300
+#define 	SNICEUI_KEY_F12   301
+#define 	SNICEUI_KEY_F13   302
+#define 	SNICEUI_KEY_F14   303
+#define 	SNICEUI_KEY_F15   304
+#define 	SNICEUI_KEY_F16   305
+#define 	SNICEUI_KEY_F17   306
+#define 	SNICEUI_KEY_F18   307
+#define 	SNICEUI_KEY_F19   308
+#define 	SNICEUI_KEY_F20   309
+#define 	SNICEUI_KEY_F21   310
+#define 	SNICEUI_KEY_F22   311
+#define 	SNICEUI_KEY_F23   312
+#define 	SNICEUI_KEY_F24   313
+#define 	SNICEUI_KEY_F25   314
+#define 	SNICEUI_KEY_KP_0   320
+#define 	SNICEUI_KEY_KP_1   321
+#define 	SNICEUI_KEY_KP_2   322
+#define 	SNICEUI_KEY_KP_3   323
+#define 	SNICEUI_KEY_KP_4   324
+#define 	SNICEUI_KEY_KP_5   325
+#define 	SNICEUI_KEY_KP_6   326
+#define 	SNICEUI_KEY_KP_7   327
+#define 	SNICEUI_KEY_KP_8   328
+#define 	SNICEUI_KEY_KP_9   329
+#define 	SNICEUI_KEY_KP_DECIMAL   330
+#define 	SNICEUI_KEY_KP_DIVIDE   331
+#define 	SNICEUI_KEY_KP_MULTIPLY   332
+#define 	SNICEUI_KEY_KP_SUBTRACT   333
+#define 	SNICEUI_KEY_KP_ADD   334
+#define 	SNICEUI_KEY_KP_ENTER   335
+#define 	SNICEUI_KEY_KP_EQUAL   336
+#define 	SNICEUI_KEY_LEFT_SHIFT   340
+#define 	SNICEUI_KEY_LEFT_CONTROL   341
+#define 	SNICEUI_KEY_LEFT_ALT   342
+#define 	SNICEUI_KEY_LEFT_SUPER   343
+#define 	SNICEUI_KEY_RIGHT_SHIFT   344
+#define 	SNICEUI_KEY_RIGHT_CONTROL   345
+#define 	SNICEUI_KEY_RIGHT_ALT   346
+#define 	SNICEUI_KEY_RIGHT_SUPER   347
+#define 	SNICEUI_KEY_MENU   348
+#define 	SNICEUI_KEY_LAST   SNICEUI_KEY_MENU
 
 /**	\brief define return minimal value  beetween X an Y*/
 #define min(X, Y)  ((X) < (Y) ? (X) : (Y))
@@ -141,7 +197,7 @@ public:
 
 	void MouseButton( int button, int action);
 	void KeyPressed( int button, int action);
-	void CharPressed( int character, int action);
+	void CharPressed(unsigned int character);
 
 };
 
@@ -149,7 +205,7 @@ public:
 //GLvoid BuildFont(GLvoid);
 //GLvoid KillFont(GLvoid);
 int InitSniceUI();
-void DrawCursor();
+//void DrawCursor();
 
 
 #endif //_SNICE_UI_H_

@@ -65,15 +65,6 @@ W_progress::~W_progress()
 	delete text;
 }
 
-void W_progress::Action(bool a)
-{
-	action = a;
-}
-
-void W_progress::Speed(float s)
-{
-	speed = s;
-}
 void W_progress::SetName(string l)
 {
 	delete text;
@@ -271,6 +262,26 @@ void W_progress::SetValue(float v)
 {
 	// value = v;
 	SetLabel();
+}
+
+float W_progress::GetAction()
+{
+	return action;
+}
+
+void W_progress::SetAction(bool a)
+{
+	action = a;
+}
+
+float W_progress::GetSpeed()
+{
+	return speed;
+}
+
+void W_progress::SetSpeed(float s)
+{
+	speed = s;
 }
 
 void W_progress::LoadXML(TiXmlElement* element)

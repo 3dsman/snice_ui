@@ -52,23 +52,25 @@ private:
 
 public:
 
-	W_menu(int x, int y, int w, int h, char *l, float r = 0.3f, float g = 0.3f, float b = 0.3f);
+	W_menu(int x, int y, int w, int h, string l, float r = 0.3f, float g = 0.3f, float b = 0.3f);
 
 	virtual ~W_menu();
-	
+
 	void pickOption(W_subMenu* caller, unsigned char option);
 
-	void SetLabel(char *l);
+	void SetLabel(string l);
 
-	void AddOption(char *l, W_subMenu * optionsubMenu = 0);
-	
+	void AddOption(string l, W_subMenu * optionsubMenu = 0);
+
 	UI_base* OnLButtonDown(int x, int y);
 
 	UI_base* OnLButtonUp(int x, int y);
 
+	UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
+
 	void Callback(UI_base * pCallObject, unsigned char callIndex );
 
-	char* GetString();
+	string GetString();
 
 	int GetOption();
 
@@ -78,11 +80,14 @@ public:
 
 	void Flush(); // delete all options
 
+    /**	\brief function to set the OnPickOption callback function.*/
+	void OnPickOption(void (*function)(W_subMenu* caller, unsigned char option));
+
 	void LoadXML(TiXmlElement* element);
 
 	void SaveXML(TiXmlElement* element);
 
-	virtual void Set(char* order);
+	virtual void Set(string order);
 };
 
 #endif //_SNICE_MENU_H_

@@ -43,20 +43,20 @@
 
 class W_subMenu;
 
-class Option 
+class Option
 {
 public:
 	/**	\brief option's label*/
-	char label[64];
-	/**	\brief pointer to the option's submenu (NULL if there's not)*/ 
+	string label;
+	/**	\brief pointer to the option's submenu (NULL if there's not)*/
 	W_subMenu * optionSubMenu;
 
     W_label* optionLabel;
 
-	/**	\brief defalut constructor*/ 
-	Option(const char* l, W_subMenu * subMenu);
-	
-	/**	\brief defalut destructor*/ 
+	/**	\brief defalut constructor*/
+	Option(const string l, W_subMenu * subMenu);
+
+	/**	\brief defalut destructor*/
 	~Option();
 
 };
@@ -71,7 +71,7 @@ private:
 
 	List options;
 	Option* pSelectedOption;
-	
+
 	void (*onPickOption)(W_subMenu* caller, unsigned char option);
 
 public:
@@ -79,10 +79,10 @@ public:
 	W_subMenu(int x, int y, int w = 0, float r = 0.3f, float g = 0.3f, float b = 0.3f);
 	virtual ~W_subMenu();
 
-	void AddOption(const char *l, W_subMenu * optionsubMenu = 0);
+	void AddOption(const string l, W_subMenu * optionsubMenu = 0);
 
 	void Draw();
-	
+
 
 	UI_base* OnLButtonDown(int x, int y);
 
@@ -91,16 +91,16 @@ public:
 	UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
 
-	char* GetString();
+	string GetString();
 
 	unsigned char GetOption();
 
 	bool SetOption(int v);
 
-	bool SetOption(char * text);
+	bool SetOption(string text);
 
 	void Flush(); // delete all options
-	
+
     /**	\brief function to set the OnPickOption callback function.*/
 	void OnPickOption(void (*function)(W_subMenu* caller, unsigned char option));
 
@@ -108,7 +108,7 @@ public:
 
 	void SaveXML(TiXmlElement* element);
 
-	virtual void Set(char* order);
+	virtual void Set(string order);
 };
 
 #endif //_SNICE_SUBMENU_H_

@@ -62,10 +62,12 @@ W_label::W_label(int x, int y, int w, bool bw, string fmt, ...)
 
 void W_label::Draw()
 {
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
+	  //TODO TEXTURES DES FONTS
 	glBindTexture(GL_TEXTURE_2D, font.texture.texID);
 
 	glPushMatrix();
@@ -73,15 +75,15 @@ void W_label::Draw()
 	glTranslated(posx,posy,0);
 
 
-	int temp = 0;
+	int bold = 0;
 
 	if (!black)
 	{
-		temp = 1;
+		bold = 1;
 		glColor4f(r,g,b,0.6f);
 	}
 
-    glListBase(font.fontList-32+(128*temp));
+    glListBase(font.fontList-32+(128*bold));
 
 
 	glScalef(1.0f,-1.0f,1.0f);
