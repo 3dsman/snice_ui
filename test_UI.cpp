@@ -32,6 +32,8 @@ W_button* progressToggle;
 W_textbox* textbox;
 W_slider* slider;
 W_progress* progress;
+W_colorSelectdisplay* color_display;
+
 UI_window* pwind;
 W_subMenu* submenu;
 W_subMenu* submenu2;
@@ -200,6 +202,8 @@ void create_interface()
 	menu->OnPickOption(pickOption);
 	pViewport->AddChild(menu);
 
+    color_display = new W_colorSelectdisplay(400,300, 150,150,HUE,0.2, 0.5, 0.8);
+	pViewport->AddChild(color_display);
 }
 
 

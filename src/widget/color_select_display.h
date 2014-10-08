@@ -41,40 +41,45 @@
 
 #include "widget/UI_widget.h"
 #include "tgafile.h"
+enum colorSelector {HUE, SAT, VAL, RED, GREEN, BLUE};
 
 class W_colorSelectdisplay : public UI_widget
 {
-	
+
 private:
 
 	bool refresh;
-	
+	float r,g,b;
+
 
 public:
-	int curx;
-	int cury;
+	float curx;
+	float cury;
+	float curz;
 	bool action;
+	colorSelector mode;
 
 	Texture PreviewImage;
 
 	void RefreshImage();
 
-	W_colorSelectdisplay(int x, int y, int w, int h, int pImageWidth, int pImageHeight, float red = 0.8f, float green = 0.8f, float blue = 0.8f);
+	W_colorSelectdisplay(int x, int y, int w, int h, colorSelector mode, float red = 0.8f, float green = 0.8f, float blue = 0.8f, int pImageWidth = 256, int pImageHeight = 256);
 
 	~W_colorSelectdisplay();
 
-	
+
 	void Draw();
 
 	void UpdateColor(int x, int y);
 
 	void GetColor(float* red, float* green, float* blue);
 
-	void OnLButtonDown(int x, int y);
-
-	void OnLButtonUp(int x, int y);
-
-	void OnMouseMove(int x, int y, int prevx, int prevy);
+	/**	\brief left button down function.*/
+	virtual UI_base* OnLButtonDown(int x, int y);
+	/**	\brief left button up function.*/
+	virtual UI_base* OnLButtonUp(int x, int y);
+	/**	\brief mouse move function.*/
+	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
 	void LoadXML(TiXmlElement* element);
 

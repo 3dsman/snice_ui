@@ -35,7 +35,7 @@
  */
 
 
-#include "../snice_UI.h""
+#include "../snice_UI.h"
 #include "widget/progress.h"
 
 W_progress::W_progress(int x, int y, int w, int h, string l, float red, float green, float blue)

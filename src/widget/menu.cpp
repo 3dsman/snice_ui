@@ -98,7 +98,7 @@ UI_base* W_menu::OnLButtonDown(int x, int y)
     {
         pInterceptChild = 0;
     }
-
+    return 0;
 }
 
 UI_base* W_menu::OnLButtonUp(int x, int y){
