@@ -164,6 +164,9 @@
 /**	\brief define return maximal value  beetween X an Y*/
 #define max(X, Y)  ((X) > (Y) ? (X) : (Y))
 
+#define PI 3.14159265358979323846
+#define DEG2RAD(DEG)((DEG)*((PI)/(180.0)))
+
 //extern Texture textures[20];	// Storage For Textures
 //extern GLuint base;				// Base Display List For The Font
 

@@ -37,177 +37,7 @@
 #include "include/color_conversion.h"
 #include "../snice_UI.h"
 #include "widget/color_select_display.h"
-
-//void W_colorSelectdisplay::RefreshImage(){
-	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, quadImage.width, quadImage.height, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
-
-void W_colorSelectdisplay::RefreshImage(){
-//	Texture* Image;
-
-	//Image = &(pRgbcolor->quadImage);
-
-	int k = 0;
-	float red, green, blue;
-	float hue, saturation, luminosity;
-	float h, s, v;
-    RGBtoHSV(r,g,b,&h,&s,&v);
-
-	int i,j;
-	for (i=0; i<int(quadImage.height); ++i){
-		for (j=0; j<int(quadImage.width); ++j){
-			switch (mode)
-			{
-				case HUE:
-				{
-					hue = h;
-					saturation = float(j)/ quadImage.width;
-					luminosity = float(i) / quadImage.height ;
-
-					HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
-					break;
-				}
-
-				case SAT:
-				{
-					hue = float(j)/ quadImage.width*360.0f;
-					saturation = s;
-					luminosity = float(i) / quadImage.height ;
-
-					HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
-					break;
-				}
-
-				case VAL:
-				{
-					hue = float(j)/ quadImage.width*360.0f;
-					saturation = float(i) / quadImage.height ;
-					luminosity = v;
-
-					HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
-					break;
-				}
-
-				case RED:
-				{
-					red= r;
-					green= float(j)/ quadImage.width;
-					blue= float(i)/ quadImage.height;
-					break;
-				}
-
-				case GREEN:
-				{
-					red= float(j)/ quadImage.width;
-					green= g;
-					blue= float(i)/ quadImage.height;
-					break;
-				}
-
-				case BLUE:
-				{
-					red= float(j)/ quadImage.width;
-					green= float(i)/ quadImage.height;
-					blue= b;
-					break;
-				}
-			}
-
-			quadImage.imageData[k++] = char(red * 255);
-			quadImage.imageData[k++] = char(green * 255);
-			quadImage.imageData[k++] = char(blue * 255);
-		}
-	}
-
-    k=0;
-	for (i=0; i<lineImage.height; i++){
-        switch (mode)
-        {
-            case HUE:
-            {
-                hue = float(i)/ lineImage.height*360.0f;
-                saturation = s;
-                luminosity = v ;
-
-                HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
-                break;
-            }
-
-            case SAT:
-            {
-                hue = h;
-                saturation = float(i) / float(lineImage.height);
-                luminosity = v ;
-
-                HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
-                break;
-            }
-
-            case VAL:
-            {
-                hue = h;
-                saturation = s;
-                luminosity = float(i) / float(lineImage.height);
-
-                HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
-                break;
-            }
-
-            case RED:
-            {
-                red= float(i) / float(lineImage.height);
-                green= g;
-                blue= b;
-                break;
-            }
-
-            case GREEN:
-            {
-                red= r;
-                green= float(i) / float(lineImage.height);
-                blue= b;
-                break;
-            }
-
-            case BLUE:
-            {
-                red= r;
-                green= g;
-                blue= float(i) / float(lineImage.height);
-                break;
-            }
-        }
-
-        for (j=0; j<lineImage.width; j++){
-            lineImage.imageData[k++] = char(red * 255);
-            lineImage.imageData[k++] = char(green * 255);
-            lineImage.imageData[k++] = char(blue * 255);
-        }
-	}
-
-	// horizontal bar
-	i=int(cury * quadImage.height)*quadImage.width * 3;
-	for (j= 0; j < quadImage.width * 3;j++){
-		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);
-		i++;
-	}
-
-	// vertical bar
-	i = curx*quadImage.width * 3;
-	for (j = 0; j < int(quadImage.height) ;++j){
-		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);i++;
-		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);i++;
-		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);i++;
-		i += (quadImage.width-1)*3;
-	}
-
-	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
-
-	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
-
-	refresh = true;
-};
+#include <cmath>
 
 W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSelector selectorType, float red, float green, float blue, int pImageWidth, int pImageHeight)
 		:UI_widget(x, y, w, h, red, green, blue)
@@ -217,41 +47,32 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 	width = w;
 	height = h;
 
-	//curx = 0;
-	//cury = 0;
-	r = red;
-	g = green;
-	b = blue;
-
 	mode=selectorType;
 
-    float hue, sat, val;
-    RGBtoHSV(r,g,b,&hue,&sat,&val);
+    if ((mode==HUE)||(mode==SAT)||(mode==VAL))
+        RGBtoHSV(red,green,blue,&redHue,&greenSat,&blueVal);
+    else
+    {
+            redHue = red;
+            greenSat = green;
+            blueVal = blue;
+    }
 
 	switch (mode)
 			{
 				case HUE:
-                    curx = sat;cury = val;break;
+                    curx = greenSat; cury = blueVal; curz = redHue/360.0f;break;
 				case SAT:
-                    curx = hue/360.0f; cury = val; break;
+                    curx = redHue/360.0f; cury = blueVal; curz = greenSat; break;
 				case VAL:
-                    curx = hue/360.0f; cury = sat; break;
+                    curx = redHue/360.0f; cury = greenSat; curz = blueVal; break;
 				case RED:
-                    curx = g; cury = b; break;
+                    curx = greenSat; cury = blueVal; curz = redHue; break;
 				case GREEN:
-                    curx = r; cury = b; break;
+                    curx = redHue; cury = blueVal; curz = greenSat; break;
 				case BLUE:
-                    curx = r; cury = g; break;
+                    curx = redHue; cury = greenSat; curz = blueVal; break;
 			}
-
-	refresh = true;
-
-    //gentex(lineImage);
-	lineImage.width  = 4;
-	lineImage.height = pImageHeight;
-	lineImage.bpp	= 24;
-	lineImage.imageData	= (GLubyte *)malloc(lineImage.width*lineImage.height*3);
-	glGenTextures(1, &lineImage.texID);
 
 	quadImage.width  = pImageWidth;
 	quadImage.height = pImageHeight;
@@ -259,7 +80,15 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 	quadImage.imageData	= (GLubyte *)malloc(pImageWidth*pImageHeight*3);
 	glGenTextures(1, &quadImage.texID);
 
-    RefreshImage();
+    RefreshImageXY();
+
+    //gentex(lineImage);
+	lineImage.width  = 4;
+	lineImage.height = pImageHeight;
+	lineImage.bpp	= 24;
+	lineImage.imageData	= (GLubyte *)malloc(lineImage.width*lineImage.height*3);
+	glGenTextures(1, &lineImage.texID);
+    RefreshImageZ();
 
 	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR  );
@@ -270,9 +99,6 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR  );
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR  );
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
-    //gentex(lineImage);
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
 
 }
 
@@ -289,18 +115,177 @@ W_colorSelectdisplay::~W_colorSelectdisplay()
 }
 
 
+void W_colorSelectdisplay::SetCursorXY(float curx, float cury){
+
+	switch (mode)
+    {
+        case HUE:
+            greenSat = curx; blueVal = cury;
+            break;
+        case SAT:
+            redHue= curx*360.0f; blueVal = cury;
+            break;
+        case VAL:
+            redHue= curx*360.0f; greenSat = cury;
+            break;
+        case RED:
+            greenSat = curx; blueVal = cury; break;
+        case GREEN:
+            redHue = curx; blueVal = cury; break;
+        case BLUE:
+            redHue = curx; greenSat = cury; break;
+    }
+
+    RefreshImageZ();
+}
+
+
+void W_colorSelectdisplay::SetCursorZ(float curz){
+
+	switch (mode)
+			{
+				case HUE:
+                    redHue = curz*360.0f;
+                    if (redHue==360.0f)redHue=0;
+                    break;
+				case SAT:
+                    greenSat = curz;
+                    break;
+				case VAL:
+                    blueVal = curz;
+                    break;
+				case RED:
+                    redHue = curz;break;
+				case GREEN:
+                    greenSat = curz;break;
+				case BLUE:
+                    blueVal = curz;break;
+			}
+
+			RefreshImageXY();
+}
+
+void W_colorSelectdisplay::RefreshImageXY(){
+
+	int k = 0;
+	float red, green, blue;
+
+	int i,j;
+	for (i=0; i<int(quadImage.height); ++i){
+		for (j=0; j<int(quadImage.width); ++j){
+			switch (mode)
+			{
+				case HUE:
+					HSVtoRGB(redHue,float(j)/ quadImage.width,float(i) / quadImage.height,&red,&green,&blue);
+					break;
+
+				case SAT:
+					HSVtoRGB(float(j)/ quadImage.width*360.0f,greenSat,float(i) / quadImage.height,&red,&green,&blue);
+					break;
+
+				case VAL:
+					HSVtoRGB(float(j)/ quadImage.width*360.0f,float(i) / quadImage.height,blueVal,&red,&green,&blue);
+					break;
+
+				case RED:
+					red= redHue;
+					green= float(j)/ quadImage.width;
+					blue= float(i)/ quadImage.height;
+					break;
+
+				case GREEN:
+					red= float(j)/ quadImage.width;
+					green= greenSat;
+					blue= float(i)/ quadImage.height;
+					break;
+
+				case BLUE:
+					red= float(j)/ quadImage.width;
+					green= float(i)/ quadImage.height;
+					blue= blueVal;
+					break;
+			}
+
+			quadImage.imageData[k++] = char(red * 255);
+			quadImage.imageData[k++] = char(green * 255);
+			quadImage.imageData[k++] = char(blue * 255);
+		}
+	}
+
+	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
+
+};
+
+void W_colorSelectdisplay::RefreshImageZ(){
+
+	int k = 0;
+	float red = redHue;
+	float green = greenSat;
+	float blue =blueVal;
+
+	for (unsigned int i=0; i<lineImage.height; i++){
+        switch (mode)
+        {
+            case HUE:
+            {
+                //hue = float(i)/ float(lineImage.height)*360.0f;
+                HSVtoRGB(float(i)/ float(lineImage.height)*360.0f,greenSat,blueVal,&red,&green,&blue);
+                break;
+            }
+
+            case SAT:
+            {
+                //saturation = float(i) / float(lineImage.height);
+                HSVtoRGB(redHue,float(i) / float(lineImage.height),blueVal,&red,&green,&blue);
+                break;
+            }
+
+            case VAL:
+            {
+                //luminosity = float(i) / float(lineImage.height);
+
+                HSVtoRGB(redHue,greenSat,float(i) / float(lineImage.height),&red,&green,&blue);
+                break;
+            }
+
+            case RED:
+            {
+                red= float(i) / float(lineImage.height);
+                break;
+            }
+
+            case GREEN:
+            {
+                green= float(i) / float(lineImage.height);
+                break;
+            }
+
+            case BLUE:
+            {
+                blue= float(i) / float(lineImage.height);
+                break;
+            }
+        }
+
+        for (unsigned int j=0; j<lineImage.width; j++){
+            lineImage.imageData[k++] = char(red * 255);
+            lineImage.imageData[k++] = char(green * 255);
+            lineImage.imageData[k++] = char(blue * 255);
+        }
+	}
+
+	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
+
+};
+
+
 void W_colorSelectdisplay::Draw()
 {
 
 	glEnable(GL_TEXTURE_2D);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glEnable(GL_BLEND);
 
-	if (refresh){
-
-//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, quadImage.width, quadImage.height, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
-		//refresh=false;
-	}
 	glTranslated(posx, posy, 0);
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -337,7 +322,7 @@ void W_colorSelectdisplay::Draw()
 
 	glDisable(GL_TEXTURE_2D);
 
-if (refresh){refresh =false;};
+//if (refresh){refresh =false;};
 
 	// draw the border
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
@@ -438,45 +423,69 @@ if (refresh){refresh =false;};
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
+	glBegin(GL_LINE_LOOP);
+	glLineWidth(1);
+
+	//glTranslatef(curx*(width-20),cury*height,0);
+    // cursor circle
+	for (int i = 0; i < 360 ;i+=5){
+		glVertex2d(curx*(width-20)+sin(DEG2RAD(float(i)))*6, cury*height-height+cos(DEG2RAD(float(i)))*6);
+	}
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < 180 ;i+=5){
+		glVertex2d((width-3)+sin(DEG2RAD(float(i)))*4, curz*height-height+cos(DEG2RAD(float(i)))*4);
+	}
+    for (int i = 180; i < 360 ;i+=5){
+		glVertex2d((width-12)+sin(DEG2RAD(float(i)))*4, curz*height-height+cos(DEG2RAD(float(i)))*4);
+	}
+	//glTranslatef(-curx*(width-20),-cury*height,0);
+    glEnd();
 	glTranslated(-posx,-posy,0);
 }
 
 void W_colorSelectdisplay::UpdateColor(int x, int y){
 
-	r = float(x)/float(width);
-	g = -(float(y)/float(height));
-	b = 0;
+	/*redHue = float(x)/float(width);
+	greenSat = -(float(y)/float(height));
+	blueVal = 0;*/
 }
 
 void W_colorSelectdisplay::GetColor(float* red, float* green, float* blue){
-	*red = r;
-	*green = g;
-	*blue = b;
-
+    if ((mode==HUE)||(mode==SAT)||(mode==VAL))
+        HSVtoRGB(redHue,greenSat,blueVal, red, green, blue);
+    else
+    {
+        *red = redHue;
+        *green = greenSat;
+        *blue = blueVal;
+    }
 };
 
 UI_base* W_colorSelectdisplay::OnLButtonDown(int x, int y)
 {
 	if (Hittest(x,y))
 	{
-        UpdateColor(x-posx,y-posy);
-		curx = x-posx;
-		cury = posy-y;
 		pInterceptChild = this;
-	}
-    else
-    {
-        pInterceptChild = 0;
+        if (x-posx<width-20)
+        {
+            curx = float(x-posx)/float(width-20);
+            cury = 1+float(y-posy)/float(height);
+            SetCursorXY(curx, cury);
+            xy=true;
+            return 0;
+		}
+		else if (x-posx>width-15)
+		{
+            curz = 1+float(y-posy)/float(height);
+            SetCursorZ(curz);
+            xy=false;
+            return 0;
+		}
     }
-	/*if (!(x<posx || x>posx+width || y>posy || y<posy-height)){
-		//action = true;
-		UpdateColor(x-posx,y-posy);
-		curx = x-posx;
-		cury = posy-y;
+    pInterceptChild = 0;
+    return 0;
 
-		pInterceptChild = this;
-		return this;
-	}*/
 }
 
 UI_base* W_colorSelectdisplay::OnLButtonUp(int x, int y)
@@ -489,26 +498,19 @@ UI_base* W_colorSelectdisplay::OnLButtonUp(int x, int y)
 
 UI_base* W_colorSelectdisplay::OnMouseMove(int x, int y, int prevx, int prevy)
 {
-	//if (action == true)
 	if(pInterceptChild == this)
 	{
-
-		curx = x-posx;
-		cury = posy-y;
-		if (curx<0 ){
-			curx = 0;
+        if (xy)
+        {
+            curx = max(min(float(x-posx)/float(width-20),1.0f),0.0f);
+            cury = max(min(1+float(y-posy)/float(height),1.0f),0.0f);
+            SetCursorXY(curx, cury);
 		}
-		if (curx>width ){
-			curx = width;
+		else
+		{
+            curz = max(min(1+float(y-posy)/float(height),1.0f),0.0f);
+            SetCursorZ(curz);
 		}
-		if (cury<0 ){
-			cury = 0;
-		}
-		if (cury>height ){
-			cury = height;
-		}
-
-        //pInterceptChild = this;
 		return this;
 		/*
 		if (pParentUI_base)

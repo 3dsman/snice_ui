@@ -48,8 +48,12 @@ class W_colorSelectdisplay : public UI_widget
 
 private:
 
-	bool refresh;
-	float r,g,b;
+	bool xy;
+	float redHue, greenSat, blueVal;
+	void RefreshImageXY();
+	void RefreshImageZ();
+    void SetCursorXY(float curx, float cury);
+    void SetCursorZ(float curz);
 
 public:
 	float curx;
@@ -61,7 +65,6 @@ public:
 	Texture quadImage;
 	Texture lineImage;
 
-	void RefreshImage();
 
 	W_colorSelectdisplay(int x, int y, int w, int h, colorSelector mode, float red = 0.8f, float green = 0.8f, float blue = 0.8f, int pImageWidth = 256, int pImageHeight = 256);
 
