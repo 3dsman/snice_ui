@@ -84,6 +84,13 @@ void testwin(UI_window* caller)
     pValid->SetName( "ca marche");
 };
 
+void colorPickerContent(W_colorSelectdisplay* caller)
+{
+float red, green,blue;
+caller->GetColor(&red, &green,&blue);
+    if(progress) progress->SetColor( red, green, blue);
+};
+
 void viewport_resize(UI_base* caller, int w, int h)
 {
     if(pValid) pValid->SetPosX(w-150);
@@ -103,6 +110,7 @@ void pickOption(W_subMenu* caller, unsigned char option)
 {
     if((caller)&&(pValid)) pValid->SetName( caller->GetString());
 };
+
 //////////////////////////////////////////////////
 // init(int argc, char *argv[]).
 // Initialise the system and process special args
@@ -203,6 +211,7 @@ void create_interface()
 	pViewport->AddChild(menu);
 
     color_display = new W_colorSelectdisplay(400,300, 250,250,HUE,0.2, 0.5, 0.8);
+    color_display->OnChange(colorPickerContent);
 	pViewport->AddChild(color_display);
 }
 

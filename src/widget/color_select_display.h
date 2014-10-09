@@ -55,6 +55,8 @@ private:
     void SetCursorXY(float curx, float cury);
     void SetCursorZ(float curz);
 
+	void (*onChange)(W_colorSelectdisplay* caller);
+
 public:
 	float curx;
 	float cury;
@@ -76,6 +78,9 @@ public:
 	void UpdateColor(int x, int y);
 
 	void GetColor(float* red, float* green, float* blue);
+
+    /**	\brief function to set the onChange callback function.*/
+	void OnChange(void (*function)(W_colorSelectdisplay* caller));
 
 	/**	\brief left button down function.*/
 	virtual UI_base* OnLButtonDown(int x, int y);

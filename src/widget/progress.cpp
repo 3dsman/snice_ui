@@ -135,6 +135,7 @@ void W_progress::Draw()
 
 
 	glEnable(GL_TEXTURE_2D);
+	glColor4f(r,g,b,1.0f);
 	//glBindTexture(GL_TEXTURE_2D, textures[11].texID);
 	glBindTexture(GL_TEXTURE_2D, textures.progress.texID);
 
