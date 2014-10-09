@@ -202,7 +202,7 @@ void create_interface()
 	menu->OnPickOption(pickOption);
 	pViewport->AddChild(menu);
 
-    color_display = new W_colorSelectdisplay(400,300, 150,150,HUE,0.2, 0.5, 0.8);
+    color_display = new W_colorSelectdisplay(400,300, 250,250,HUE,0.2, 0.5, 0.8);
 	pViewport->AddChild(color_display);
 }
 

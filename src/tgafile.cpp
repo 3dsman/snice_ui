@@ -61,14 +61,17 @@ int MessageBox(int empty, char * message, char * title, int flag)
 	return 0;
 }
 
-void gentex(Texture tex)
+void gentex(Texture * tex)
 {
-    glGenTextures(1, &tex.texID);				// Create The Texture
-    glBindTexture(GL_TEXTURE_2D, tex.texID);
+    glGenTextures(1, &tex->texID);				// Create The Texture
+    glBindTexture(GL_TEXTURE_2D, tex->texID);
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width, tex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.imageData);
-    if (tex.imageData){free(tex.imageData);}
+    if (tex->bpp == 24)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->width, tex->height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex->imageData);
+    else
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->imageData);
+    //if (tex.imageData){free(tex.imageData);}
 }
 
 bool LoadTGA(Texture * texture, char * filename)				// Load a TGA file

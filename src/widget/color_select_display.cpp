@@ -39,12 +39,12 @@
 #include "widget/color_select_display.h"
 
 //void W_colorSelectdisplay::RefreshImage(){
-	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, PreviewImage.width, PreviewImage.height, GL_RGB, GL_UNSIGNED_BYTE, PreviewImage.imageData);
+	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, quadImage.width, quadImage.height, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
 
 void W_colorSelectdisplay::RefreshImage(){
 //	Texture* Image;
 
-	//Image = &(pRgbcolor->PreviewImage);
+	//Image = &(pRgbcolor->quadImage);
 
 	int k = 0;
 	float red, green, blue;
@@ -53,15 +53,15 @@ void W_colorSelectdisplay::RefreshImage(){
     RGBtoHSV(r,g,b,&h,&s,&v);
 
 	int i,j;
-	for (i=0; i<int(PreviewImage.height); ++i){
-		for (j=0; j<int(PreviewImage.width); ++j){
+	for (i=0; i<int(quadImage.height); ++i){
+		for (j=0; j<int(quadImage.width); ++j){
 			switch (mode)
 			{
 				case HUE:
 				{
 					hue = h;
-					saturation = float(j)/ 255.0f;
-					luminosity = float(i) / 255.0f ;
+					saturation = float(j)/ quadImage.width;
+					luminosity = float(i) / quadImage.height ;
 
 					HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
 					break;
@@ -69,9 +69,9 @@ void W_colorSelectdisplay::RefreshImage(){
 
 				case SAT:
 				{
-					hue = float(j)/ 255.0f*360.0f;
+					hue = float(j)/ quadImage.width*360.0f;
 					saturation = s;
-					luminosity = float(i) / 255.0f ;
+					luminosity = float(i) / quadImage.height ;
 
 					HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
 					break;
@@ -79,8 +79,8 @@ void W_colorSelectdisplay::RefreshImage(){
 
 				case VAL:
 				{
-					hue = float(j)/ 255.0f*360.0f;
-					saturation = float(i) / 255.0f ;
+					hue = float(j)/ quadImage.width*360.0f;
+					saturation = float(i) / quadImage.height ;
 					luminosity = v;
 
 					HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
@@ -90,50 +90,121 @@ void W_colorSelectdisplay::RefreshImage(){
 				case RED:
 				{
 					red= r;
-					green= float(j);
-					blue= float(i);
+					green= float(j)/ quadImage.width;
+					blue= float(i)/ quadImage.height;
 					break;
 				}
 
 				case GREEN:
 				{
-					red= float(j);
+					red= float(j)/ quadImage.width;
 					green= g;
-					blue= float(i);
+					blue= float(i)/ quadImage.height;
 					break;
 				}
 
 				case BLUE:
 				{
-					red= float(j);
-					green= float(i);
+					red= float(j)/ quadImage.width;
+					green= float(i)/ quadImage.height;
 					blue= b;
 					break;
 				}
 			}
 
-			PreviewImage.imageData[k++] = char(red * 255);
-			PreviewImage.imageData[k++] = char(green * 255);
-			PreviewImage.imageData[k++] = char(blue * 255);
+			quadImage.imageData[k++] = char(red * 255);
+			quadImage.imageData[k++] = char(green * 255);
+			quadImage.imageData[k++] = char(blue * 255);
 		}
 	}
 
+    k=0;
+	for (i=0; i<lineImage.height; i++){
+        switch (mode)
+        {
+            case HUE:
+            {
+                hue = float(i)/ lineImage.height*360.0f;
+                saturation = s;
+                luminosity = v ;
+
+                HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
+                break;
+            }
+
+            case SAT:
+            {
+                hue = h;
+                saturation = float(i) / float(lineImage.height);
+                luminosity = v ;
+
+                HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
+                break;
+            }
+
+            case VAL:
+            {
+                hue = h;
+                saturation = s;
+                luminosity = float(i) / float(lineImage.height);
+
+                HSVtoRGB(hue,saturation,luminosity,&red,&green,&blue);
+                break;
+            }
+
+            case RED:
+            {
+                red= float(i) / float(lineImage.height);
+                green= g;
+                blue= b;
+                break;
+            }
+
+            case GREEN:
+            {
+                red= r;
+                green= float(i) / float(lineImage.height);
+                blue= b;
+                break;
+            }
+
+            case BLUE:
+            {
+                red= r;
+                green= g;
+                blue= float(i) / float(lineImage.height);
+                break;
+            }
+        }
+
+        for (j=0; j<lineImage.width; j++){
+            lineImage.imageData[k++] = char(red * 255);
+            lineImage.imageData[k++] = char(green * 255);
+            lineImage.imageData[k++] = char(blue * 255);
+        }
+	}
 
 	// horizontal bar
-	i=int(cury * PreviewImage.height)*PreviewImage.width * 3;
-	for (j= 0; j < PreviewImage.width * 3;j++){
-		PreviewImage.imageData[i] = 1 - (PreviewImage.imageData[i]);
+	i=int(cury * quadImage.height)*quadImage.width * 3;
+	for (j= 0; j < quadImage.width * 3;j++){
+		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);
 		i++;
 	}
 
 	// vertical bar
-	i = curx*PreviewImage.width * 3;
-	for (j = 0; j < int(PreviewImage.height) ;++j){
-		PreviewImage.imageData[i] = 1 - (PreviewImage.imageData[i]);i++;
-		PreviewImage.imageData[i] = 1 - (PreviewImage.imageData[i]);i++;
-		PreviewImage.imageData[i] = 1 - (PreviewImage.imageData[i]);i++;
-		i += (PreviewImage.width-1)*3;
+	i = curx*quadImage.width * 3;
+	for (j = 0; j < int(quadImage.height) ;++j){
+		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);i++;
+		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);i++;
+		quadImage.imageData[i] = 1 - (quadImage.imageData[i]);i++;
+		i += (quadImage.width-1)*3;
 	}
+
+	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
+
+	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
 
 	refresh = true;
 };
@@ -174,31 +245,46 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 			}
 
 	refresh = true;
-	//action=false;
-	printf("%03f %03f", curx, cury);
 
-    gentex(PreviewImage);
-	PreviewImage.width  = pImageWidth;
-	PreviewImage.height = pImageHeight;
-	PreviewImage.bpp	= 24;
-	PreviewImage.imageData	= (GLubyte *)malloc(pImageWidth*pImageHeight*24);
+    //gentex(lineImage);
+	lineImage.width  = 4;
+	lineImage.height = pImageHeight;
+	lineImage.bpp	= 24;
+	lineImage.imageData	= (GLubyte *)malloc(lineImage.width*lineImage.height*3);
+	glGenTextures(1, &lineImage.texID);
 
-	glGenTextures(1, &PreviewImage.texID);
-	glBindTexture(GL_TEXTURE_2D, PreviewImage.texID);
+	quadImage.width  = pImageWidth;
+	quadImage.height = pImageHeight;
+	quadImage.bpp	= 24;
+	quadImage.imageData	= (GLubyte *)malloc(pImageWidth*pImageHeight*3);
+	glGenTextures(1, &quadImage.texID);
 
+    RefreshImage();
+
+	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR  );
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR  );
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, PreviewImage.width, PreviewImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, PreviewImage.imageData);
-	RefreshImage();
+	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR  );
+	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR  );
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
+    //gentex(lineImage);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
 
 }
 
 W_colorSelectdisplay::~W_colorSelectdisplay()
 {
-	if (PreviewImage.imageData)
+	if (quadImage.imageData)
     {
-        free(PreviewImage.imageData);
+        free(quadImage.imageData);
+    }
+    if (lineImage.imageData)
+    {
+        free(lineImage.imageData);
     }
 }
 
@@ -207,22 +293,37 @@ void W_colorSelectdisplay::Draw()
 {
 
 	glEnable(GL_TEXTURE_2D);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glBindTexture(GL_TEXTURE_2D, PreviewImage.texID);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
 
 	if (refresh){
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, PreviewImage.width, PreviewImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, PreviewImage.imageData);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, PreviewImage.width, PreviewImage.height, GL_RGB, GL_UNSIGNED_BYTE, PreviewImage.imageData);
-		refresh=false;
+
+//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, quadImage.width, quadImage.height, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
+		//refresh=false;
 	}
 	glTranslated(posx, posy, 0);
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
+	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex2d(1,-1);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2d(width-20, -1);
+
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2d(width-20, -height+1);
+
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2d(1, -height+1);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2d(width-15,-1);
 
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex2d(width-1, -1);
@@ -231,11 +332,12 @@ void W_colorSelectdisplay::Draw()
 		glVertex2d(width-1, -height+1);
 
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex2d(1, -height+1);
+		glVertex2d(width-15, -height+1);
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 
+if (refresh){refresh =false;};
 
 	// draw the border
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
@@ -332,6 +434,8 @@ void W_colorSelectdisplay::Draw()
 		glVertex2d(0, -height);
 	glEnd();
 	*/
+
+	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
 	glTranslated(-posx,-posy,0);

@@ -51,7 +51,6 @@ private:
 	bool refresh;
 	float r,g,b;
 
-
 public:
 	float curx;
 	float cury;
@@ -59,7 +58,8 @@ public:
 	bool action;
 	colorSelector mode;
 
-	Texture PreviewImage;
+	Texture quadImage;
+	Texture lineImage;
 
 	void RefreshImage();
 
