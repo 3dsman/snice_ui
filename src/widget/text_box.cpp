@@ -41,7 +41,7 @@
 #include "widget/text_box.h"
 
 
-W_textbox::W_textbox(int x, int y, int w, int h, string l, string c,bool num, bool integer, bool deci, float red, float green, float blue)
+W_textbox::W_textbox(int x, int y, int w, int h, string l, string c,bool num, bool integer, bool deci, bool contour, float red, float green, float blue)
 		:UI_widget(x, y, w, h, r, g, b)
 {
 
@@ -51,6 +51,8 @@ W_textbox::W_textbox(int x, int y, int w, int h, string l, string c,bool num, bo
     integ = integer;
 
 	action = false;
+
+    drawContour = contour;
 
 	refName = l;
 
@@ -130,150 +132,152 @@ void W_textbox::OnSetContent(void (*function)(W_textbox* caller, string content)
 
 void W_textbox::Draw()
 {
-	glTranslated(posx, posy, 0);
-	// Black outlining
-	/*glColor4f(0.3f,0.3f,0.3f,0.5f);
-	glBegin(GL_POLYGON);
+    if(drawContour)
+    {
+        glTranslated(posx, posy, 0);
+        // Black outlining
+        /*glColor4f(0.3f,0.3f,0.3f,0.5f);
+        glBegin(GL_POLYGON);
 
-		glVertex2d(6, 0);
-		glVertex2d(width-6, 0);
-		glVertex2d(width-2, -1);
-		glVertex2d(width-1, -3);
-		glVertex2d(width, -6);
-		glVertex2d(width, -height+6);
-		glVertex2d(width-1, -height+2);
-		glVertex2d(width-3, -height+1);
-		glVertex2d(width-6, -height);
-		glVertex2d(6, -height);
-		glVertex2d(2, -height+1);
-		glVertex2d(1, -height+3);
-		glVertex2d(0, -height+6);
-		glVertex2d(0, -6);
-		glVertex2d(1, -2);
-		glVertex2d(3, -1);
-		glVertex2d(6, 0);
-	glEnd();*/
+            glVertex2d(6, 0);
+            glVertex2d(width-6, 0);
+            glVertex2d(width-2, -1);
+            glVertex2d(width-1, -3);
+            glVertex2d(width, -6);
+            glVertex2d(width, -height+6);
+            glVertex2d(width-1, -height+2);
+            glVertex2d(width-3, -height+1);
+            glVertex2d(width-6, -height);
+            glVertex2d(6, -height);
+            glVertex2d(2, -height+1);
+            glVertex2d(1, -height+3);
+            glVertex2d(0, -height+6);
+            glVertex2d(0, -6);
+            glVertex2d(1, -2);
+            glVertex2d(3, -1);
+            glVertex2d(6, 0);
+        glEnd();*/
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	// Fill
-	// glColor4f(1.0f, 1.0f, 1.0f,0.6f);
-	// glColor4f(0.64f, 0.59f, 0.53f,1.0f);
-	glColor4f(0.75f, 0.75f, 0.75f,1.0f);
-	glBegin(GL_POLYGON);
-		glVertex2d(6, -1);
-		glVertex2d(width-6, -1);
-		glVertex2d(width-2, -2);
-		glVertex2d(width-1, -4);
-		glVertex2d(width-1, -6);
-		glVertex2d(width-1, -height+6);
-		glVertex2d(width-2, -height+2);
-		glVertex2d(width-4, -height+1);
-		glVertex2d(width-6, -height+1);
-		glVertex2d(6, -height+1);
-		glVertex2d(2, -height+2);
-		glVertex2d(1, -height+4);
-		glVertex2d(1, -height+5);
-		glVertex2d(1, -7);
-		glVertex2d(2, -2);
-		glVertex2d(4, -1);
-		glVertex2d(6, 0);
-	glEnd();
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        // Fill
+        // glColor4f(1.0f, 1.0f, 1.0f,0.6f);
+        // glColor4f(0.64f, 0.59f, 0.53f,1.0f);
+        glColor4f(0.75f, 0.75f, 0.75f,1.0f);
+        glBegin(GL_POLYGON);
+            glVertex2d(6, -1);
+            glVertex2d(width-6, -1);
+            glVertex2d(width-2, -2);
+            glVertex2d(width-1, -4);
+            glVertex2d(width-1, -6);
+            glVertex2d(width-1, -height+6);
+            glVertex2d(width-2, -height+2);
+            glVertex2d(width-4, -height+1);
+            glVertex2d(width-6, -height+1);
+            glVertex2d(6, -height+1);
+            glVertex2d(2, -height+2);
+            glVertex2d(1, -height+4);
+            glVertex2d(1, -height+5);
+            glVertex2d(1, -7);
+            glVertex2d(2, -2);
+            glVertex2d(4, -1);
+            glVertex2d(6, 0);
+        glEnd();
 
-	// draw the border
-	glColor4f(1.0f,1.0f,1.0f,0.7f);
+        // draw the border
+        glColor4f(1.0f,1.0f,1.0f,0.7f);
 
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);				// Select Our Font Texture
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textures.slider.texID);				// Select Our Font Texture
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
 
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0f,1.0f);
-		glVertex2d(0, 0);
-		glTexCoord2f(0.25f,1.0f);
-		glVertex2d(8, 0);
-		glTexCoord2f(0.25,0.75f);
-		glVertex2d(8, -8);
-		glTexCoord2f(0.0f,0.75f);
-		glVertex2d(0, -8);
+        glBegin(GL_QUADS);
+            glTexCoord2f(0.0f,1.0f);
+            glVertex2d(0, 0);
+            glTexCoord2f(0.25f,1.0f);
+            glVertex2d(8, 0);
+            glTexCoord2f(0.25,0.75f);
+            glVertex2d(8, -8);
+            glTexCoord2f(0.0f,0.75f);
+            glVertex2d(0, -8);
 
-		glTexCoord2f(0.49f,1.0f);
-		glVertex2d(8, 0);
-		glTexCoord2f(0.51f,1.0f);
-		glVertex2d(width-8, 0);
-		glTexCoord2f(0.51f,0.75f);
-		glVertex2d(width-8, -8);
-		glTexCoord2f(0.49f,0.75f);
-		glVertex2d(8, -8);
+            glTexCoord2f(0.49f,1.0f);
+            glVertex2d(8, 0);
+            glTexCoord2f(0.51f,1.0f);
+            glVertex2d(width-8, 0);
+            glTexCoord2f(0.51f,0.75f);
+            glVertex2d(width-8, -8);
+            glTexCoord2f(0.49f,0.75f);
+            glVertex2d(8, -8);
 
-		glTexCoord2f(0.75f,1.0f);
-		glVertex2d(width-8, 0);
-		glTexCoord2f(1.00f,1.0f);
-		glVertex2d(width, 0);
-		glTexCoord2f(1.00f,0.75f);
-		glVertex2d(width, -8);
-		glTexCoord2f(0.75f,0.75f);
-		glVertex2d(width-8, -8);
+            glTexCoord2f(0.75f,1.0f);
+            glVertex2d(width-8, 0);
+            glTexCoord2f(1.00f,1.0f);
+            glVertex2d(width, 0);
+            glTexCoord2f(1.00f,0.75f);
+            glVertex2d(width, -8);
+            glTexCoord2f(0.75f,0.75f);
+            glVertex2d(width-8, -8);
 
-		glTexCoord2f(0.75f,0.75f);
-		glVertex2d(width-8, -8);
-		glTexCoord2f(1.00f,0.75f);
-		glVertex2d(width, -8);
-		glTexCoord2f(1.00f,0.25f);
-		glVertex2d(width, -height+8);
-		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(width-8, -height+8);
+            glTexCoord2f(0.75f,0.75f);
+            glVertex2d(width-8, -8);
+            glTexCoord2f(1.00f,0.75f);
+            glVertex2d(width, -8);
+            glTexCoord2f(1.00f,0.25f);
+            glVertex2d(width, -height+8);
+            glTexCoord2f(0.75f,0.25f);
+            glVertex2d(width-8, -height+8);
 
-		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(width-8, -height+8);
-		glTexCoord2f(1.00f,0.25f);
-		glVertex2d(width, -height+8);
-		glTexCoord2f(1.00f,0.00f);
-		glVertex2d(width, -height);
-		glTexCoord2f(0.75f,0.00f);
-		glVertex2d(width-8, -height);
+            glTexCoord2f(0.75f,0.25f);
+            glVertex2d(width-8, -height+8);
+            glTexCoord2f(1.00f,0.25f);
+            glVertex2d(width, -height+8);
+            glTexCoord2f(1.00f,0.00f);
+            glVertex2d(width, -height);
+            glTexCoord2f(0.75f,0.00f);
+            glVertex2d(width-8, -height);
 
-		glTexCoord2f(0.25f,0.25f);
-		glVertex2d(8, -height+8);
-		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(width-8, -height+8);
-		glTexCoord2f(0.75,0.00f);
-		glVertex2d(width-8, -height);
-		glTexCoord2f(0.25f,0.00f);
-		glVertex2d(8, -height);
+            glTexCoord2f(0.25f,0.25f);
+            glVertex2d(8, -height+8);
+            glTexCoord2f(0.75f,0.25f);
+            glVertex2d(width-8, -height+8);
+            glTexCoord2f(0.75,0.00f);
+            glVertex2d(width-8, -height);
+            glTexCoord2f(0.25f,0.00f);
+            glVertex2d(8, -height);
 
-		glTexCoord2f(0.0f,0.25f);
-		glVertex2d(0, -height+8);
-		glTexCoord2f(0.25f,0.25f);
-		glVertex2d(8, -height+8);
-		glTexCoord2f(0.25f,0.00f);
-		glVertex2d(8, -height);
-		glTexCoord2f(0.0f,0.00f);
-		glVertex2d(0, -height);
+            glTexCoord2f(0.0f,0.25f);
+            glVertex2d(0, -height+8);
+            glTexCoord2f(0.25f,0.25f);
+            glVertex2d(8, -height+8);
+            glTexCoord2f(0.25f,0.00f);
+            glVertex2d(8, -height);
+            glTexCoord2f(0.0f,0.00f);
+            glVertex2d(0, -height);
 
-		glTexCoord2f(0.00f,0.75f);
-		glVertex2d(0, -8);
-		glTexCoord2f(0.25f,0.75f);
-		glVertex2d(8, -8);
-		glTexCoord2f(0.25f,0.25f);
-		glVertex2d(8, -height+8);
-		glTexCoord2f(0.00f,0.25f);
-		glVertex2d(0, -height+8);
-	glEnd();
+            glTexCoord2f(0.00f,0.75f);
+            glVertex2d(0, -8);
+            glTexCoord2f(0.25f,0.75f);
+            glVertex2d(8, -8);
+            glTexCoord2f(0.25f,0.25f);
+            glVertex2d(8, -height+8);
+            glTexCoord2f(0.00f,0.25f);
+            glVertex2d(0, -height+8);
+        glEnd();
 
-	glDisable(GL_TEXTURE_2D);
+        glDisable(GL_TEXTURE_2D);
 
-	// draw the cursor
-	//glColor4f(0.9f,0.3f,0.1f,0.6f);
-	//glBegin(GL_QUADS);
-	//	glVertex2d(,);
-	//	glVertex2d(,);
-	//	glVertex2d(,);
-	//	glVertex2d(,);
-	//glEnd();
-	glTranslated(-posx,-posy,0);
-
+        // draw the cursor
+        //glColor4f(0.9f,0.3f,0.1f,0.6f);
+        //glBegin(GL_QUADS);
+        //	glVertex2d(,);
+        //	glVertex2d(,);
+        //	glVertex2d(,);
+        //	glVertex2d(,);
+        //glEnd();
+        glTranslated(-posx,-posy,0);
+    }
 	glColor4f(0.7f,0.7f,0.7f,0.4f);
 	UI_widget::Draw();
 }
@@ -394,11 +398,6 @@ UI_base* W_textbox::OnKeyPressed(int key)
     		case SNICEUI_KEY_ENTER :
     		case SNICEUI_KEY_KP_ENTER:
     			{
-    				// delete the cursor of the chain
-    				/*for (unsigned short i = curPos ; i < (contents.size()); ++i)
-    				{
-    					contents[i] = contents[i+1];
-    				}*/
     				//if the chain is empty and must contain a number then write "0"
     				if ((number)&&(contents.size()==0))
     				   contents = "0";
@@ -412,11 +411,6 @@ UI_base* W_textbox::OnKeyPressed(int key)
 
     	            if(onSetContent) onSetContent(this, contents);
 
-
-        /*
-        			if (pParentUI_base)
-        			   pParentUI_base->Callback(this,1);
-        */
             		//free the inteception pointers
                     pInterceptChild = 0;
                     return 0;
@@ -466,65 +460,17 @@ UI_base* W_textbox::OnKeyPressed(int key)
 			 }
 			CloseClipboard () ;
 
-		}else
-		{*/
-
-/*			contents[pos] = key + 32;
-
-			if(pos < 254) pos++;
-			contents[pos] = '|';
-			contents[pos+1] = '\0';
-			width = width + 7;
-
-		//}
+		}
 	}
-
-	if(key >= 96 && key <= 105)
-	{
-			contents[pos] = key - 48;
-
-			if(pos < 254) pos++;
-			contents[pos] = '|';
-			contents[pos+1] = '\0';
-			width = width + 7;
-
-	}
-
-	if(key >= 106 && key <= 111)
-	{
-			contents[pos] = key - 64;
-			if(pos < 254) pos++;
-			contents[pos] = '|';
-			contents[pos+1] = '\0';
-			width = width + 7;
-
-	}*/
-
-//}
-
+*/
 UI_base* W_textbox::OnCharPressed(int character)
 {
-//printf("%s", character);
 	if((action)&&( character > 0 && character < 256 )&&
     (( character >= 48 && character <= 57 )||((character == '.')&&decimal)||((character == '-')&&integ)||(!number)))
 		{
-			//if we are at the limit of the chain
-			//if ((contents.size()) < 255)
-				//{
-					//move to the right all the characters between end and cursor (cursor include)
-					/*for (unsigned int i = contents.size() ; i >= curPos; --i)
-					{
-						contents[i+1] = contents[i];
-					}*/
-					contents.insert(curPos, 1, (char) character);
 
-					//replace the next cursor character by the input character
-					//contents[curPos] = (char) character;
-
-					//and increment the cursor position
-					curPos++;
-				//}
-
+            contents.insert(curPos, 1, (char) character);
+            curPos++;
 			//dont forget to refresh the label
 			SetLabel();
 		}

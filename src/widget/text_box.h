@@ -57,6 +57,7 @@ private:
     bool integ;
 	bool decimal;
 	bool action;
+	bool drawContour=true;
 
     void (*onSetContent)(W_textbox* caller, string content) = NULL;
 
@@ -67,7 +68,7 @@ private:
 
 public:
 
-	W_textbox(int x, int y, int w, int h, string l, string c, bool num = false, bool integer = true, bool deci = false, float r = 0.3f, float g = 0.3f, float b = 0.3f);
+	W_textbox(int x, int y, int w, int h, string l, string c, bool num = false, bool integer = true, bool deci = false, bool contour = true, float r = 0.3f, float g = 0.3f, float b = 0.3f);
 
 	virtual ~W_textbox();
 
