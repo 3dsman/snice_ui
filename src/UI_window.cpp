@@ -64,6 +64,8 @@ UI_window::UI_window(int x, int y, int w, int h, string winName, bool closeable,
 	this->foldable = foldable;
 	int labelpos = 17;
 	if (!foldable) labelpos = 5;
+	//onFold = NULL;
+	//onUnfold = NULL;
 	//if (strlen(winName)<255)
 	//{
 		refName = winName;//strcpy(refName,winName);

@@ -72,7 +72,7 @@ private:
 	List options;
 	Option* pSelectedOption;
 
-	void (*onPickOption)(W_subMenu* caller, unsigned char option);
+	void (*onPickOption)(W_subMenu* caller, unsigned char option) = NULL;
 
 public:
 

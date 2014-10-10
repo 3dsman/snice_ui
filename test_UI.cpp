@@ -84,10 +84,8 @@ void testwin(UI_window* caller)
     pValid->SetName( "ca marche");
 };
 
-void colorPickerContent(W_colorSelectdisplay* caller)
+void colorPickerContent(W_colorSelectdisplay* caller,float red, float green, float blue)
 {
-float red, green,blue;
-caller->GetColor(&red, &green,&blue);
     if(progress) progress->SetColor( red, green, blue);
 };
 
@@ -189,7 +187,6 @@ void create_interface()
 	slider = new W_slider(100, -60, 150, 20, "Ha", 120, 100, 200, 0);
 	pwind->AddChild(slider);
 	slider->OnSetValue(sliderValue);
-	//pViewport->AddChild(slider);
 
 	submenu2 = new W_subMenu(100,10,100);
 	submenu2->AddOption("aaaaa");

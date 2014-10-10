@@ -58,7 +58,7 @@ private:
 	bool decimal;
 	bool action;
 
-    void (*onSetContent)(W_textbox* caller, string content);
+    void (*onSetContent)(W_textbox* caller, string content) = NULL;
 
 
 	void SetLabel(string l);

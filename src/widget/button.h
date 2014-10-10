@@ -50,9 +50,9 @@ protected:
 
 	bool pressed;
 	bool active;
-	void (*onMouseOver)(W_button* caller);
-	void (*onMouseOut)(W_button* caller);
-	void (*onClick)(W_button* caller);
+	void (*onMouseOver)(W_button* caller) = NULL;
+	void (*onMouseOut)(W_button* caller) = NULL;
+	void (*onClick)(W_button* caller) = NULL;
 
 	void SetLabel(string l);
 

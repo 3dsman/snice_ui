@@ -9,13 +9,13 @@
 ///
 // based on Crafter (Leaf) Library by Wybren van Keulen (www.funnyfarm.tv)
 // based on GLFW Library (www.glfw.org)
-// 
+//
 // viewport.h
 // This file is the file of the window class
 // File created by Tricoire Sebastien
 // Date of creation : 2005 16 02
 ///
-// File modified by 
+// File modified by
 // Date of modification :
 ///
 // Copyright (C) 2004 Sebastien Tricoire and Lionel Allorge.
@@ -38,14 +38,14 @@ class UI_widget;
 
 class Viewport : public UI_base
 {
-	
+
 protected:
 	float scrollx; /**< \brief  Horizontal scroll position*/
 	float scrolly; /**< \brief  Vertical scroll position*/
 	float viewZoom; /**< \brief  Zoom factor (not used for now)*/
 	/** \brief funtion to draw the content of the viewport*/
-	
-	void (*onDraw)(UI_base* caller);
+
+	void (*onDraw)(UI_base* caller) = NULL;
 	//virtual void DrawOn(){};
 public:
 	//Viewport();
@@ -58,15 +58,15 @@ public:
 	//virtual UI_base* OnKeyPressed(int key);
 
 	//virtual UI_base* OnCharPressed(int character);
-	
+
 	virtual bool GetScreenToLocalMatrix(UI_base * object, float *x, float *y, float *zoom);
-	
+
 	void Callback(UI_base * pCallObject, unsigned char callIndex );
 
 	/**	\brief Function called when we resize the viewport .*/
 	virtual void Resize(int x, int y,int w, int h);
-	
-	
+
+
 	void setOnDraw(void (*function)(UI_base* caller));
 
 	void Draw();

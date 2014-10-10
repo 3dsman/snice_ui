@@ -59,9 +59,9 @@ protected:
 	W_label* pTitlelabel;	/**<	\brief title of the window (you can get it with GetName()).*/
 
 
-	void (*onClose)(UI_window* caller);
-	void (*onFold)(UI_window* caller);
-	void (*onUnfold)(UI_window* caller);
+	void (*onClose)(UI_window* caller) = NULL;
+	void (*onFold)(UI_window* caller) = NULL;
+	void (*onUnfold)(UI_window* caller) = NULL;
 
 public:
 

@@ -57,7 +57,7 @@ private:
 
 	bool action;
 
-	void (*onSetValue)(W_slider* caller, float value, bool realtime);
+	void (*onSetValue)(W_slider* caller, float value, bool realtime) = NULL;
 
 	void Init(int x, int y, int w, int h, string l, float v, float f, float t, int p, float bar, float r, float g, float b);
 

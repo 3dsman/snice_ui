@@ -95,8 +95,8 @@ protected:
 
 	List childList; /**< \brief List of childs*/
 
-	void (*onResize)(UI_base* caller, int w, int h); /**<		\brief resize callback function */
-	void (*onMove)(UI_base* caller, int x, int y); /**<		\brief move callback function */
+	void (*onResize)(UI_base* caller, int w, int h) = NULL; /**<		\brief resize callback function */
+	void (*onMove)(UI_base* caller, int x, int y) = NULL; /**<		\brief move callback function */
 
 public:
 	bool killMe;

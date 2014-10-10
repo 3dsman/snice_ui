@@ -462,7 +462,7 @@ void W_colorSelectdisplay::GetColor(float* red, float* green, float* blue){
     }
 };
 
-void W_colorSelectdisplay::OnChange(void (*function)(W_colorSelectdisplay* caller))
+void W_colorSelectdisplay::OnChange(void (*function)(W_colorSelectdisplay* caller,float red,float green, float blue))
 {
     onChange = function;
 }
@@ -478,7 +478,12 @@ UI_base* W_colorSelectdisplay::OnLButtonDown(int x, int y)
             cury = 1+float(y-posy)/float(height);
             SetCursorXY(curx, cury);
             xy=true;
-            if(onChange) onChange(this);
+            if(onChange)
+            {
+                float r,g,b;
+                GetColor(&r,&g,&b);
+                onChange(this,r,g,b);
+            }
             return 0;
 		}
 		else if (x-posx>width-15)
@@ -486,7 +491,12 @@ UI_base* W_colorSelectdisplay::OnLButtonDown(int x, int y)
             curz = 1+float(y-posy)/float(height);
             SetCursorZ(curz);
             xy=false;
-            if(onChange) onChange(this);
+            if(onChange)
+            {
+                float r,g,b;
+                GetColor(&r,&g,&b);
+                onChange(this,r,g,b);
+            }
             return 0;
 		}
     }
@@ -518,7 +528,12 @@ UI_base* W_colorSelectdisplay::OnMouseMove(int x, int y, int prevx, int prevy)
             curz = max(min(1+float(y-posy)/float(height),1.0f),0.0f);
             SetCursorZ(curz);
 		}
-        if(onChange) onChange(this);
+        if(onChange)
+            {
+                float r,g,b;
+                GetColor(&r,&g,&b);
+                onChange(this,r,g,b);
+            }
 		return this;
 	}
     return 0;
