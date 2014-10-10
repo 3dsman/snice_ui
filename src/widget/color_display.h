@@ -40,7 +40,7 @@
 
 #include "widget/UI_widget.h"
 
-class D_ColorPicker;
+//class D_ColorPicker;
 
 typedef bool (*pt2Function)();
 
@@ -52,33 +52,41 @@ private:
 
 	int width;
 	int height;
-	
-	D_ColorPicker* pColorPicker;
 
+	//D_ColorPicker* pColorPicker;
+
+	void (*onClick)(W_colorDisplay* caller) = NULL;
+	void (*onChange)(W_colorDisplay* caller,float red,float green, float blue) = NULL;
 public:
 
-	W_colorDisplay(int x, int y, int w, int h, char* name, float r = 0.8f, float g = 0.8f, float b = 0.8f);
+	W_colorDisplay(int x, int y, int w, int h, string name, float r = 0.8f, float g = 0.8f, float b = 0.8f);
 
 	~W_colorDisplay();
-	
+
 
 	void Draw();
 	void SetColor(float r, float g, float b);
 
 	void GetColor(float * r, float * g, float * b);
-	
+
+    /**	\brief function to set the onClic callback function.*/
+	void OnClick(void (*function)(W_colorDisplay* caller));
+
+    /**	\brief function to set the onChange callback function.*/
+	void OnChange(void (*function)(W_colorDisplay* caller,float red,float green, float blue));
+
 	float GetColor(int RGB);
 
-	void OnLButtonDown(int x, int y){};
+	UI_base* OnLButtonDown(int x, int y);
 
-	void OnLButtonUp(int x, int y);
-	
-	void Callback(UI_base * pCallObject, unsigned char callIndex );
+	UI_base* OnLButtonUp(int x, int y);
+
+	//void Callback(UI_base * pCallObject, unsigned char callIndex );
 
 	void SetOnDrawFunction(pt2Function onDrawFunction);
 
 	virtual void OnDraw();
-	
+
 	void LoadXML(TiXmlElement* element);
 
 	void SaveXML(TiXmlElement* element);

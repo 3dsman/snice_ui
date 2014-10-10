@@ -34,14 +34,14 @@
  * ***** END GPL LICENSE BLOCK *****
  */
 
-#include "snice.h"
+#include "../snice_UI.h"
 
-#include "viewports_array.h"
-#include "dialog/color_picker.h"
+//#include "viewports_array.h"
+//#include "dialog/color_picker.h"
 
 #include "widget/color_display.h"
 
-W_colorDisplay::W_colorDisplay(int x, int y, int w, int h, char* name, float r, float g, float b)
+W_colorDisplay::W_colorDisplay(int x, int y, int w, int h, string name, float r, float g, float b)
 			 :UI_widget(x, y, w, h, r, g, b)
 {
 	posx = x;
@@ -49,7 +49,7 @@ W_colorDisplay::W_colorDisplay(int x, int y, int w, int h, char* name, float r, 
 	width = w;
 	height = h;
 
-	strcpy(refName, name);
+	refName= name;
 
 	r = r;
 	g = g;
@@ -107,14 +107,14 @@ void W_colorDisplay::Draw()
 			glVertex2d(1,-1);
 			glVertex2d(width-1, -1);					// Draw the backgound to color and stencil buffers.
 			glVertex2d(width-1, -height+1);				// We Only Want To Mark It In The Stencil Buffer
-			glVertex2d(1, -height+1);					
-		glEnd();							
+			glVertex2d(1, -height+1);
+		glEnd();
 
 		glStencilFunc(GL_EQUAL, 1, 1);					// We draw only where the stencil is 1
 														// (I.E. where the background was drawn)
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);			// Don't change the stencil buffer
 
-		glPushMatrix();									// Push the matrix 
+		glPushMatrix();									// Push the matrix
 
 		OnDraw();								// draw the content of the window
 
@@ -122,15 +122,15 @@ void W_colorDisplay::Draw()
 
 		glDisable(GL_STENCIL_TEST);						// We don't need the stencil buffer any more (Disable)
 
-	
+
 	// draw the border
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures[8].texID);				// Select Our Font Texture
+	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID);				// Select Our Font Texture
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	
+
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
 		glVertex2d(0, 0);
@@ -140,7 +140,7 @@ void W_colorDisplay::Draw()
 		glVertex2d(8, -8);
 		glTexCoord2f(0.0f,0.75f);
 		glVertex2d(0, -8);
-		
+
 		glTexCoord2f(0.49f,1.0f);
 		glVertex2d(8, 0);
 		glTexCoord2f(0.51f,1.0f);
@@ -206,7 +206,7 @@ void W_colorDisplay::Draw()
 	glEnd();
 
 	/*glBindTexture(GL_TEXTURE_2D, textures[10].texID);
-	glColor4f(1.0f,1.0f,1.0f,0.6f);	
+	glColor4f(1.0f,1.0f,1.0f,0.6f);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
 		glVertex2d(0, 0);
@@ -219,7 +219,7 @@ void W_colorDisplay::Draw()
 	glEnd();*/
 
 	glDisable(GL_TEXTURE_2D);
-	
+
 	glTranslated(-posx,-posy,0);
 }
 void W_colorDisplay::SetColor(float red, float green, float blue)
@@ -247,14 +247,38 @@ float W_colorDisplay::GetColor(int RGB)
 		}
 }
 
-void W_colorDisplay::OnLButtonUp(int x, int y)
+void W_colorDisplay::OnClick(void (*function)(W_colorDisplay* caller))
+{
+    onClick = function;
+}
+
+void W_colorDisplay::OnChange(void (*function)(W_colorDisplay* caller,float red,float green, float blue))
+{
+    onChange = function;
+}
+
+UI_base* W_colorDisplay::OnLButtonDown(int x, int y)
 {
 	if (Hittest(x,y))
-		if (pParentUI_base) pParentUI_base->Callback(this,1);	
+	{
+		pInterceptChild = this;
+		return this;
+	}
+	return NULL;
+}
+
+UI_base* W_colorDisplay::OnLButtonUp(int x, int y)
+{
+	if (Hittest(x,y))
+        if(onClick)
+            onClick(this);
+		pInterceptChild = 0;
+
+		//if (pParentUI_base) pParentUI_base->Callback(this,1);
 }
 
 
-void W_colorDisplay::Callback(UI_base * pCallObject, unsigned char callIndex ){};
+//void W_colorDisplay::Callback(UI_base * pCallObject, unsigned char callIndex ){};
 
 
 
@@ -263,13 +287,13 @@ void W_colorDisplay::OnDraw(){};
 
 void W_colorDisplay::SaveXML(TiXmlElement* element)
 {
-	
+
 	char buf[256];
 	float red, green, blue;
 	GetColor(&red, &green, &blue);
 
 	//creation of the ColorBand xml flag
-	TiXmlElement NodeColorDisplay( refName );
+	TiXmlElement NodeColorDisplay( refName.c_str() );
 
 	sprintf( buf, "%f", red );
 	NodeColorDisplay.SetAttribute( "Red", buf );
@@ -294,7 +318,7 @@ void W_colorDisplay::LoadXML(TiXmlElement* element)
 
 void W_colorDisplay::Set(char* order)
 {
- 	printf("->%s", refName);
+ 	printf("->%s", refName.c_str());
  	char value[256];
 	int i=0;
  	for (i=0; i<256; ++i)
@@ -315,7 +339,7 @@ void W_colorDisplay::Set(char* order)
 		 g = atof(value);
 		 b = atof(separator+1);
      }
-     
+
    	 SetColor(r/255.0f,g/255.0f,b/255.0f);
 //   	 if (pParentUI_base) pParentUI_base->Callback(this,1);
 };

@@ -32,7 +32,8 @@ W_button* progressToggle;
 W_textbox* textbox;
 W_slider* slider;
 W_progress* progress;
-W_colorSelectdisplay* color_display;
+W_colorSelectdisplay* color_select_display;
+W_colorDisplay* color_display;
 
 UI_window* pwind;
 W_subMenu* submenu;
@@ -87,6 +88,8 @@ void testwin(UI_window* caller)
 void colorPickerContent(W_colorSelectdisplay* caller,float red, float green, float blue)
 {
     if(progress) progress->SetColor( red, green, blue);
+    if(color_display) color_display->SetColor( red, green, blue);
+
 };
 
 void viewport_resize(UI_base* caller, int w, int h)
@@ -150,7 +153,7 @@ void create_interface()
 	//pViewport = new Viewport(0,0,640,480);
 	pViewport->OnResize(viewport_resize);
 
-    pwind = new UI_window(100, 350, 500, 250, "test");
+    pwind = new UI_window(50, 550, 500, 250, "test");
 
 	pViewport->AddChild(pwind);
 
@@ -161,7 +164,7 @@ void create_interface()
 	progress->SetAction(true);
 	progress->SetSpeed(-0.1);
 
-	pValid = new W_button(490,100, 120,20, "COOL");
+	pValid = new W_button(200,100, 120,20, "COOL");
 	pViewport->AddChild(pValid);
 	//pValid->OnMouseOver(test);
 	//pValid->OnMouseOut(test2);
@@ -180,7 +183,7 @@ void create_interface()
 	pwind->AddChild(progressToggle);
 	progressToggle->OnClick(buttonHa);
 
-	textbox = new W_textbox(100,50, 150,20, "tutu","titi");
+	textbox = new W_textbox(100,150, 150,20, "tutu","titi");
 	pViewport->AddChild(textbox);
 	textbox->OnSetContent(textboxContent);
 
@@ -200,15 +203,18 @@ void create_interface()
 	submenu->AddOption("fffff");
 	submenu->OnPickOption(pickOption);
 
-	menu = new W_menu(110,100, 150,20, "menu");
+	menu = new W_menu(110,250, 150,20, "menu");
 	menu->AddOption("ggggg", submenu);
 	menu->AddOption("hhhhh");
 	menu->AddOption("iiiii");
 	menu->OnPickOption(pickOption);
 	pViewport->AddChild(menu);
 
-    color_display = new W_colorSelectdisplay(400,300, 250,250,HUE,0.2, 0.5, 0.8);
-    color_display->OnChange(colorPickerContent);
+    color_select_display = new W_colorSelectdisplay(400,300, 250,250,HUE,0.2, 0.5, 0.8);
+    color_select_display->OnChange(colorPickerContent);
+	pViewport->AddChild(color_select_display);
+
+	color_display = new W_colorDisplay(670,300, 50,30,"color",0.2, 0.5, 0.8);
 	pViewport->AddChild(color_display);
 }
 

@@ -22,6 +22,7 @@
 #include "widget/progress.h"
 #include "widget/sub_menu.h"
 #include "widget/menu.h"
+#include "widget/color_display.h"
 #include "widget/color_select_display.h"
 
 
