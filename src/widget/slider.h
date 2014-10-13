@@ -45,7 +45,7 @@ class W_slider : public UI_widget
 {
 private:
 	W_label* text;
-	char name[512];
+	string name;
 
 	float value;
 	float tmpValue;
@@ -68,9 +68,9 @@ public:
 
 	virtual ~W_slider();
 
-	void SetName(char *l);
+	void SetName(string l);
 
-	void SetLabel(char *l);
+	void SetLabel(string l);
 
 	void SetLabel();
 

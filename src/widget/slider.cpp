@@ -82,7 +82,7 @@ void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, floa
 	mouseOffset = 0;
 
 	refName = l;
-	sprintf(name, "%s", l.c_str());
+	name = l;
 	//text = new W_label(x+width/2-(strlen(l)*7)/2-4, y-2, 0, 1, name);
 	text = new W_label(width/2-(l.size()*7)/2-4, 8-(height/2), 0, 1, name);
 	this->AddChild(text);
@@ -97,31 +97,26 @@ void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, floa
 	onSetValue = 0;
 }
 
-void W_slider::SetName(char *l)
+void W_slider::SetName(string l)
 {
-    if (strlen(l)< 256)
-	{
-	   //delete text;
-	   sprintf(name, "%s", l);
-	   //text = new W_label(posx+width/2-(strlen(l)*7)/2-4, posy-2, 0, 1, name);
-	   SetLabel();
-	}
+   name = l;
+   SetLabel();
 }
 
 
-void W_slider::SetLabel(char *l)
+void W_slider::SetLabel(string l)
 {
-	if (strlen(l)< 256)
-	{
 		text->SetText(l);
-		text->SetPos(width/2-(strlen(l)*7)/2-4, 8-(height/2));
-	}
+		text->SetPos(width/2-(l.size()*7)/2-4, 8-(height/2));
 }
 
 void W_slider::SetLabel()
 {
-	char buttontext[14];
-	sprintf(buttontext, "%s: %.*f", name, precision, value);
+	char buttontext[name.size()+14];
+    if (name.size())
+        sprintf(buttontext, "%s: %.*f", name.c_str(), precision, value);
+    else
+        sprintf(buttontext, "%.*f", precision, value);
 	SetLabel(&buttontext[0]);
 }
 
