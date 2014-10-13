@@ -54,13 +54,13 @@ W_slider::W_slider(int x, int y, int w, int h, string l, float v, float f, float
 {
 	Init(x,y,w,h,l,v,f,t,p,bar,r,g,b);
 }
-
+/*
 W_slider::W_slider(int x, int y, int w, int h, string l, float v, float f, float t, int p, float r, float g, float b)
 		:UI_widget(x, y, w, h, r, g, b)
 {
 	Init(x,y,w,h,l,v,f,t,p,0.0f,r,g,b);
 
-}
+}*/
 
 W_slider::~W_slider()
 {

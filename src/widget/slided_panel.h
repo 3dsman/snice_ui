@@ -50,19 +50,20 @@ protected:
 
 
 	W_slider * pHorizontalSlider;
+	W_slider * pVerticalSlider;
 
-	virtual void PanelOnLButtonDown(int x, int y, int px, int py)=0;
-	virtual void PanelOnLButtonUp(int x, int y)=0;
-	virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy)=0;
-	virtual void PanelOnKeyPressed(int key)=0;
-	virtual void PanelDraw()=0;
+	//virtual void PanelOnLButtonDown(int x, int y, int px, int py)=0;
+	//virtual void PanelOnLButtonUp(int x, int y)=0;
+	//virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy)=0;
+	//virtual void PanelOnKeyPressed(int key)=0;
+	//virtual void PanelDraw()=0;
 
 public:
 
 	W_slidedPanel(int x, int y, int w, int h,int sx = 10, int sy = 10, float r = 0.8f, float g = 0.8f, float b = 0.8f);
 
 	virtual ~W_slidedPanel();
-	
+
 	void Draw();
 	void SetColor(float red, float green, float blue);
 
@@ -72,14 +73,15 @@ public:
 
 	bool HitPanel(int x, int y);
 
-	void OnLButtonDown(int x, int y);
+	/**	\brief left button down function.*/
+	virtual UI_base* OnLButtonDown(int x, int y);
+	/**	\brief left button up function.*/
+	virtual UI_base* OnLButtonUp(int x, int y);
+	/**	\brief mouse move function.*/
+	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
+	/**	\brief char pressed function.*/
+	//virtual UI_base* OnKeyPressed(int key);
 
-	void OnLButtonUp(int x, int y);
-
-	void OnMouseMove(int x, int y, int prevx, int prevy);
-
-	void OnKeyPressed(int key);
-	
 	void LoadXML(TiXmlElement* element);
 
 	//void SaveXML(TiXmlElement* element);

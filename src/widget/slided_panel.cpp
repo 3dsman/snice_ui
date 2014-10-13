@@ -36,7 +36,7 @@
  * ***** END GPL LICENSE BLOCK *****
  */
 
-#include "snice.h"
+#include "../snice_UI.h"
 #include "widget/slided_panel.h"
 
 
@@ -46,16 +46,22 @@ W_slidedPanel::W_slidedPanel(int x, int y, int w, int h,int sx, int sy, float re
 	surfacex = sx;
 	surfacey = sy;
 
-	pHorizontalSlider = new W_slider(0,-height+20,width,20,"", 0.0f, 0.0f, (float)surfacex, 0, (float)width,0.5,0.5,0.5);
-	AddChild(pHorizontalSlider);
+	pHorizontalSlider = new W_slider(0,-height+20,width-20,20,"", 0.0f, 0.0f, (float)surfacex, 0, (float)width);
+	//AddChild(pHorizontalSlider);
+	pVerticalSlider = new W_slider(width-20,0,20,height-20,"", 0.0f, 0.0f, (float)surfacey, 0, (float)height);
+	//AddChild(pVerticalSlider);
 }
 
-W_slidedPanel::~W_slidedPanel(){}
+W_slidedPanel::~W_slidedPanel()
+{
+    delete pHorizontalSlider;
+    delete pVerticalSlider;
+}
 
 void W_slidedPanel::Draw()
 {
-	float winHeight;
-	winHeight=height-20.0f;
+	float winHeight = height-20.0f;
+	float winWidth = width-20.0f;
 	glTranslated(posx, posy, 0);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -94,21 +100,27 @@ void W_slidedPanel::Draw()
 													// Keep if test fails, keep if test passes but buffer test fails replace if test passes
 	glBegin(GL_QUADS);
 		glVertex2d(1,-1);
-		glVertex2d(width-1, -1);					// Draw the backgound to color and stencil buffers.
-		glVertex2d(width-1, -winHeight+1);				// We Only Want To Mark It In The Stencil Buffer
-		glVertex2d(1, -winHeight+1);					
-	glEnd();							
+		glVertex2d(winWidth-1, -1);					// Draw the backgound to color and stencil buffers.
+		glVertex2d(winWidth-1, -winHeight+1);				// We Only Want To Mark It In The Stencil Buffer
+		glVertex2d(1, -winHeight+1);
+	glEnd();
 
 	glStencilFunc(GL_EQUAL, 1, 1);					// We draw only where the stencil is 1
 													// (I.E. where the background was drawn)
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);			// Don't change the stencil buffer
 
 	glPushMatrix();									// Push the matrix for the slider translation
-	glTranslated(-pHorizontalSlider->GetValue(), 0, 0);							// Slider translation
+	glTranslated(-pHorizontalSlider->GetValue(), pVerticalSlider->GetValue(), 0);
+							// Slider translation
 
 //**********************************  draw the content of the window  ***********************
 
-	PanelDraw();
+	if (childList.ToFirst())
+			do
+			{
+				((UI_base*)childList.GetCurrentObjectPointer())->Draw();
+			}while(childList.ToNext());
+	//PanelDraw();
 
 //*******************************************************************************************
 
@@ -122,10 +134,10 @@ void W_slidedPanel::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures[8].texID);				// Select Our Font Texture
+	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);				// Select Our Font Texture
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	
+
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
 		glVertex2d(0, 0);
@@ -135,49 +147,49 @@ void W_slidedPanel::Draw()
 		glVertex2d(8, -8);
 		glTexCoord2f(0.0f,0.75f);
 		glVertex2d(0, -8);
-		
+
 		glTexCoord2f(0.49f,1.0f);
 		glVertex2d(8, 0);
 		glTexCoord2f(0.51f,1.0f);
-		glVertex2d(width-8, 0);
+		glVertex2d(winWidth-8, 0);
 		glTexCoord2f(0.51f,0.75f);
-		glVertex2d(width-8, -8);
+		glVertex2d(winWidth-8, -8);
 		glTexCoord2f(0.49f,0.75f);
 		glVertex2d(8, -8);
 
 		glTexCoord2f(0.75f,1.0f);
-		glVertex2d(width-8, 0);
+		glVertex2d(winWidth-8, 0);
 		glTexCoord2f(1.00f,1.0f);
-		glVertex2d(width, 0);
+		glVertex2d(winWidth, 0);
 		glTexCoord2f(1.00f,0.75f);
-		glVertex2d(width, -8);
+		glVertex2d(winWidth, -8);
 		glTexCoord2f(0.75f,0.75f);
-		glVertex2d(width-8, -8);
+		glVertex2d(winWidth-8, -8);
 
 		glTexCoord2f(0.75f,0.75f);
-		glVertex2d(width-8, -8);
+		glVertex2d(winWidth-8, -8);
 		glTexCoord2f(1.00f,0.75f);
-		glVertex2d(width, -8);
+		glVertex2d(winWidth, -8);
 		glTexCoord2f(1.00f,0.25f);
-		glVertex2d(width, -winHeight+8);
+		glVertex2d(winWidth, -winHeight+8);
 		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(width-8, -winHeight+8);
+		glVertex2d(winWidth-8, -winHeight+8);
 
 		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(width-8, -winHeight+8);
+		glVertex2d(winWidth-8, -winHeight+8);
 		glTexCoord2f(1.00f,0.25f);
-		glVertex2d(width, -winHeight+8);
+		glVertex2d(winWidth, -winHeight+8);
 		glTexCoord2f(1.00f,0.00f);
-		glVertex2d(width, -winHeight);
+		glVertex2d(winWidth, -winHeight);
 		glTexCoord2f(0.75f,0.00f);
-		glVertex2d(width-8, -winHeight);
+		glVertex2d(winWidth-8, -winHeight);
 
 		glTexCoord2f(0.25f,0.25f);
 		glVertex2d(8, -winHeight+8);
 		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(width-8, -winHeight+8);
+		glVertex2d(winWidth-8, -winHeight+8);
 		glTexCoord2f(0.75,0.00f);
-		glVertex2d(width-8, -winHeight);
+		glVertex2d(winWidth-8, -winHeight);
 		glTexCoord2f(0.25f,0.00f);
 		glVertex2d(8, -winHeight);
 
@@ -201,7 +213,7 @@ void W_slidedPanel::Draw()
 	glEnd();
 
 	/*glBindTexture(GL_TEXTURE_2D, textures[10].texID);
-	glColor4f(1.0f,1.0f,1.0f,0.6f);	
+	glColor4f(1.0f,1.0f,1.0f,0.6f);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
 		glVertex2d(0, 0);
@@ -214,10 +226,11 @@ void W_slidedPanel::Draw()
 	glEnd();*/
 
 	glDisable(GL_TEXTURE_2D);
-	
+
 	pHorizontalSlider->Draw();
+	pVerticalSlider->Draw();
 	glTranslated(-posx,-posy,0);
-	
+
 }
 void W_slidedPanel::SetColor(float red, float green, float blue)
 {
@@ -232,47 +245,168 @@ void W_slidedPanel::GetColor(float * red, float * green, float * blue)
 void W_slidedPanel::SetPanelSurface(int x, int y)
 {
 	//change the total surface of the panel so set the slider
-	surfacex = max(x,width);
+	surfacex = max(x,width-20);
 	surfacey = max(y,height-20);
 	pHorizontalSlider->SetTo((float)surfacex);
 	pHorizontalSlider->SetValue(0);
+	pVerticalSlider->SetTo((float)surfacey);
+	pVerticalSlider->SetValue(0);
 }
 
 bool W_slidedPanel::HitPanel(int x, int y)
 {
-	if (x<posx || x>posx+width || y>posy || y<posy-height+20)
+	if (x<posx || x>posx+width-20 || y>posy || y<posy-height+20)
 		return 0;
 	else
 		return 1;
 }
 
-void W_slidedPanel::OnLButtonDown(int x, int y)
+UI_base* W_slidedPanel::OnLButtonDown(int x, int y)
 {
+		//PanelOnLButtonDown( x - posx + (int)(pHorizontalSlider->GetValue()), y - posy, 0, 0);
+    int xOffset = (int)(pHorizontalSlider->GetValue());
+    int yOffset = (int)(pVerticalSlider->GetValue());
+    if (pInterceptChild)
+    {
+        if ((pInterceptChild==pVerticalSlider)||(pInterceptChild==pHorizontalSlider))
+        {
+            pInterceptChild = (pInterceptChild)->OnLButtonDown(x - posx , y - posy);
+            Autokill(pInterceptChild);
+        }else
+        if (pInterceptChild!=this)
+        {
+            pInterceptChild = (pInterceptChild)->OnLButtonDown(x - posx + xOffset, y - posy + yOffset);
+            Autokill(pInterceptChild);
+        }
+        if (pInterceptChild)
+            return this;
+        else
+            return 0;
+    };
+
 	if (HitPanel(x,y))
-		PanelOnLButtonDown( x - posx + (int)(pHorizontalSlider->GetValue()), y - posy, 0, 0);
-	//pHorizontalSlider->onLButtonDown(x-posx,y-posy, posx+scrollx, posy+scrolly);
+	{
+        if (childList.ToFirst())
+            do
+            {
+                childList.Push();
+                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonDown(x - posx + xOffset, y - posy + yOffset);
+                childList.Pop();
+                Autokill((UI_base*)childList.GetCurrentObjectPointer());
+                if (pInterceptChild) {return this;};
+            }while(childList.ToNext());
+    }else{
 
-	pHorizontalSlider->OnLButtonDown(x-posx,y-posy);
+        pInterceptChild = pHorizontalSlider->OnLButtonDown(x-posx,y-posy);
+        if (pInterceptChild) {return this;};
+        pInterceptChild = pVerticalSlider->OnLButtonDown(x-posx,y-posy);
+        if (pInterceptChild) {return this;};
+	}
+
+	return 0;
 }
 
-void W_slidedPanel::OnLButtonUp(int x, int y)
+UI_base* W_slidedPanel::OnLButtonUp(int x, int y)
 {
+    int xOffset = (int)(pHorizontalSlider->GetValue());
+    int yOffset = (int)(pVerticalSlider->GetValue());
+    if (pInterceptChild)
+    {
+        if ((pInterceptChild==pVerticalSlider)||(pInterceptChild==pHorizontalSlider))
+        {
+            pInterceptChild = (pInterceptChild)->OnLButtonUp(x - posx , y - posy);
+            Autokill(pInterceptChild);
+        }else
+        if (pInterceptChild!=this)
+        {
+            pInterceptChild = (pInterceptChild)->OnLButtonUp(x - posx + xOffset, y - posy + yOffset);
+            Autokill(pInterceptChild);
+        }
+        if (pInterceptChild)
+            return this;
+        else
+            return 0;
+    };
+
 	if (HitPanel(x,y))
-		PanelOnLButtonUp( x - posx + (int)(pHorizontalSlider->GetValue()), y - posy);
-	pHorizontalSlider->OnLButtonUp(x-posx,y-posy);
+	{
+        if (childList.ToFirst())
+            do
+            {
+                childList.Push();
+                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonUp(x - posx + xOffset, y - posy + yOffset);
+                childList.Pop();
+                Autokill((UI_base*)childList.GetCurrentObjectPointer());
+                if (pInterceptChild) {return this;};
+            }while(childList.ToNext());
+    }else{
+
+        pInterceptChild = pHorizontalSlider->OnLButtonUp(x-posx,y-posy);
+        if (pInterceptChild) {return this;};
+        pInterceptChild = pVerticalSlider->OnLButtonUp(x-posx,y-posy);
+        if (pInterceptChild) {return this;};
+	}
+
+	return 0;
+	//if (HitPanel(x,y))
+	//	PanelOnLButtonUp( x - posx + (int)(pHorizontalSlider->GetValue()), y - posy);
+	//pHorizontalSlider->OnLButtonUp(x-posx,y-posy);
+	//pVerticalSlider->OnLButtonUp(x-posx,y-posy);
 }
 
-void W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
+UI_base* W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
 {
+    int xOffset = (int)(pHorizontalSlider->GetValue());
+    int yOffset = (int)(pVerticalSlider->GetValue());
+    if (pInterceptChild)
+    {
+        if ((pInterceptChild==pVerticalSlider)||(pInterceptChild==pHorizontalSlider))
+        {
+            pInterceptChild = (pInterceptChild)->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
+            Autokill(pInterceptChild);
+        }else
+        if (pInterceptChild!=this)
+        {
+            pInterceptChild = (pInterceptChild)->OnMouseMove( x - posx + xOffset, y - posy + yOffset, prevx - posx + xOffset, prevy - posy + yOffset);
+            Autokill(pInterceptChild);
+        }
+        if (pInterceptChild)
+            return this;
+        else
+            return 0;
+    };
+
 	if (HitPanel(x,y))
-		PanelOnMouseMove( x - posx + (int)(pHorizontalSlider->GetValue()), y - posy, prevx - posx + (int)(pHorizontalSlider->GetValue()), prevy - posy);
-	pHorizontalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
-}
+	{
+        if (childList.ToFirst())
+            do
+            {
+                childList.Push();
+                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnMouseMove( x - posx + xOffset, y - posy + yOffset, prevx - posx + xOffset, prevy - posy + yOffset);
+                childList.Pop();
+                Autokill((UI_base*)childList.GetCurrentObjectPointer());
+                if (pInterceptChild) {return this;};
+            }while(childList.ToNext());
+    }else{
 
-void W_slidedPanel::OnKeyPressed(int key)
-{
-		PanelOnKeyPressed(key);
+        pInterceptChild = pHorizontalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
+        if (pInterceptChild) {return this;};
+        pInterceptChild = pVerticalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
+        if (pInterceptChild) {return this;};
+	}
+
+	return 0;
+	//if (HitPanel(x,y))
+	//	PanelOnMouseMove( x - posx + (int)(pHorizontalSlider->GetValue()), y - posy, prevx - posx + (int)(pHorizontalSlider->GetValue()), prevy - posy);
+	//pHorizontalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
+	//pVerticalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
 }
+/*
+UI_base* W_slidedPanel::OnKeyPressed(int key)
+            UI_base::OnKeyPressed(int key)
+{
+	//	PanelOnKeyPressed(key);
+}*/
 /*
 void W_slidedPanel::panelOnLButtonDown(int x, int y, int px, int py){};
 void W_slidedPanel::panelOnLButtonUp(int x, int y){};

@@ -71,8 +71,6 @@ class UI_widget;
 class UI_base
 {
 private:
-	/**	\brief to check ant treat autokill on the child.*/
-	void Autokill(UI_base * child);
 
 protected:
 	int posx, posy; /**<		\brief Object's position */
@@ -97,6 +95,9 @@ protected:
 
 	void (*onResize)(UI_base* caller, int w, int h) = NULL; /**<		\brief resize callback function */
 	void (*onMove)(UI_base* caller, int x, int y) = NULL; /**<		\brief move callback function */
+
+	/**	\brief to check ant treat autokill on the child.*/
+	void Autokill(UI_base * child);
 
 public:
 	bool killMe;
