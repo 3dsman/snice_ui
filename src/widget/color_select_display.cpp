@@ -49,7 +49,7 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 
 	mode=selectorType;
 
-    if ((mode==HUE)||(mode==SAT)||(mode==VAL))
+    if ((mode==H)||(mode==S)||(mode==V))
         RGBtoHSV(red,green,blue,&redHue,&greenSat,&blueVal);
     else
     {
@@ -60,17 +60,17 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 
 	switch (mode)
 			{
-				case HUE:
+				case H:
                     curx = greenSat; cury = blueVal; curz = redHue/360.0f;break;
-				case SAT:
+				case S:
                     curx = redHue/360.0f; cury = blueVal; curz = greenSat; break;
-				case VAL:
+				case V:
                     curx = redHue/360.0f; cury = greenSat; curz = blueVal; break;
-				case RED:
+				case R:
                     curx = greenSat; cury = blueVal; curz = redHue; break;
-				case GREEN:
+				case G:
                     curx = redHue; cury = blueVal; curz = greenSat; break;
-				case BLUE:
+				case B:
                     curx = redHue; cury = greenSat; curz = blueVal; break;
 			}
 
@@ -119,20 +119,20 @@ void W_colorSelectdisplay::SetCursorXY(float curx, float cury){
 
 	switch (mode)
     {
-        case HUE:
+        case H:
             greenSat = curx; blueVal = cury;
             break;
-        case SAT:
+        case S:
             redHue= curx*360.0f; blueVal = cury;
             break;
-        case VAL:
+        case V:
             redHue= curx*360.0f; greenSat = cury;
             break;
-        case RED:
+        case R:
             greenSat = curx; blueVal = cury; break;
-        case GREEN:
+        case G:
             redHue = curx; blueVal = cury; break;
-        case BLUE:
+        case B:
             redHue = curx; greenSat = cury; break;
     }
 
@@ -144,21 +144,21 @@ void W_colorSelectdisplay::SetCursorZ(float curz){
 
 	switch (mode)
 			{
-				case HUE:
+				case H:
                     redHue = curz*360.0f;
                     if (redHue==360.0f)redHue=0;
                     break;
-				case SAT:
+				case S:
                     greenSat = curz;
                     break;
-				case VAL:
+				case V:
                     blueVal = curz;
                     break;
-				case RED:
+				case R:
                     redHue = curz;break;
-				case GREEN:
+				case G:
                     greenSat = curz;break;
-				case BLUE:
+				case B:
                     blueVal = curz;break;
 			}
 
@@ -175,31 +175,31 @@ void W_colorSelectdisplay::RefreshImageXY(){
 		for (j=0; j<int(quadImage.width); ++j){
 			switch (mode)
 			{
-				case HUE:
+				case H:
 					HSVtoRGB(redHue,float(j)/ quadImage.width,float(i) / quadImage.height,&red,&green,&blue);
 					break;
 
-				case SAT:
+				case S:
 					HSVtoRGB(float(j)/ quadImage.width*360.0f,greenSat,float(i) / quadImage.height,&red,&green,&blue);
 					break;
 
-				case VAL:
+				case V:
 					HSVtoRGB(float(j)/ quadImage.width*360.0f,float(i) / quadImage.height,blueVal,&red,&green,&blue);
 					break;
 
-				case RED:
+				case R:
 					red= redHue;
 					green= float(j)/ quadImage.width;
 					blue= float(i)/ quadImage.height;
 					break;
 
-				case GREEN:
+				case G:
 					red= float(j)/ quadImage.width;
 					green= greenSat;
 					blue= float(i)/ quadImage.height;
 					break;
 
-				case BLUE:
+				case B:
 					red= float(j)/ quadImage.width;
 					green= float(i)/ quadImage.height;
 					blue= blueVal;
@@ -227,21 +227,21 @@ void W_colorSelectdisplay::RefreshImageZ(){
 	for (unsigned int i=0; i<lineImage.height; i++){
         switch (mode)
         {
-            case HUE:
+            case H:
             {
                 //hue = float(i)/ float(lineImage.height)*360.0f;
                 HSVtoRGB(float(i)/ float(lineImage.height)*360.0f,greenSat,blueVal,&red,&green,&blue);
                 break;
             }
 
-            case SAT:
+            case S:
             {
                 //saturation = float(i) / float(lineImage.height);
                 HSVtoRGB(redHue,float(i) / float(lineImage.height),blueVal,&red,&green,&blue);
                 break;
             }
 
-            case VAL:
+            case V:
             {
                 //luminosity = float(i) / float(lineImage.height);
 
@@ -249,19 +249,19 @@ void W_colorSelectdisplay::RefreshImageZ(){
                 break;
             }
 
-            case RED:
+            case R:
             {
                 red= float(i) / float(lineImage.height);
                 break;
             }
 
-            case GREEN:
+            case G:
             {
                 green= float(i) / float(lineImage.height);
                 break;
             }
 
-            case BLUE:
+            case B:
             {
                 blue= float(i) / float(lineImage.height);
                 break;
@@ -452,7 +452,7 @@ void W_colorSelectdisplay::UpdateColor(int x, int y){
 }
 
 void W_colorSelectdisplay::GetColor(float* red, float* green, float* blue){
-    if ((mode==HUE)||(mode==SAT)||(mode==VAL))
+    if ((mode==H)||(mode==S)||(mode==V))
         HSVtoRGB(redHue,greenSat,blueVal, red, green, blue);
     else
     {

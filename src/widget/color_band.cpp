@@ -38,13 +38,13 @@
  * ***** END GPL LICENSE BLOCK *****
  */
 
-#include "global.h"
-#include "snice.h"
-#include "interpolation.h"
+//#include "global.h"
+#include "../snice_UI.h"
+//#include "interpolation.h"
 #include "widget/color_band.h"
 
-W_colorband::colorbandItem * W_colorband::NewColorbandItem(float position, float red, float green, float blue, float alpha){
-	W_colorband::colorbandItem * tmp;
+W_colorBand::colorbandItem * W_colorBand::NewColorbandItem(float position, float red, float green, float blue, float alpha){
+	W_colorBand::colorbandItem * tmp;
 	tmp = new colorbandItem;
 	tmp->pos = position;
 	tmp->r = red;
@@ -54,12 +54,12 @@ W_colorband::colorbandItem * W_colorband::NewColorbandItem(float position, float
 	return tmp;
 }
 
-W_colorband::W_colorband(int x, int y, int w, int h, char* name)
+W_colorBand::W_colorBand(int x, int y, int w, int h, string name)
 		  :UI_widget(x, y, w, h)
 {
 	interpolation = 1;
 
-	strcpy(refName,name);
+	refName=name;
 
 	draggingcolorbandItem = false;
 
@@ -70,12 +70,12 @@ W_colorband::W_colorband(int x, int y, int w, int h, char* name)
 
 }
 
-W_colorband::~W_colorband()
+W_colorBand::~W_colorBand()
 {
 	FlushColorNode();
 }
 
-void W_colorband::FlushColorNode()
+void W_colorBand::FlushColorNode()
 {
 	// delete the current nodes
 	listofcolorbandItems.ToFirst();
@@ -83,15 +83,15 @@ void W_colorband::FlushColorNode()
 
 	while (pCurrentColourbandnode != NULL)
 	{
-		listofcolorbandItems.RemoveCurrent(); 
+		listofcolorbandItems.RemoveCurrent();
 		delete pCurrentColourbandnode;
-		
+
 
 		pCurrentColourbandnode = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
 	}
 }
 
-void W_colorband::RemoveActiveColorNode()
+void W_colorBand::RemoveActiveColorNode()
 {
 	// go through the list until the active node is found and delete it
 	listofcolorbandItems.ToFirst();
@@ -115,7 +115,7 @@ void W_colorband::RemoveActiveColorNode()
 	pActiveColorBandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
 }
 
-void W_colorband::SortList()
+void W_colorBand::SortList()
 {
 	// go through list and sort it with the last in the list being the node with the largest pos
 	bool goon = true;
@@ -127,7 +127,7 @@ void W_colorband::SortList()
 	{
 		listofcolorbandItems.ToFirst();
 		pCurrentColorbandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
-	
+
 		while (pCurrentColorbandItem != NULL)
 		{
 			if (listofcolorbandItems.ToNext() == true)
@@ -149,7 +149,7 @@ void W_colorband::SortList()
 	}
 }
 
-void W_colorband::AddColorNode(float Pos, float Red, float Green, float Blue, float Alpha)
+void W_colorBand::AddColorNode(float Pos, float Red, float Green, float Blue, float Alpha)
 {
 	if ((Red<=1)&&(Red>=0)&&(Green<=1)&&(Green>=0)&&(Blue<=1)&&(Blue>=0)&&(Alpha<=1)&&(Alpha>=0)&&(Pos<=1)&&(Pos>=0))
 	{
@@ -160,7 +160,7 @@ void W_colorband::AddColorNode(float Pos, float Red, float Green, float Blue, fl
 	}
 }
 
-void W_colorband::SetActiveColor(float Red,float Green,float Blue,float Alpha)
+void W_colorBand::SetActiveColor(float Red,float Green,float Blue,float Alpha)
 {
 	if (pActiveColorBandItem)
 	{
@@ -171,7 +171,7 @@ void W_colorband::SetActiveColor(float Red,float Green,float Blue,float Alpha)
 	}
 }
 
-void W_colorband::GetActiveColor(float* Red,float* Green,float* Blue,float* Alpha)
+void W_colorBand::GetActiveColor(float* Red,float* Green,float* Blue,float* Alpha)
 {
 	if (pActiveColorBandItem)
 	{
@@ -189,7 +189,7 @@ void W_colorband::GetActiveColor(float* Red,float* Green,float* Blue,float* Alph
 	}
 }
 
-float W_colorband::GetActiveColor(int RGBA)
+float W_colorBand::GetActiveColor(int RGBA)
 {
 	if (pActiveColorBandItem)
 	{
@@ -213,7 +213,7 @@ float W_colorband::GetActiveColor(int RGBA)
 	}
 }
 
-void W_colorband::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, float pos)
+void W_colorBand::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, float pos)
 {
 
 	listofcolorbandItems.ToFirst();
@@ -249,18 +249,9 @@ void W_colorband::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, f
 			proportion = PosRelative / NextRelative;
 
 			// choice of the interpolation
-
-			switch (interpolation)
+// TODO reactiver l'interpolation
+			/*switch (interpolation)
 			{
-				case 2:
-				{
-					*Red = CosineInterpolate1D(pCurrentColourbandnode->r,pNextColourbandnode->r,proportion);
-					*Green = CosineInterpolate1D(pCurrentColourbandnode->g,pNextColourbandnode->g,proportion);
-					*Blue = CosineInterpolate1D(pCurrentColourbandnode->b,pNextColourbandnode->b,proportion);
-					*Alpha = CosineInterpolate1D(pCurrentColourbandnode->a,pNextColourbandnode->a,proportion);
-					
-					break;
-				};
 				case 1:
 				{
 					*Red = LinearInterpolate1D(pCurrentColourbandnode->r,pNextColourbandnode->r,proportion);
@@ -269,7 +260,16 @@ void W_colorband::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, f
 					*Alpha = LinearInterpolate1D(pCurrentColourbandnode->a,pNextColourbandnode->a,proportion);
 					break;
 				};
-			}
+				case 2:
+				{
+					*Red = CosineInterpolate1D(pCurrentColourbandnode->r,pNextColourbandnode->r,proportion);
+					*Green = CosineInterpolate1D(pCurrentColourbandnode->g,pNextColourbandnode->g,proportion);
+					*Blue = CosineInterpolate1D(pCurrentColourbandnode->b,pNextColourbandnode->b,proportion);
+					*Alpha = CosineInterpolate1D(pCurrentColourbandnode->a,pNextColourbandnode->a,proportion);
+
+					break;
+				};
+			}*/
 		}else
 		{
 			*Red =  pNextColourbandnode->r;
@@ -277,55 +277,54 @@ void W_colorband::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, f
 			*Blue = pNextColourbandnode->b;
 			*Alpha = pNextColourbandnode->a;
 		}
-			
+
 	}else
 	{
 		*Red = pCurrentColourbandnode->r;
 		*Green = pCurrentColourbandnode->g;
-		*Blue = pCurrentColourbandnode->b;	
+		*Blue = pCurrentColourbandnode->b;
 		*Alpha = pCurrentColourbandnode->a;
 	}
 
 
 }
 
-void W_colorband::SetInterpolation(int i)
+void W_colorBand::SetInterpolation(int i)
 {
 	if (i > 0) interpolation = i;
 }
 
-void W_colorband::GetInterpolation(int i)
+void W_colorBand::GetInterpolation(int i)
 {
 	i = interpolation;
 }
 
-void W_colorband::SetHeight(int h)
+void W_colorBand::SetHeight(int h)
 {
 	if (h > 0){
 		height = h;
 	}
 }
 
-void W_colorband::SetWidth(int w)
+void W_colorBand::SetWidth(int w)
 {
 	if (w > 0){
 		width = w;
 	}
 }
 
-void W_colorband::SetPosX(int x)
+void W_colorBand::SetPosX(int x)
 {
 	posx = x;
 }
 
-void W_colorband::SetPosY(int y)
+void W_colorBand::SetPosY(int y)
 {
 	posy = y;
 }
 
-void W_colorband::Draw()
+void W_colorBand::Draw()
 {
-
 	// draw a stripe in the buttons to indicate the current value
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -335,20 +334,22 @@ void W_colorband::Draw()
 	// make a rectangle with vertex colours
 	// make a triangle with stripe which represents the node
 
-	glTranslated(posx,-32,0);
+	glTranslated(posx,posy,0);
+
 
 	bool bw = true;
 	// first make a grid to show the alpha through
-	for ( int loopx = 0; loopx < width/10; ++loopx )
+	for ( int loopx = 0; loopx < width-8; loopx+=10 )
 	{
-		for ( int loopy = 0; loopy <= 20; ++loopy )
+        bw = loopx%20;
+		for ( int loopy = 0; loopy < height; loopy+=10 )
 		{
 			glBegin(GL_QUADS);
 				glColor4f(bw ? 0.0f : 1.0f,bw ? 0.0f : 1.0f,bw ? 0.0f : 1.0f,1.0f);
-				glVertex2d(loopx*10,-loopy*10);
-				glVertex2d(loopx*10+10,-loopy*10);
-				glVertex2d(loopx*10+10,-loopy*10-10);
-				glVertex2d(loopx*10,-loopy*10-10);
+				glVertex2d(loopx,-loopy);
+				glVertex2d(min(width-8,loopx+10),-loopy);
+				glVertex2d(min(width-8,loopx+10),-min(height,loopy+10));
+				glVertex2d(loopx,-min(height,loopy+10));
 			glEnd();
 
 			bw = !bw;	// to get a checkerlike pattern
@@ -368,13 +369,13 @@ void W_colorband::Draw()
 	glBegin(GL_QUADS);
 		glColor4f(pCurrentColorbandItem->r,pCurrentColorbandItem->g,pCurrentColorbandItem->b,pCurrentColorbandItem->a);
 		glVertex2d(0,-height);
-		glVertex2d(width,-height);
+		glVertex2d(width-8,-height);
 
 	while (pCurrentColorbandItem != NULL)
 	{
 		// second half of the quad
 			glColor4f(pCurrentColorbandItem->r,pCurrentColorbandItem->g,pCurrentColorbandItem->b,pCurrentColorbandItem->a);
-			glVertex2d(width,-height*(1-pCurrentColorbandItem->pos));
+			glVertex2d(width-8,-height*(1-pCurrentColorbandItem->pos));
 			glVertex2d(0,-height*(1-pCurrentColorbandItem->pos));
 		glEnd();
 
@@ -382,9 +383,9 @@ void W_colorband::Draw()
 		glBegin(GL_QUADS);
 			glColor4f(pCurrentColorbandItem->r,pCurrentColorbandItem->g,pCurrentColorbandItem->b,pCurrentColorbandItem->a);
 			glVertex2d(0,-height*(1-pCurrentColorbandItem->pos));
-			glVertex2d(width,-height*(1-pCurrentColorbandItem->pos));
+			glVertex2d(width-8,-height*(1-pCurrentColorbandItem->pos));
 
-		
+
 		if (listofcolorbandItems.ToNext() == true)
 		{
 			pCurrentColorbandItem = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
@@ -392,7 +393,7 @@ void W_colorband::Draw()
 		else
 		{
 			// close the quad
-				glVertex2d(width,0);
+				glVertex2d(width-8,0);
 				glVertex2d(0,0);
 			glEnd();
 
@@ -404,10 +405,10 @@ void W_colorband::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures[8].texID);				// Select Our Font Texture
+	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID);				// Select Our Font Texture
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	
+
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
 		glVertex2d(0, 0);
@@ -417,7 +418,7 @@ void W_colorband::Draw()
 		glVertex2d(8, -8);
 		glTexCoord2f(0.0f,0.75f);
 		glVertex2d(0, -8);
-		
+
 		glTexCoord2f(0.49f,1.0f);
 		glVertex2d(8, 0);
 		glTexCoord2f(0.51f,1.0f);
@@ -485,7 +486,7 @@ void W_colorband::Draw()
 	glEnd();
 
 	/*glBindTexture(GL_TEXTURE_2D, textures[10].texID);
-	glColor4f(1.0f,1.0f,1.0f,0.6f);	
+	glColor4f(1.0f,1.0f,1.0f,0.6f);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
 		glVertex2d(0, 0);
@@ -502,7 +503,7 @@ void W_colorband::Draw()
 	// draw the trianlge and stripe to indicate a node
 	listofcolorbandItems.ToFirst();
 	pCurrentColorbandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
-	
+
 	while (pCurrentColorbandItem != NULL)
 	{
 		if (pCurrentColorbandItem == pActiveColorBandItem)
@@ -513,15 +514,15 @@ void W_colorband::Draw()
 		glTranslated(0, -height+(pCurrentColorbandItem->pos/1.0f)*height, 0);
 		glBegin(GL_QUADS);
 			glVertex2d(0,1);
-			glVertex2d(width,1);
-			glVertex2d(width,-1);
+			glVertex2d(width-8,1);
+			glVertex2d(width-8,-1);
 			glVertex2d(0,-1);
 		glEnd();
 
 		glBegin(GL_TRIANGLES);
-			glVertex2d(width+1,0);
-			glVertex2d(width+8,3);
-			glVertex2d(width+8,-3);
+			glVertex2d(width-8,0);
+			glVertex2d(width,3);
+			glVertex2d(width,-3);
 		glEnd();
 		glTranslated(0, -(-height+(pCurrentColorbandItem->pos/1.0f)*height), 0);
 
@@ -531,15 +532,17 @@ void W_colorband::Draw()
 			pCurrentColorbandItem = NULL;
 	}
 
-	glTranslated(-posx,32,0);
+	glTranslated(-posx,-posy,0);
 
 }
 
-void W_colorband::OnLButtonDown(int x, int y)
+UI_base* W_colorBand::OnLButtonDown(int x, int y)
 {
 
-	if (x > posx && x < posx+width+8 && y > posy-height-4 && y < posy+4)
+	if (Hittest(x,y))
 	{
+	//if (x > posx && x < posx+width+8 && y > posy-height-4 && y < posy+4)
+	//{
 		colorbandItem* pCurrentColorbandItem;
 		if (listofcolorbandItems.ToFirst())
 			do
@@ -551,10 +554,12 @@ void W_colorband::OnLButtonDown(int x, int y)
 					if (pActiveColorBandItem != pCurrentColorbandItem)
 					{
 						pActiveColorBandItem = pCurrentColorbandItem;
-						if (pParentUI_base) pParentUI_base->Callback(this,1);
+						//if (pParentUI_base) pParentUI_base->Callback(this,1);
 					}
 					draggingcolorbandItem = true;
-					break;
+                    pInterceptChild = this;
+                    return this;
+					//break;
 				}
 			}while (listofcolorbandItems.ToNext());
 
@@ -564,50 +569,62 @@ void W_colorband::OnLButtonDown(int x, int y)
 			float r,g,b,a;
 			GetColorAt(&r,&g,&b,&a,(float)(y+height-posy)/(float)(height));
 			colorbandItem* tempnode = NewColorbandItem((float)(y+height-posy)/(float)(height),r,g,b,a);
-			
+
 			listofcolorbandItems.Add((void*) tempnode);
 			SortList();
 			pActiveColorBandItem = tempnode;
 
-			if (pParentUI_base) pParentUI_base->Callback(this,2);
+			//if (pParentUI_base) pParentUI_base->Callback(this,2);
 
 			draggingcolorbandItem = true;
+            pInterceptChild = this;
+            return this;
 
 		}
 	}
-
+    pInterceptChild = 0;
+    return 0;
 }
 
-void W_colorband::OnLButtonUp(int x, int y)
+UI_base* W_colorBand::OnLButtonUp(int x, int y)
 {
+    UI_widget::OnLButtonUp(x, y);
 	draggingcolorbandItem = false;
+	pInterceptChild = 0;
+    return 0;
 }
 
-void W_colorband::OnMouseMove(int x, int y, int prevx, int prevy)
+UI_base* W_colorBand::OnMouseMove(int x, int y, int prevx, int prevy)
 {
-	
-	if (draggingcolorbandItem)
-	{
-		if ( y > posy - height && y < -posy )
-			pActiveColorBandItem->pos = ((float)y+height-posy)/(float)height;
+	if(pInterceptChild == this)
+        {
+        if (draggingcolorbandItem)
+        {
+        pActiveColorBandItem->pos = max(min(1+float(y-posy)/float(height),1.0f),0.0f);
+            //if ( y > posy - height && y < -posy )
+            //if ( y > posy - height && y < -posy )
+            //	pActiveColorBandItem->pos = max(min(((float)y+height-posy)/(float)height,1.0f),0.0f);
+    /*
+            if (pActiveColorBandItem->pos > 1.0f)
+                pActiveColorBandItem->pos = 1.0f;
+            if (pActiveColorBandItem->pos < 0.0f)
+                pActiveColorBandItem->pos = 0.0f;
+    */
+            if (x > posx + width + 50)
+            {
+                RemoveActiveColorNode();
+                draggingcolorbandItem=false;
+            };
 
-		if (pActiveColorBandItem->pos > 1.0f)
-			pActiveColorBandItem->pos = 1.0f;
-		if (pActiveColorBandItem->pos < 0.0f)
-			pActiveColorBandItem->pos = 0.0f;
-
-		if (x > posx + width + 50)
-		{
-			RemoveActiveColorNode();
-			draggingcolorbandItem=false;
-		};
-
-		SortList();
+            SortList();
+        }
+		return this;
 	}
-	
+    return 0;
+
 }
 
-void W_colorband::LoadXML(TiXmlElement* element)
+void W_colorBand::LoadXML(TiXmlElement* element)
 {
 
 	TiXmlElement* nodeElement = 0;
@@ -619,7 +636,7 @@ void W_colorband::LoadXML(TiXmlElement* element)
 		if(strncmp(nodeElement->Value(),"ColorBar",9) == 0)
 		{
 			double r, g, b, a, pos;
-			
+
 			if ((nodeElement->QueryDoubleAttribute("Red",&r) != TIXML_NO_ATTRIBUTE)
 				&& (nodeElement->QueryDoubleAttribute("Green",&g) != TIXML_NO_ATTRIBUTE)
 				&& (nodeElement->QueryDoubleAttribute("Blue",&b) != TIXML_NO_ATTRIBUTE)
@@ -639,13 +656,13 @@ void W_colorband::LoadXML(TiXmlElement* element)
 
 }
 
-void W_colorband::SaveXML(TiXmlElement* element)
+void W_colorBand::SaveXML(TiXmlElement* element)
 {
 	char buf[256];
-	
+
 
 		//creation of the ColorBand xml flag
-	TiXmlElement NodeColorBand( refName );
+	TiXmlElement NodeColorBand( refName.c_str() );
 
 	if (interpolation == 1)
 		sprintf( buf, "linear" );
@@ -656,7 +673,7 @@ void W_colorband::SaveXML(TiXmlElement* element)
 	NodeColorBand.SetAttribute( "Interpolation",  buf );
 	//delete buf;
 
-	
+
 
 	listofcolorbandItems.ToFirst();
 	colorbandItem* pCurrentColourbandnode = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
@@ -687,9 +704,9 @@ void W_colorband::SaveXML(TiXmlElement* element)
 
 }
 
-void W_colorband::Set(char* order)
+void W_colorBand::Set(char* order)
 {
- 	printf("->%s", refName);
+ 	printf("->%s", refName.c_str());
  	char value[256];
 	int i=0;
  	for (i=0; i<256; ++i)
@@ -698,7 +715,7 @@ void W_colorband::Set(char* order)
 	if (separator)
 	{
 	 	int separatorPos = separator - order ;
-	 	
+
 	 	strncpy( value, order,separatorPos);
 	 	char* end = order + separatorPos + 1;
 	    printf (" %s=%s\n",value, end);
@@ -707,7 +724,7 @@ void W_colorband::Set(char* order)
    		    if(strncmp(end,"linear",6) == 0){interpolation = 1;};
 		    if(strncmp(end,"cosine",6) == 0){interpolation = 2;};
 		}
-		
+
 		if(strncmp(value,"colorBar.",9) == 0)
 		{
 			if (listofcolorbandItems.Goto(atoi(value + 9)))
@@ -729,9 +746,9 @@ void W_colorband::Set(char* order)
 		 			 g = atof(value);
 		 			 b = atof(separator+1);
 			     }
-			     
+
 			   	 SetActiveColor(r/255,g/255,b/255,1);
-			   	 if (pParentUI_base) pParentUI_base->Callback(this,1);
+			   	 //if (pParentUI_base) pParentUI_base->Callback(this,1);
 	  		}else printf("!!!! this bar dont exist");
 		};
 	}

@@ -34,6 +34,7 @@ W_slider* slider;
 W_progress* progress;
 W_colorSelectdisplay* color_select_display;
 W_colorDisplay* color_display;
+W_colorBand* color_band;
 
 UI_window* pwind;
 W_subMenu* submenu;
@@ -210,12 +211,15 @@ void create_interface()
 	menu->OnPickOption(pickOption);
 	pViewport->AddChild(menu);
 
-    color_select_display = new W_colorSelectdisplay(400,300, 250,250,HUE,0.2, 0.5, 0.8);
+    color_select_display = new W_colorSelectdisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
     color_select_display->OnChange(colorPickerContent);
 	pViewport->AddChild(color_select_display);
 
 	color_display = new W_colorDisplay(670,300, 50,30,"color",0.2, 0.5, 0.8);
 	pViewport->AddChild(color_display);
+
+	color_band = new W_colorBand(670,250, 30,100,"colorband");
+	pViewport->AddChild(color_band);
 }
 
 

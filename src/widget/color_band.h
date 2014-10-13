@@ -49,7 +49,7 @@ public:
 };*/
 
 
-class W_colorband: public UI_widget
+class W_colorBand: public UI_widget
 {
 
 private:
@@ -66,17 +66,17 @@ private:
 	int interpolation;
 
 	List listofcolorbandItems;
-	
+
 	colorbandItem* pActiveColorBandItem;
 	bool draggingcolorbandItem;
-	
+
 	void SortList();
 
 public:
 
-	W_colorband(int x, int y, int w, int h, char* name);
+	W_colorBand(int x, int y, int w, int h, string name);
 
-	~W_colorband();
+	~W_colorBand();
 
 	void RemoveActiveColorNode();
 
@@ -101,16 +101,17 @@ public:
 	void SetWidth(int w);
 
 	void SetPosX(int x);
-	
+
 	void SetPosY(int y);
 
 	void Draw();
-	
-	void OnLButtonDown(int x, int y);
 
-	void OnLButtonUp(int x, int y);
-
-	void OnMouseMove(int x, int y, int prevx, int prevy);
+	/**	\brief left button down function.*/
+	virtual UI_base* OnLButtonDown(int x, int y);
+	/**	\brief left button up function.*/
+	virtual UI_base* OnLButtonUp(int x, int y);
+	/**	\brief mouse move function.*/
+	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
 	void LoadXML(TiXmlElement* element);
 

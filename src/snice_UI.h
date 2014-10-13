@@ -24,6 +24,7 @@
 #include "widget/menu.h"
 #include "widget/color_display.h"
 #include "widget/color_select_display.h"
+#include "widget/color_band.h"
 
 
 // Key and button state/action definitions
@@ -168,6 +169,7 @@
 #define PI 3.14159265358979323846
 #define DEG2RAD(DEG)((DEG)*((PI)/(180.0)))
 
+enum color {RED, GREEN, BLUE, ALPHA};
 //extern Texture textures[20];	// Storage For Textures
 //extern GLuint base;				// Base Display List For The Font
 

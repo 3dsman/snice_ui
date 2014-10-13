@@ -41,7 +41,8 @@
 
 #include "widget/UI_widget.h"
 #include "tgafile.h"
-enum colorSelector {HUE, SAT, VAL, RED, GREEN, BLUE};
+
+enum colorSelector {H, S, V, R, G, B};
 
 class W_colorSelectdisplay : public UI_widget
 {
