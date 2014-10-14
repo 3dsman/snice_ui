@@ -64,16 +64,10 @@ W_slider::W_slider(int x, int y, int w, int h, string l, float v, float f, float
 
 W_slider::~W_slider()
 {
-	//delete text;
 }
 
 void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, float t, int p, float bar, float red, float green, float blue)
 {
-/*	posx = x;
-	posy = y;
-	width = w;
-	height = h;
-*/
 	value = v;
 	from = f;
 	to = t;
@@ -87,13 +81,6 @@ void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, floa
 	text = new W_label(width/2-(l.size()*7)/2-4, 8-(height/2), 0, 1, name);
 	this->AddChild(text);
 	SetLabel();
-
-	action = false;
-/*
-	r = red;
-	g = green;
-	b = blue;
-*/
 	onSetValue = 0;
 }
 
@@ -391,29 +378,15 @@ UI_base* W_slider::OnLButtonDown(int x, int y)
 			else if ((((float)(x-posx)/width)*(to-from)+from)>(value + barSize))
 			{
 				tmpValue = min(value + barSize,to);
-				//if (pParentUI_base)
-				//	pParentUI_base->Callback(this,1);
-			}
-			else
-			{
-				//if (pParentUI_base)
-				//	pParentUI_base->Callback(this,1);
-				action = true;
 			}
 		}
 		else
 		{
 			tmpValue = (float)(x-posx)/width*(to-from)+from;
-			//if (pParentUI_base)
-			//	pParentUI_base->Callback(this,1);
-			action = true;
 		}
-		value = max(min(tmpValue, to - barSize),from);
 
-		SetLabel();
+        SetValue(max(min(tmpValue, to - barSize),from));
 
-		if(onSetValue) onSetValue(this, value, 1);
-		//pViewports->setIntercept(this);
 		pInterceptChild = this;
 		return this;
 	}
@@ -423,8 +396,7 @@ UI_base* W_slider::OnLButtonDown(int x, int y)
 
 UI_base* W_slider::OnLButtonUp(int x, int y)
 {
-    if ((pInterceptChild == this)&&(onSetValue)) onSetValue(this, value, 0);
-	//action = false;
+    if(onSetValue) onSetValue(this, value, false);
 	pInterceptChild = 0;
 	return 0;
 }
@@ -433,13 +405,8 @@ UI_base* W_slider::OnMouseMove(int x, int y, int prevx, int prevy)
 {
     if (pInterceptChild == this)
     {
-    	//if (action)
-    	//{
             tmpValue+=((float)(x-prevx)/width*(to-from));
-    		value = max(min(tmpValue,to - barSize),from);
-    		SetLabel();
-    		if(onSetValue) onSetValue(this, value, 1);
-    	//}
+            SetValue(max(min(tmpValue,to - barSize),from));
         return this;
     }
 	return 0;
@@ -456,6 +423,7 @@ void W_slider::SetValue(float v)
 	if (value > to) value = to;
 	if (value < from) value = from;
 	SetLabel();
+    if(onSetValue) onSetValue(this, value, true);
 }
 
 void W_slider::LoadXML(TiXmlElement* element)
