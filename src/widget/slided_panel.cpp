@@ -365,11 +365,11 @@ UI_base* W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
             pInterceptChild = (pInterceptChild)->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
             Autokill(pInterceptChild);
         }else
-        if (pInterceptChild!=this)
-        {
-            pInterceptChild = (pInterceptChild)->OnMouseMove( x - posx + xOffset, y - posy + yOffset, prevx - posx + xOffset, prevy - posy + yOffset);
-            Autokill(pInterceptChild);
-        }
+            if (pInterceptChild!=this)
+            {
+                pInterceptChild = (pInterceptChild)->OnMouseMove( x - posx + xOffset, y - posy + yOffset, prevx - posx + xOffset, prevy - posy + yOffset);
+                Autokill(pInterceptChild);
+            }
         if (pInterceptChild)
             return this;
         else

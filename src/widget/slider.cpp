@@ -91,6 +91,11 @@ void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, floa
 
 void W_slider::SetName(string l)
 {
+    if (text==0)
+    {
+        text = new W_label(width/2-(l.size()*7)/2-4, 8-(height/2), 0, 1, name);
+        this->AddChild(text);
+    }
    name = l;
    SetLabel();
 }
@@ -98,14 +103,11 @@ void W_slider::SetName(string l)
 
 void W_slider::SetLabel(string l)
 {
-    if (text==0)
+    if(text)
     {
-        text = new W_label(width/2-(l.size()*7)/2-4, 8-(height/2), 0, 1, name);
-        this->AddChild(text);
+        text->SetText(l);
+        text->SetPos(width/2-(l.size()*7)/2-4, 8-(height/2));
     }
-
-    text->SetText(l);
-    text->SetPos(width/2-(l.size()*7)/2-4, 8-(height/2));
 }
 
 void W_slider::SetLabel()
@@ -404,28 +406,33 @@ UI_base* W_slider::OnLButtonDown(int x, int y)
 	if (Hittest(x,y))
 	{
         float position;
-        if (vertical)
-            position = ((float)(y-posy)/height);
-        else
-            position = ((float)(x-posx)/width);
+		pInterceptChild = this;
 
+        if (vertical)
+            position = 1+((float)(y-posy)/(float)height);
+        else
+            position = ((float)(x-posx)/(float)width);
 
         if (barSize)
         {
             if ((position*(to-from)+from)<value)
+            {
                 tmpValue = max(value - barSize,from);
+                pInterceptChild = 0;
+            }
             else if ((position*(to-from)+from)>(value + barSize))
+            {
                 tmpValue = min(value + barSize,to);
+                pInterceptChild = 0;
+            }
         }
         else
             tmpValue = position*(to-from)+from;
 
+        tmpValue = max(min(tmpValue,to - barSize),from);
+        SetValue(tmpValue);
 
-
-        SetValue(max(min(tmpValue, to - barSize),from));
-
-		pInterceptChild = this;
-		return this;
+		return pInterceptChild;
 	}
 	pInterceptChild = 0;
 	return 0;
@@ -433,7 +440,8 @@ UI_base* W_slider::OnLButtonDown(int x, int y)
 
 UI_base* W_slider::OnLButtonUp(int x, int y)
 {
-    if(onSetValue) onSetValue(this, value, false);
+    if (pInterceptChild == this)
+       if(onSetValue) onSetValue(this, value, false);
 	pInterceptChild = 0;
 	return 0;
 }
