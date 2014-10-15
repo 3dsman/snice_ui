@@ -75,12 +75,17 @@ void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, floa
 	barSize = bar;
 	mouseOffset = 0;
 
+	if (h>w) vertical = true;
+
 	refName = l;
 	name = l;
 	//text = new W_label(x+width/2-(strlen(l)*7)/2-4, y-2, 0, 1, name);
-	text = new W_label(width/2-(l.size()*7)/2-4, 8-(height/2), 0, 1, name);
-	this->AddChild(text);
-	SetLabel();
+	if (l.size())
+	{
+        text = new W_label(width/2-(l.size()*7)/2-4, 8-(height/2), 0, 1, name);
+        this->AddChild(text);
+        SetLabel();
+	}
 	onSetValue = 0;
 }
 
@@ -93,8 +98,14 @@ void W_slider::SetName(string l)
 
 void W_slider::SetLabel(string l)
 {
-		text->SetText(l);
-		text->SetPos(width/2-(l.size()*7)/2-4, 8-(height/2));
+    if (text==0)
+    {
+        text = new W_label(width/2-(l.size()*7)/2-4, 8-(height/2), 0, 1, name);
+        this->AddChild(text);
+    }
+
+    text->SetText(l);
+    text->SetPos(width/2-(l.size()*7)/2-4, 8-(height/2));
 }
 
 void W_slider::SetLabel()
@@ -233,22 +244,52 @@ void W_slider::Draw()
 	glEnd();
 
 	// draw a stripe in the buttons to indicate the current value
-	glBegin(GL_QUADS);
-		glColor4f(r,g,b,0.3f);
 
-		glVertex2d((value-from)/(to-from)*width,-1);
-		glVertex2d((value-from)/(to-from)*width,-height+1);
-		if (barSize){
-			glVertex2d((value+barSize-from)/(to-from)*width,-height+1);
-			glVertex2d((value+barSize-from)/(to-from)*width, -1);
-		}
-		else{
-			glVertex2d(0,-height+1);
-			glVertex2d(0, -1);
-		}
-	glEnd();
+    glBegin(GL_QUADS);
+    glColor4f(r,g,b,0.3f);
 
+	if (vertical)
+	{
+        glVertex2d(0,(value-from)/(to-from)*height-height);
+        glVertex2d(width,(value-from)/(to-from)*height-height);
+        if (barSize){
+            glVertex2d(width,(value+barSize-from)/(to-from)*height-height);
+            glVertex2d(0,(value+barSize-from)/(to-from)*height-height);
+        }
+        else{
+            glVertex2d(0,-height+1);
+            glVertex2d(0, -1);
+        }
 
+	}else{
+        glVertex2d((value-from)/(to-from)*width,-1);
+        glVertex2d((value-from)/(to-from)*width,-height+1);
+        if (barSize){
+            glVertex2d((value+barSize-from)/(to-from)*width,-height+1);
+            glVertex2d((value+barSize-from)/(to-from)*width, -1);
+        }
+        else{
+            glVertex2d(0,-height+1);
+            glVertex2d(0, -1);
+        }
+    }
+        glEnd();
+/*
+        glBegin(GL_QUADS);
+            glColor4f(r,g,b,0.3f);
+
+            glVertex2d((value-from)/(to-from)*width,-1);
+            glVertex2d((value-from)/(to-from)*width,-height+1);
+            if (barSize){
+                glVertex2d((value+barSize-from)/(to-from)*width,-height+1);
+                glVertex2d((value+barSize-from)/(to-from)*width, -1);
+            }
+            else{
+                glVertex2d(0,-height+1);
+                glVertex2d(0, -1);
+            }
+        glEnd();
+	}*/
 
 	// draw the border
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
@@ -330,32 +371,27 @@ void W_slider::Draw()
 		glVertex2d(0, -height+8);
 	glEnd();
 
-	//if (pPrefs->GetCute())
-	//{
-		glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
-		glColor4f(1.0f,1.0f,1.0f,0.6f);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0f,1.0f);
-			glVertex2d(0, 0);
-			glTexCoord2f(1.0f,1.0f);
-			glVertex2d(width, 0);
-			glTexCoord2f(1.0f,0.0f);
-			glVertex2d(width,-height);
-			glTexCoord2f(0.0f,0.0f);
-			glVertex2d(0, -height);
-		glEnd();
-	//}
+    glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
+    glColor4f(1.0f,1.0f,1.0f,0.6f);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0.0f,1.0f);
+        glVertex2d(0, 0);
+        glTexCoord2f(1.0f,1.0f);
+        glVertex2d(width, 0);
+        glTexCoord2f(1.0f,0.0f);
+        glVertex2d(width,-height);
+        glTexCoord2f(0.0f,0.0f);
+        glVertex2d(0, -height);
+    glEnd();
+
 
 	glDisable(GL_TEXTURE_2D);
 
 	glTranslated(-posx,-posy,0);
 
-	// glColor4f(0.7f,0.7f,0.7f,0.4f);	// for not antialiased font
 	glColor4f(0.5f,0.5f,0.5f,0.5f);
 
-	//if (strcmp(name,""))				// Draw text only if there is a name
-		//text->Draw();
-	   UI_widget::Draw();
+    UI_widget::Draw();
 }
 
 void W_slider::OnSetValue(void (*function)(W_slider* caller, float value, bool realtime))
@@ -367,23 +403,24 @@ UI_base* W_slider::OnLButtonDown(int x, int y)
 {
 	if (Hittest(x,y))
 	{
-		if (barSize)
-		{
-			if ((((float)(x-posx)/width)*(to-from)+from)<value)
-			{
-				tmpValue = max(value - barSize,from);
-				//if (pParentUI_base)
-				//pParentUI_base->Callback(this,1);
-			}
-			else if ((((float)(x-posx)/width)*(to-from)+from)>(value + barSize))
-			{
-				tmpValue = min(value + barSize,to);
-			}
-		}
-		else
-		{
-			tmpValue = (float)(x-posx)/width*(to-from)+from;
-		}
+        float position;
+        if (vertical)
+            position = ((float)(y-posy)/height);
+        else
+            position = ((float)(x-posx)/width);
+
+
+        if (barSize)
+        {
+            if ((position*(to-from)+from)<value)
+                tmpValue = max(value - barSize,from);
+            else if ((position*(to-from)+from)>(value + barSize))
+                tmpValue = min(value + barSize,to);
+        }
+        else
+            tmpValue = position*(to-from)+from;
+
+
 
         SetValue(max(min(tmpValue, to - barSize),from));
 
@@ -405,7 +442,10 @@ UI_base* W_slider::OnMouseMove(int x, int y, int prevx, int prevy)
 {
     if (pInterceptChild == this)
     {
-            tmpValue+=((float)(x-prevx)/width*(to-from));
+            if (vertical)
+                tmpValue+=((float)(y-prevy)/height*(to-from));
+            else
+                tmpValue+=((float)(x-prevx)/width*(to-from));
             SetValue(max(min(tmpValue,to - barSize),from));
         return this;
     }

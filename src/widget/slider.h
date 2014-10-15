@@ -44,7 +44,7 @@
 class W_slider : public UI_widget
 {
 private:
-	W_label* text;
+	W_label* text = NULL;
 	string name;
 
 	float value;
@@ -55,7 +55,7 @@ private:
 	float mouseOffset;
 	int precision;
 
-	bool action;
+	bool vertical = false;
 
 	void (*onSetValue)(W_slider* caller, float value, bool realtime) = NULL;
 

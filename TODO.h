@@ -7,7 +7,7 @@ dialogs:
     ajouter alertbox
 autre:
     widget slider vertical ou option dans slider
-    ajouter fonction setMode dans le colorpicker
+    ajouter fonction setMode (changement du mode hsvrgb) dans le colorpicker
     gerer les textures de curseur dans les viewports
     UI_window -> ajouter un resize a la souris?
     choix de la couleur de l'interface
