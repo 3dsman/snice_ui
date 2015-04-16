@@ -63,7 +63,10 @@ private:
 
 	colorbandItem* NewColorbandItem(float position, float red, float green, float blue, float alpha);
 
-	int interpolation;
+	double LinearInterpolate1D(double a, double b, double x);
+	double CosineInterpolate1D(double a, double b, double x);
+
+	char interpolation;
 
 	List listofcolorbandItems;
 
@@ -92,9 +95,9 @@ public:
 
 	void GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, float pos);
 
-	void SetInterpolation(int i);
+	void SetInterpolation(char i);
 
-	void GetInterpolation(int i);
+	void GetInterpolation(char i);
 
 	void SetHeight(int h);
 

@@ -42,6 +42,7 @@
 #include "../snice_UI.h"
 //#include "interpolation.h"
 #include "widget/color_band.h"
+#include <math.h>
 
 W_colorBand::colorbandItem * W_colorBand::NewColorbandItem(float position, float red, float green, float blue, float alpha){
 	W_colorBand::colorbandItem * tmp;
@@ -74,6 +75,15 @@ W_colorBand::~W_colorBand()
 {
 	FlushColorNode();
 }
+
+double W_colorBand::LinearInterpolate1D(double a, double b, double x) {
+    return (b-a)*x+a;
+  }
+
+double W_colorBand::CosineInterpolate1D(double a, double b, double x) {
+    double amp = (a-b)/2;
+    return a-amp+amp*cos(PI*x);
+  }
 
 void W_colorBand::FlushColorNode()
 {
@@ -250,7 +260,7 @@ void W_colorBand::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, f
 
 			// choice of the interpolation
 // TODO reactiver l'interpolation
-			/*switch (interpolation)
+			switch (interpolation)
 			{
 				case 1:
 				{
@@ -269,7 +279,7 @@ void W_colorBand::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, f
 
 					break;
 				};
-			}*/
+			}
 		}else
 		{
 			*Red =  pNextColourbandnode->r;
@@ -289,12 +299,12 @@ void W_colorBand::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, f
 
 }
 
-void W_colorBand::SetInterpolation(int i)
+void W_colorBand::SetInterpolation(char i)
 {
 	if (i > 0) interpolation = i;
 }
 
-void W_colorBand::GetInterpolation(int i)
+void W_colorBand::GetInterpolation(char i)
 {
 	i = interpolation;
 }
