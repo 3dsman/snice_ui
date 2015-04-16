@@ -110,7 +110,7 @@ UI_base* W_menu::OnLButtonUp(int x, int y){
 
 UI_base* W_menu::OnMouseMove(int x, int y, int prevx, int prevy)
 {
-    UI_widget::OnMouseMove(x, y, prevx, prevy);
+    return UI_widget::OnMouseMove(x, y, prevx, prevy);
 }
 
 void W_menu::Callback(UI_base * pCallObject, unsigned char callIndex )

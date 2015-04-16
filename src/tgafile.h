@@ -3,7 +3,7 @@
 //
 // File created by Lionel Allorge
 // Date of creation : 2004 06 02
-// Date of modification : 
+// Date of modification :
 
 // Other copyrights :
 // part copyright 2002-2003 Wybren van Keulen
@@ -71,7 +71,7 @@ typedef struct
 	GLuint		bytesPerPixel;							// Holds Number Of Bytes Per Pixel Used In The TGA File
 	GLuint		imageSize;								// Used To Store The Image Size When Setting Aside Ram
 	GLuint		temp;									// Temporary Variable
-	GLuint		type;	
+	GLuint		type;
 	GLuint		Height;									//Height of Image
 	GLuint		Width;									//Width ofImage
 	GLuint		Bpp;									// Bits Per Pixel
@@ -83,9 +83,9 @@ static TGA tga;												// TGA image data
 static GLubyte uTGAcompare[12] = {0,0,2, 0,0,0,0,0,0,0,0,0};	// Uncompressed TGA Header
 static GLubyte cTGAcompare[12] = {0,0,10,0,0,0,0,0,0,0,0,0};	// Compressed TGA Header
 
-bool LoadTGA(Texture * texture, char * filename);		// Load a TGA file
-bool LoadUncompressedTGA(Texture * texture, char * filename, FILE * fTGA);	// Load an Uncompressed file
-bool LoadCompressedTGA(Texture * texture, char * filename, FILE * fTGA);		// Load a Compressed file
+bool LoadTGA(Texture * texture, const char * filename);		// Load a TGA file
+bool LoadUncompressedTGA(Texture * texture, const char * filename, FILE * fTGA);	// Load an Uncompressed file
+bool LoadCompressedTGA(Texture * texture, const char * filename, FILE * fTGA);		// Load a Compressed file
 
 #endif // _SNICE_TGAFILE_H_
 

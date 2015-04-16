@@ -137,7 +137,8 @@ void W_progress::Draw()
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(r,g,b,1.0f);
 	//glBindTexture(GL_TEXTURE_2D, textures[11].texID);
-	glBindTexture(GL_TEXTURE_2D, textures.progress.texID);
+	//glBindTexture(GL_TEXTURE_2D, textures.progress.texID);
+	textures.progress.BindTex();
 
 	glBegin(GL_QUADS);
 		glTexCoord2f(value/height*2, 1.0f);
@@ -156,7 +157,8 @@ void W_progress::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	//glBindTexture(GL_TEXTURE_2D, textures[8].texID);
-	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);
+	//glBindTexture(GL_TEXTURE_2D, textures.slider.texID);
+    textures.slider.BindTex();
 
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
@@ -233,7 +235,8 @@ void W_progress::Draw()
 	glEnd();
 
 	//glBindTexture(GL_TEXTURE_2D, textures[10].texID);
-	glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
+	//glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
+	textures.specular.BindTex();
 	glColor4f(1.0f,1.0f,1.0f,0.6f);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);

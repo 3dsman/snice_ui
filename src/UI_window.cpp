@@ -201,7 +201,8 @@ void UI_window::Draw()
 		glColor4f(r,g,b,0.2f);
 
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, textures.shadow.texID);
+		//glBindTexture(GL_TEXTURE_2D, textures.shadow.GetTexID());
+		textures.shadow.BindTex();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 
@@ -281,7 +282,8 @@ void UI_window::Draw()
 		glEnd();
 	//}
 
-	glBindTexture(GL_TEXTURE_2D, font.texture.texID);
+	//glBindTexture(GL_TEXTURE_2D, font.texture.GetTexID());
+	font.texture.BindTex();
 	glDisable(GL_TEXTURE_2D);
 
 	// Fill

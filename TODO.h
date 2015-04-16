@@ -6,7 +6,7 @@ dialogs:
     filepicker
     ajouter alertbox
 autre:
-    widget slider vertical ou option dans slider
+    faire apparaitre/disparaitre automatiquement les sliders du slided_panel quand la surface ne les justifie pas
     ajouter fonction setMode (changement du mode hsvrgb) dans le colorpicker
     gerer les textures de curseur dans les viewports
     UI_window -> ajouter un resize a la souris?

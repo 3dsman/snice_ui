@@ -405,7 +405,8 @@ void W_colorBand::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID);				// Select Our Font Texture
+	//glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID);
+	textures.slider.BindTex();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 

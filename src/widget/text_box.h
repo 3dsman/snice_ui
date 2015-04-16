@@ -57,7 +57,7 @@ private:
     bool integ;
 	bool decimal;
 	bool action;
-	bool drawContour=true;
+	bool drawContour;
 
     void (*onSetContent)(W_textbox* caller, string content) = NULL;
 

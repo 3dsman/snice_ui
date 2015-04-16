@@ -134,9 +134,10 @@ void W_button::Draw()
 
 	glEnable(GL_TEXTURE_2D);
 	//glBindTexture(GL_TEXTURE_2D, textures[9].texID);
-	glBindTexture(GL_TEXTURE_2D, textures.button.texID);
+	//glBindTexture(GL_TEXTURE_2D, textures.button.texID);
+	textures.button.BindTex();
 	//if (pressed) glBindTexture(GL_TEXTURE_2D, textures[13].texID);
-	if (pressed) glBindTexture(GL_TEXTURE_2D, textures.buttonPress.texID);
+	if (pressed) textures.buttonPress.BindTex();//glBindTexture(GL_TEXTURE_2D, textures.buttonPress.texID);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
@@ -225,7 +226,8 @@ void W_button::Draw()
 	glEnd();
 
 	//glBindTexture(GL_TEXTURE_2D, textures[10].texID);
-	glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
+	//glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
+	textures.specular.BindTex();
 	glColor4f(1.0f,1.0f,1.0f,0.6f);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);

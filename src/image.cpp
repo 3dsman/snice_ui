@@ -1,17 +1,10 @@
-// tgafile.cpp
-// This file is for TGA image format related functions.
-//
-// File created by Lionel Allorge
-// Date of creation : 2004 06 02
-// Date of modification :
 
-// Other copyrights :
-// part copyright � 2002-2003 Wybren van Keulen
-// www.funnyfarm.tv
-// I used the OpenGL framework by Jeff Molofee 2000
-// his site rocks, visit it at nehe.gamedev.net
-// updated by tricoire sebastien
-// 3dsman@free.fr
+// image.cpp
+// This file is for image load.
+//
+// File created by tricoire sebastien
+// Date of creation : 2015 03 31
+// Date of modification :
 
 
 /* ***** BEGIN GPL LICENSE BLOCK *****
@@ -19,10 +12,7 @@
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version. The Blender
- * Foundation also sells licenses for use in proprietary software under
- * the Blender License.  See http://www.blender.org/BL/ for information
- * about this.
+ * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,60 +23,74 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * The Original Code is Copyright (C) 2002-2003 by Funny Farm.
- * www.funnyfarm.tv
- *
  * ***** END GPL LICENSE BLOCK *****
  */
-
+#include "image.h"
 #include <stdio.h>
-#include <malloc.h>
-#include <memory.h>
-
-#include "tgafile.h"
-#include "include/glfw.h"
-//#include "snice_UI.h"
-
-//////////////////////////////////////////////////
-// MessageBox(int empty, char * message, char * title, int flag).
-// An alert message box
-//////////////////////////////////////////////////
-
-// TODO : Display an better error message
 #define N_OK 1
-
-#include <stdarg.h>
 
 #include "snice_UI.h"
 
-int MessageBox(int empty, string message, string title, int flag)
+/////////////////////////////////////////////
+// Functions
+/////////////////////////////////////////////
+UI_image::UI_image()
+{
+
+
+}
+
+UI_image::UI_image(string filename)
+{
+
+
+}
+
+UI_image::~UI_image()
+{
+
+    if (tex.imageData)
+    {
+        free(tex.imageData);
+    }
+}
+
+bool UI_image::LoadImage(string filename)
+{
+    return LoadTGA(&tex, filename.c_str());
+}
+
+int UI_image::MessageBox(int empty, string message, string title, int flag)
 {
 	printf("%s : %s\n", title.c_str(), message.c_str());
 	return 0;
 }
 
-void gentex(Texture * tex)
+void UI_image::gentex()
 {
-    glGenTextures(1, &tex->texID);				// Create The Texture
-    glBindTexture(GL_TEXTURE_2D, tex->texID);
+    glGenTextures(1, &(tex.texID));				// Create The Texture
+    glBindTexture(GL_TEXTURE_2D, tex.texID);
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    if (tex->bpp == 24)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->width, tex->height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex->imageData);
+    if (tex.bpp == 24)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex.width, tex.height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex.imageData);
     else
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->imageData);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width, tex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.imageData);
     //if (tex.imageData){free(tex.imageData);}
 }
 
-bool LoadTGA(Texture * texture, const char * filename)				// Load a TGA file
+bool UI_image::LoadTGA(Texture * texture, string filename)				// Load a TGA file
 {
+    uTGAcompare[2] = 2;	// Uncompressed TGA Header
+    cTGAcompare[2] = 10;	// Compressed TGA Header
+
 	FILE * fTGA;												// File pointer to texture file
-	fTGA = fopen(filename, "rb");								// Open file for reading
+	fTGA = fopen(filename.c_str(), "rb");								// Open file for reading
 
 	if (fTGA == NULL)											// If it didn't open....
 	{
 		char Mess[1024];
-		sprintf(Mess,"Could not open texture file : %s", filename);
+		sprintf(Mess,"Could not open texture file : %s", filename.c_str());
 		MessageBox(0, Mess, "ERROR", N_OK);	// Display an error message
 		return false;														// Exit function
 	}
@@ -103,12 +107,12 @@ bool LoadTGA(Texture * texture, const char * filename)				// Load a TGA file
 
 	if (memcmp(uTGAcompare, &tgaheader, sizeof(tgaheader)) == 0)				// See if header matches the predefined header of
 	{																		// an Uncompressed TGA image
-		LoadUncompressedTGA(texture, filename, fTGA);						// If so, jump to Uncompressed TGA loading code
+		LoadUncompressedTGA(texture, fTGA);						// If so, jump to Uncompressed TGA loading code
 	}
 	else if (memcmp(cTGAcompare, &tgaheader, sizeof(tgaheader)) == 0)		// See if header matches the predefined header of
 	{
 																			// an RLE compressed TGA image
-		LoadCompressedTGA(texture, filename, fTGA);							// If so, jump to Compressed TGA loading code
+		LoadCompressedTGA(texture, fTGA);							// If so, jump to Compressed TGA loading code
 	}
 	else																	// If header matches neither type
 	{
@@ -119,7 +123,7 @@ bool LoadTGA(Texture * texture, const char * filename)				// Load a TGA file
 	return true;															// All went well, continue on
 }
 
-bool LoadUncompressedTGA(Texture * texture, const char * filename, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's
+bool UI_image::LoadUncompressedTGA(Texture * texture, FILE * fTGA)	// Load an uncompressed TGA (note, much of this code is based on NeHe's
 {																			// TGA Loading code nehe.gamedev.net)
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Read TGA header
 	{
@@ -190,7 +194,7 @@ bool LoadUncompressedTGA(Texture * texture, const char * filename, FILE * fTGA)	
 	return true;															// Return success
 }
 
-bool LoadCompressedTGA(Texture * texture, const char * filename, FILE * fTGA)		// Load COMPRESSED TGAs
+bool UI_image::LoadCompressedTGA(Texture * texture, FILE * fTGA)		// Load COMPRESSED TGAs
 {
 	if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)					// Attempt to read header
 	{
@@ -383,6 +387,53 @@ bool LoadCompressedTGA(Texture * texture, const char * filename, FILE * fTGA)		/
 	fclose(fTGA);																		// Close the file
 	return true;																		// return success
 }
+/*
+GLuint UI_image::GetTexID()
+{
+    return tex.texID;
+}*/
+GLuint	UI_image::GetWidth()
+{
+    return tex.width;
+}
+GLuint	UI_image::GetHeight()
+{
+    return tex.height;
+
+}
+
+GLubyte * UI_image::GetData()
+{
+    return tex.imageData;
+
+}
+
+bool UI_image::SetWidth(GLuint width)
+{
+    tex.width = width;
+}
+bool UI_image::SetHeight(GLuint height)
+{
+    tex.height = height;
+}
+bool UI_image::SetBpp(GLuint bpp)
+{
+    tex.bpp = bpp;
+}
+bool UI_image::SetData(GLubyte * data)
+{
+    if (tex.imageData)
+    {
+        free(tex.imageData);
+    }
+    tex.imageData = data;
+}
+
+bool UI_image::BindTex()
+{
+
+	glBindTexture(GL_TEXTURE_2D, tex.texID);
+	return true;
+}
 
 
-// End of tgafile.cpp

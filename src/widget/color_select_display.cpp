@@ -74,44 +74,48 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
                     curx = redHue; cury = greenSat; curz = blueVal; break;
 			}
 
-	quadImage.width  = pImageWidth;
-	quadImage.height = pImageHeight;
-	quadImage.bpp	= 24;
-	quadImage.imageData	= (GLubyte *)malloc(pImageWidth*pImageHeight*3);
-	glGenTextures(1, &quadImage.texID);
+	quadImage.SetWidth(pImageWidth);
+	quadImage.SetHeight(pImageHeight);
+	quadImage.SetBpp(24);
+	quadImage.SetData((GLubyte *)malloc(pImageWidth*pImageHeight*3));
+	//glGenTextures(1, &quadImage.texID);
+	quadImage.gentex();
 
     RefreshImageXY();
 
     //gentex(lineImage);
-	lineImage.width  = 4;
-	lineImage.height = pImageHeight;
-	lineImage.bpp	= 24;
-	lineImage.imageData	= (GLubyte *)malloc(lineImage.width*lineImage.height*3);
-	glGenTextures(1, &lineImage.texID);
+	lineImage.SetWidth(4);
+	lineImage.SetHeight(pImageHeight);
+	lineImage.SetBpp(24);
+	lineImage.SetData((GLubyte *)malloc(lineImage.GetWidth()*lineImage.GetHeight()*3));
+	lineImage.gentex();
+	//glGenTextures(1, &lineImage.texID);
     RefreshImageZ();
 
-	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
+	//glBindTexture(GL_TEXTURE_2D, quadImage.texID);
+	quadImage.BindTex();
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR  );
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR  );
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.GetWidth(), quadImage.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.GetData());
 
-	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+	//glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+	lineImage.BindTex();
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR  );
 	glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR  );
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.GetWidth(), lineImage.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.GetData());
 
 }
 
 W_colorSelectdisplay::~W_colorSelectdisplay()
 {
-	if (quadImage.imageData)
+	/*if (quadImage.GetData())
     {
         free(quadImage.imageData);
     }
     if (lineImage.imageData)
     {
         free(lineImage.imageData);
-    }
+    }*/
 }
 
 
@@ -169,51 +173,53 @@ void W_colorSelectdisplay::RefreshImageXY(){
 
 	int k = 0;
 	float red, green, blue;
-
+	GLubyte * image;
+	image = quadImage.GetData();
 	int i,j;
-	for (i=0; i<int(quadImage.height); ++i){
-		for (j=0; j<int(quadImage.width); ++j){
+	for (i=0; i<int(quadImage.GetHeight()); ++i){
+		for (j=0; j<int(quadImage.GetWidth()); ++j){
 			switch (mode)
 			{
 				case H:
-					HSVtoRGB(redHue,float(j)/ quadImage.width,float(i) / quadImage.height,&red,&green,&blue);
+					HSVtoRGB(redHue,float(j)/ quadImage.GetWidth(),float(i) / quadImage.GetHeight(),&red,&green,&blue);
 					break;
 
 				case S:
-					HSVtoRGB(float(j)/ quadImage.width*360.0f,greenSat,float(i) / quadImage.height,&red,&green,&blue);
+					HSVtoRGB(float(j)/ quadImage.GetWidth()*360.0f,greenSat,float(i) / quadImage.GetHeight(),&red,&green,&blue);
 					break;
 
 				case V:
-					HSVtoRGB(float(j)/ quadImage.width*360.0f,float(i) / quadImage.height,blueVal,&red,&green,&blue);
+					HSVtoRGB(float(j)/ quadImage.GetWidth()*360.0f,float(i) / quadImage.GetHeight(),blueVal,&red,&green,&blue);
 					break;
 
 				case R:
 					red= redHue;
-					green= float(j)/ quadImage.width;
-					blue= float(i)/ quadImage.height;
+					green= float(j)/ quadImage.GetWidth();
+					blue= float(i)/ quadImage.GetHeight();
 					break;
 
 				case G:
-					red= float(j)/ quadImage.width;
+					red= float(j)/ quadImage.GetWidth();
 					green= greenSat;
-					blue= float(i)/ quadImage.height;
+					blue= float(i)/ quadImage.GetHeight();
 					break;
 
 				case B:
-					red= float(j)/ quadImage.width;
-					green= float(i)/ quadImage.height;
+					red= float(j)/ quadImage.GetWidth();
+					green= float(i)/ quadImage.GetHeight();
 					blue= blueVal;
 					break;
 			}
 
-			quadImage.imageData[k++] = char(red * 255);
-			quadImage.imageData[k++] = char(green * 255);
-			quadImage.imageData[k++] = char(blue * 255);
+			image[k++] = char(red * 255);
+			image[k++] = char(green * 255);
+			image[k++] = char(blue * 255);
 		}
 	}
 
-	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.width, quadImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.imageData);
+	//glBindTexture(GL_TEXTURE_2D, quadImage.texID);
+	quadImage.BindTex();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, quadImage.GetWidth(), quadImage.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, quadImage.GetData());
 
 };
 
@@ -223,21 +229,23 @@ void W_colorSelectdisplay::RefreshImageZ(){
 	float red = redHue;
 	float green = greenSat;
 	float blue =blueVal;
+GLubyte * image;
+image = lineImage.GetData();
 
-	for (unsigned int i=0; i<lineImage.height; i++){
+	for (unsigned int i=0; i<lineImage.GetHeight(); i++){
         switch (mode)
         {
             case H:
             {
                 //hue = float(i)/ float(lineImage.height)*360.0f;
-                HSVtoRGB(float(i)/ float(lineImage.height)*360.0f,greenSat,blueVal,&red,&green,&blue);
+                HSVtoRGB(float(i)/ float(lineImage.GetHeight())*360.0f,greenSat,blueVal,&red,&green,&blue);
                 break;
             }
 
             case S:
             {
                 //saturation = float(i) / float(lineImage.height);
-                HSVtoRGB(redHue,float(i) / float(lineImage.height),blueVal,&red,&green,&blue);
+                HSVtoRGB(redHue,float(i) / float(lineImage.GetHeight()),blueVal,&red,&green,&blue);
                 break;
             }
 
@@ -245,38 +253,39 @@ void W_colorSelectdisplay::RefreshImageZ(){
             {
                 //luminosity = float(i) / float(lineImage.height);
 
-                HSVtoRGB(redHue,greenSat,float(i) / float(lineImage.height),&red,&green,&blue);
+                HSVtoRGB(redHue,greenSat,float(i) / float(lineImage.GetHeight()),&red,&green,&blue);
                 break;
             }
 
             case R:
             {
-                red= float(i) / float(lineImage.height);
+                red= float(i) / float(lineImage.GetHeight());
                 break;
             }
 
             case G:
             {
-                green= float(i) / float(lineImage.height);
+                green= float(i) / float(lineImage.GetHeight());
                 break;
             }
 
             case B:
             {
-                blue= float(i) / float(lineImage.height);
+                blue= float(i) / float(lineImage.GetHeight());
                 break;
             }
         }
 
-        for (unsigned int j=0; j<lineImage.width; j++){
-            lineImage.imageData[k++] = char(red * 255);
-            lineImage.imageData[k++] = char(green * 255);
-            lineImage.imageData[k++] = char(blue * 255);
+        for (unsigned int j=0; j<lineImage.GetWidth(); j++){
+            image[k++] = char(red * 255);
+            image[k++] = char(green * 255);
+            image[k++] = char(blue * 255);
         }
 	}
 
-	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.width, lineImage.height, 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.imageData);
+	//glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+	lineImage.BindTex();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.GetWidth(), lineImage.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.GetData());
 
 };
 
@@ -290,7 +299,8 @@ void W_colorSelectdisplay::Draw()
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-	glBindTexture(GL_TEXTURE_2D, quadImage.texID);
+	//glBindTexture(GL_TEXTURE_2D, quadImage.texID);
+	quadImage.BindTex();
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex2d(1,-1);
@@ -305,7 +315,8 @@ void W_colorSelectdisplay::Draw()
 		glVertex2d(1, -height+1);
 	glEnd();
 
-	glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+	//glBindTexture(GL_TEXTURE_2D, lineImage.texID);
+	lineImage.BindTex();
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex2d(width-15,-1);
@@ -328,7 +339,8 @@ void W_colorSelectdisplay::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID				// Select Our Font Texture
+	//glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID
+	textures.slider.BindTex();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 

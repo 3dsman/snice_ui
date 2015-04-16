@@ -40,7 +40,9 @@
 #define _SNICE_COLORSELECTDISPLAY_H_
 
 #include "widget/UI_widget.h"
-#include "tgafile.h"
+
+#include "image.h"
+//#include "tgafile.h"
 
 enum colorSelector {H, S, V, R, G, B};
 
@@ -65,8 +67,8 @@ public:
 	bool action;
 	colorSelector mode;
 
-	Texture quadImage;
-	Texture lineImage;
+	UI_image quadImage;
+	UI_image lineImage;
 
 
 	W_colorSelectdisplay(int x, int y, int w, int h, colorSelector mode, float red = 0.8f, float green = 0.8f, float blue = 0.8f, int pImageWidth = 256, int pImageHeight = 256);

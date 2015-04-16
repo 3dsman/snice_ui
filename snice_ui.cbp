@@ -65,12 +65,17 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="src/dialog/file_picker.h" />
+		<Unit filename="src/image.cpp" />
+		<Unit filename="src/image.h" />
 		<Unit filename="src/include/glfw.h" />
 		<Unit filename="src/mylist.cpp" />
 		<Unit filename="src/mylist.h" />
 		<Unit filename="src/snice_UI.cpp" />
 		<Unit filename="src/snice_UI.h" />
-		<Unit filename="src/tgafile.cpp" />
+		<Unit filename="src/tgafile.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="src/tgafile.h" />
 		<Unit filename="src/viewport.cpp" />
 		<Unit filename="src/viewport.h" />
@@ -83,20 +88,11 @@
 		<Unit filename="src/widget/UI_widget.h" />
 		<Unit filename="src/widget/button.cpp" />
 		<Unit filename="src/widget/button.h" />
-		<Unit filename="src/widget/color_band.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="src/widget/color_band.cpp" />
 		<Unit filename="src/widget/color_band.h" />
-		<Unit filename="src/widget/color_display.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="src/widget/color_display.cpp" />
 		<Unit filename="src/widget/color_display.h" />
-		<Unit filename="src/widget/color_select_display.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="src/widget/color_select_display.cpp" />
 		<Unit filename="src/widget/color_select_display.h" />
 		<Unit filename="src/widget/file_selector.cpp">
 			<Option compile="0" />
@@ -105,20 +101,11 @@
 		<Unit filename="src/widget/file_selector.h" />
 		<Unit filename="src/widget/label.cpp" />
 		<Unit filename="src/widget/label.h" />
-		<Unit filename="src/widget/menu.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="src/widget/menu.cpp" />
 		<Unit filename="src/widget/menu.h" />
-		<Unit filename="src/widget/progress.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="src/widget/progress.cpp" />
 		<Unit filename="src/widget/progress.h" />
-		<Unit filename="src/widget/slided_panel.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="src/widget/slided_panel.cpp" />
 		<Unit filename="src/widget/slided_panel.h" />
 		<Unit filename="src/widget/slider.cpp" />
 		<Unit filename="src/widget/slider.h" />
@@ -144,6 +131,15 @@
 			<envvars />
 			<debugger />
 			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="5" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

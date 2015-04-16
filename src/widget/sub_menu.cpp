@@ -166,7 +166,8 @@ void W_subMenu::Draw()
 			glColor4f(0.7f,0.7f,0.7f,0.2f);
 
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, textures.shadow.texID);				// Select Our Font Texture
+			//glBindTexture(GL_TEXTURE_2D, textures.shadow.texID);
+			textures.shadow.BindTex();
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glEnable(GL_BLEND);
 

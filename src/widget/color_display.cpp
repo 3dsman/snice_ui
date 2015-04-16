@@ -127,7 +127,8 @@ void W_colorDisplay::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID);				// Select Our Font Texture
+	//glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID);
+	textures.slider.BindTex();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
@@ -273,7 +274,7 @@ UI_base* W_colorDisplay::OnLButtonUp(int x, int y)
         if(onClick)
             onClick(this);
 		pInterceptChild = 0;
-
+	return 0;
 		//if (pParentUI_base) pParentUI_base->Callback(this,1);
 }
 

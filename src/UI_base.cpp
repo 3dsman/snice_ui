@@ -448,25 +448,29 @@ void UI_base::OnMove(void (*function)(UI_base* caller, int x, int y))
     onMove = function;
 }
 
-bool UI_base::SetTexture(Texture *texture, char* path)
+bool UI_base::SetTexture(UI_image *texture, string path)
 {
-    if (!LoadTGA(texture,path)){printf("a texture is missing" );return false;}
-    glGenTextures(1, &texture->texID);				// Create The Texture
-    glBindTexture(GL_TEXTURE_2D, texture->texID);
-    glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->width, texture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->imageData);
-    if (texture->imageData){ free(texture->imageData);}
+    if (!texture->LoadImage(path.c_str())){printf("%s texture is missing",path.c_str() );return false;}
+    texture->gentex();
+    //glGenTextures(1, &texture->texID);				// Create The Texture
+    //glBindTexture(GL_TEXTURE_2D, texture->texID);
+    //glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    //glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->width, texture->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture->imageData);
+    //if (texture->imageData){ free(texture->imageData);}
     return true;
 }
 
-bool UI_base::SetFont( char* path, int charWidth)
+bool UI_base::SetFont( string path, int charWidth)
 {
     font.charWidth = charWidth;
-    if (!SetTexture(&font.texture, path)){return false;}
+    SetTexture(&font.texture,path);
+    //if (!font.texture.LoadImage(path.c_str())){printf("font texture is missing" );return false;}
+    //if (!SetTexture(&font.texture, path)){return false;}
 
     font.fontList = glGenLists(256);									// Creating 256 Display Lists
-	glBindTexture(GL_TEXTURE_2D, font.texture.texID);		// Select Our Font Texture
+	//glBindTexture(GL_TEXTURE_2D, font.texture.GetTexID());		// Select Our Font Texture
+	font.texture.BindTex();
 	for (int loop1=0; loop1<256; ++loop1)					// Loop Through All 256 Lists
 	{
 		float cx = float(loop1%16)/16.0f;					// X Position Of Current Character

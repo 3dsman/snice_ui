@@ -75,7 +75,7 @@ void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, floa
 	barSize = bar;
 	mouseOffset = 0;
 
-	if (h>w) vertical = true;
+	vertical = h>w;
 
 	refName = l;
 	name = l;
@@ -297,7 +297,8 @@ void W_slider::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures.slider.texID);
+	//glBindTexture(GL_TEXTURE_2D, textures.slider.texID);
+	textures.slider.BindTex();
 
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f,1.0f);
@@ -373,7 +374,8 @@ void W_slider::Draw()
 		glVertex2d(0, -height+8);
 	glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
+    //glBindTexture(GL_TEXTURE_2D, textures.specular.texID);
+    textures.specular.BindTex();
     glColor4f(1.0f,1.0f,1.0f,0.6f);
     glBegin(GL_QUADS);
         glTexCoord2f(0.0f,1.0f);

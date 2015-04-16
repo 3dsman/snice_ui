@@ -55,7 +55,7 @@ private:
 	float mouseOffset;
 	int precision;
 
-	bool vertical = false;
+	bool vertical;
 
 	void (*onSetValue)(W_slider* caller, float value, bool realtime) = NULL;
 

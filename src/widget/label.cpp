@@ -68,7 +68,8 @@ void W_label::Draw()
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	  //TODO TEXTURES DES FONTS
-	glBindTexture(GL_TEXTURE_2D, font.texture.texID);
+	//glBindTexture(GL_TEXTURE_2D, font.texture.texID);
+	font.texture.BindTex();
 
 	glPushMatrix();
 

@@ -41,27 +41,31 @@
 		UI_base is the base class for all visible objects (dialogs, widget, nodes).
 	*/
 #include "mylist.h"
-#include "tgafile.h"
+//#include "tgafile.h"
+#include "image.h"
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string.h>
 
+typedef unsigned char GLubyte;
+typedef unsigned int GLuint;
+
 using namespace std;
 
 struct Textures{
-   Texture slider;
-   Texture button;
-   Texture buttonPress;
-   Texture specular;
-   Texture progress;
-   Texture shadow;
-   Texture cursor;
+   UI_image slider;
+   UI_image button;
+   UI_image buttonPress;
+   UI_image specular;
+   UI_image progress;
+   UI_image shadow;
+   UI_image cursor;
 };
 
 struct Font{
-   Texture texture;
+   UI_image texture;
    GLuint fontList;
    unsigned char charWidth;
 };
@@ -219,10 +223,10 @@ public:
 
 
 	/**< \brief set the texture "texture" with the file "path" */
-	static bool SetTexture(Texture *texture, char* path);
+	static bool SetTexture(UI_image *texture, string path);
 
 	/**< \brief set the font with the file "path" */
-    static bool SetFont(char* path, int charWidth);
+    static bool SetFont(string path, int charWidth);
 
 	/** \brief static function to init textures */
 	static bool InitTextures();
