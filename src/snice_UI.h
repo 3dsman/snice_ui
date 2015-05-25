@@ -16,7 +16,7 @@
 #include "widget/button.h"
 #include "mylist.h"
 //#include "tgafile.h"
-#include "image.h"
+#include "UI_image.h"
 #include "widget/label.h"
 #include "widget/text_box.h"
 #include "widget/slider.h"
@@ -27,6 +27,7 @@
 #include "widget/color_select_display.h"
 #include "widget/color_band.h"
 #include "widget/slided_panel.h"
+#include "dialog/color_picker.h"
 
 
 // Key and button state/action definitions

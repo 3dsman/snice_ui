@@ -373,7 +373,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
 
     		case SNICEUI_KEY_DELETE :
     				{
-    					if ((curPos + 1) < contents.size())
+    					if ((curPos + 1) < (int)contents.size())
     					{
     						contents.erase(curPos,1);
     					}
@@ -391,7 +391,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
     		case SNICEUI_KEY_RIGHT :
     				{
     					// move the cursor to the right
-    					if ((curPos + 1) < contents.size())
+    					if ((curPos + 1) < (int)contents.size())
     						curPos++;
     					break;
     				}

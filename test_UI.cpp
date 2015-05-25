@@ -38,6 +38,7 @@ W_colorBand* color_band;
 W_slidedPanel* slided_panel;
 
 UI_window* pwind;
+D_ColorPicker* pcpik;
 W_subMenu* submenu;
 W_subMenu* submenu2;
 W_menu* menu;
@@ -158,6 +159,10 @@ void create_interface()
     pwind = new UI_window(50, 550, 500, 250, "test");
 	pwind->OnClose(testwin);
 	pViewport->AddChild(pwind);
+
+    pcpik = new D_ColorPicker(50, 550, 10,10,10);
+	//pcpik->OnClose(testwin);
+	pViewport->AddChild(pcpik);
 
     slided_panel = new W_slidedPanel(50, 350, 300, 200,500,500);
 	pViewport->AddChild(slided_panel);

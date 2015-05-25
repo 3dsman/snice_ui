@@ -42,7 +42,7 @@
 	*/
 #include "mylist.h"
 //#include "tgafile.h"
-#include "image.h"
+#include "UI_image.h"
 
 #include <fstream>
 #include <iostream>

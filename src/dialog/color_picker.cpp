@@ -9,7 +9,7 @@
 ///
 // based on Crafter (Leaf) Library by Wybren van Keulen (www.funnyfarm.tv)
 // based on GLFW Library (www.glfw.org)
-// 
+//
 // color_picker.cpp
 // This file is the ColorPicker dialog box file
 // File created by Tricoire Sebastien
@@ -28,18 +28,20 @@
 // if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //////////////////////////////////////////////////
 
-#include "snice.h"
-#include "viewports_array.h"
-#include "nodes/container.h"
+//#include "snice.h"
+//#include "viewports_array.h"
+//#include "nodes/container.h"
 
-#include "color_conversion.h"
+//#include "color_conversion.h"
 
+#include "include/color_conversion.h"
 #include "widget/color_select_display.h"
 #include "widget/color_display.h"
 #include "widget/slider.h"
 #include "widget/label.h"
 
 #include "color_picker.h"
+#include "UI_image.h"
 
 //D_ColorPicker::D_ColorPicker(){}
 
@@ -51,11 +53,14 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 	r = 0.4f;
 	g = 0.4f;
 	b = 0.4f;
-
-	pRgbcolor = new W_colorSelectdisplay(10, -35, 255, 255, 256, 256);
+	/*
+    color_select_display = new W_colorSelectdisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
+    color_select_display->OnChange(colorPickerContent);
+	pViewport->AddChild(color_select_display);
+	*/
+	pRgbcolor = new W_colorSelectdisplay(10, -35, 255, 300,H,0.2, 0.5, 0.8);
+	//pRgbcolor->OnChange(ChangeColor);
 	AddChild(pRgbcolor);
-	pRgbcolor2 = new W_colorSelectdisplay(270, -35, 35, 255, 4, 256);
-	AddChild(pRgbcolor2);
 
 	pBeforecolor = new W_colorDisplay(310, -35, 55, 64, "before");
 	AddChild(pBeforecolor);
@@ -82,17 +87,16 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 	AddChild(pSLuminosity);
 
 	SetPicker(initRed,initGreen,initBlue);
-	RefreshImage();
-	RefreshBand();
-	
+	RefreshSelect();
+
 	RefreshSliders();
-	
+
 }
 
 
 
 D_ColorPicker::~D_ColorPicker(){}
-
+/*
 void D_ColorPicker::Callback(UI_base * pCallObject, unsigned char callIndex )
 {
 	if (callIndex == 1)
@@ -150,20 +154,21 @@ void D_ColorPicker::Callback(UI_base * pCallObject, unsigned char callIndex )
 
 		//if the callback comme from the pSSaturation
 		if (pCallObject == pSBlue)		{mode = 5;}
-		
+
 		pAftercolor->GetColor(&redColor,&greenColor,&blueColor);
 		SetPicker(redColor, greenColor, blueColor);
-		
+
 		RefreshBand();
 		RefreshImage();
 	}
 
-}
+}*/
+
+/*
+void D_ColorPicker::OnMouseMove(int x, int y, int prevx, int prevy)
+{
 
 
-void D_ColorPicker::OnMouseMove(int x, int y, int prevx, int prevy){
-	
-	
 	pRgbcolor->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
 	pRgbcolor2->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
 
@@ -173,25 +178,29 @@ void D_ColorPicker::OnMouseMove(int x, int y, int prevx, int prevy){
 	if ((x < posx || x > posx+width || y < posy-height || y > posy) && !(((pRgbcolor->action)||(pRgbcolor2->action))))
 	{ pViewports->deletewhendone = this;}
 };
+*/
 
-	
+void D_ColorPicker::ChangeColor(W_colorSelectdisplay* caller,float red, float green, float blue)
+{
 
+};
 
-void D_ColorPicker::RefreshImage(){
-	Texture* Image;
-	
-	Image = &(pRgbcolor->PreviewImage);
+void D_ColorPicker::RefreshSelect(){
+/*
+	UI_image* Image;
+
+	//Image.SetData(&(pRgbcolor->PreviewImage);
 
 	int k = 0;
 	float red, green, blue;
 	float hue, saturation, luminosity;
-	
+
 	float invRgbcolor2Cury = float(255-pRgbcolor2->cury) / 255.0f;
 	float hueInvRgbcolor2Cury = invRgbcolor2Cury*360.0f;
 	int i,j;
-	
-	for (i=0; i<int(Image->height); ++i){
-		for (j=0; j<int(Image->width); ++j){
+
+	for (i=0; i<int(Image.GetHeight()); ++i){
+		for (j=0; j<int(Image.GetWidth()); ++j){
 			switch (mode)
 			{
 
@@ -201,7 +210,7 @@ void D_ColorPicker::RefreshImage(){
 					hue = hueInvRgbcolor2Cury;
 					saturation = float(255-j)/ 255.0f;
 					luminosity = float(255-i) / 255.0f ;
-			
+
 					HSV2RGB(hue,saturation,luminosity,&red,&green,&blue);
 					break;
 				}
@@ -212,18 +221,18 @@ void D_ColorPicker::RefreshImage(){
 					hue = float(255-j)/ 255.0f*360.0f;
 					saturation = invRgbcolor2Cury;
 					luminosity = float(255-i) / 255.0f ;
-			
+
 					HSV2RGB(hue,saturation,luminosity,&red,&green,&blue);
 					break;
 				}
-				
+
 				//luminosity
 				case 2:
 				{
 					hue = float(255-j)/ 255.0f*360.0f;
 					saturation = float(255-i) / 255.0f ;
 					luminosity = invRgbcolor2Cury;
-			
+
 					HSV2RGB(hue,saturation,luminosity,&red,&green,&blue);
 					break;
 				}
@@ -244,7 +253,7 @@ void D_ColorPicker::RefreshImage(){
 					blue= float(i);
 					break;
 				}
-				
+
 				//blue
 				case 5:
 				{
@@ -255,11 +264,11 @@ void D_ColorPicker::RefreshImage(){
 				}
 			}
 
-			Image->imageData[k] = char(red * 255);
+			Image[k] = char(red * 255);
 			k++;
-			Image->imageData[k] = char(green * 255);
+			Image[k] = char(green * 255);
 			k++;
-			Image->imageData[k] = char(blue * 255);
+			Image[k] = char(blue * 255);
 			k++;
 		}
 	}
@@ -280,111 +289,15 @@ void D_ColorPicker::RefreshImage(){
 	}
 
 	pRgbcolor->RefreshImage();
-	
+*/
 }
 
-void D_ColorPicker::RefreshBand(){
-	Texture* Band;
-	Band = &(pRgbcolor2->PreviewImage);
-	int k = 0;
-	float red, green, blue;
-	float hue, saturation, luminosity;
-	//float invRgbcolorCury = float(255-pRgbcolor->cury) / 255.0f;
-	float pRgbcolorCurx = (float)pRgbcolor->curx;
-	float pRgbcolorCury = (float)pRgbcolor->cury;
-	float negCury = float(255 - pRgbcolor->cury);
-	float negCurx = float(255 - pRgbcolor->curx);
-	float invRgbcolorCury =  negCury / 255.0f;
-	float invRgbcolorCurx = pRgbcolorCurx / 255.0f;
-	float hueCurx = invRgbcolorCurx * 360.0f;
-	
-
-	for (int i=0; i<int(Band->height);++i){
-		switch (mode)
-		{
-
-			//hue
-			case 0:
-			{
-				hue = float(255-i) / 255.0f*360.0f;
-				saturation = invRgbcolorCurx;
-				luminosity = invRgbcolorCury;
-				HSV2RGB(hue,saturation,luminosity,&red,&green,&blue);
-				break;
-			}
-
-			//saturation
-			case 1:
-			{
-				hue = hueCurx;
-				saturation = float(255-i) / 255.0f;
-				luminosity = invRgbcolorCury;
-				HSV2RGB(hue,saturation,luminosity,&red,&green,&blue);
-				break;
-			}
-			
-			//luminosity
-			case 2:
-			{
-				hue = hueCurx;
-				saturation = invRgbcolorCury;
-				luminosity = float(255-i) / 255.0f;
-				HSV2RGB(hue,saturation,luminosity,&red,&green,&blue);
-				break;
-			}
-
-			//red
-			case 3:
-			{
-				red= float(i);
-				green= negCurx;
-				blue= pRgbcolorCury;
-				break;
-			}
-
-			//green
-			case 4:
-			{
-				red= negCurx;
-				green= float(i);
-				blue= pRgbcolorCury;
-				break;
-			}
-			
-			//blue
-			case 5:
-			{
-				red = negCurx;
-				green = pRgbcolorCury;
-				blue = float(i);
-				break;
-			}
-
-		}
-		
-		for (int j=0; j<int(Band->width);++j){
-			Band->imageData[k] = char(red * 255);
-			k++;
-			Band->imageData[k] = char(green * 255);
-			k++;
-			Band->imageData[k] = char(blue * 255);
-			k++;
-		}
-	}
-
-	//horizontal bar
-	k = pRgbcolor2->cury * Band->width*3;
-	for (int j= 0; j<int(Band->width)*3;++j){
-		Band->imageData[k] = 256 - Band->imageData[k];
-		k++;
-	};
-
-	pRgbcolor2->RefreshImage();
-
-};
 void D_ColorPicker::RefreshSliders(){
 	float valRed, valGreen, valBlue;
 	float hue, saturation, luminosity;
+
+/*
+
 	switch (mode)
 	{
 
@@ -394,7 +307,7 @@ void D_ColorPicker::RefreshSliders(){
 			hue = float(255-pRgbcolor2->cury) / 255.0f*360.0f;
 			saturation = float(pRgbcolor->curx) / 255.0f;
 			luminosity = float(255-pRgbcolor->cury) / 255.0f;
-			HSV2RGB(hue,saturation,luminosity,&valRed,&valGreen,&valBlue);
+			HSVtoRGB(hue,saturation,luminosity,&valRed,&valGreen,&valBlue);
 			break;
 		}
 			//saturation
@@ -403,17 +316,17 @@ void D_ColorPicker::RefreshSliders(){
 			hue = float(pRgbcolor->curx) / 255.0f*360.0f;
 			saturation = float(255-pRgbcolor2->cury) / 255.0f;
 			luminosity = float(255-pRgbcolor->cury) / 255.0f;
-			HSV2RGB(hue,saturation,luminosity,&valRed,&valGreen,&valBlue);
+			HSVtoRGB(hue,saturation,luminosity,&valRed,&valGreen,&valBlue);
 			break;
 		}
-		
+
 		//luminosity
 		case 2:
 		{
 			hue = float(pRgbcolor->curx) / 255.0f*360.0f;
 			saturation = float(255-pRgbcolor->cury) / 255.0f;
 			luminosity = float(255-pRgbcolor2->cury) / 255.0f;
-			HSV2RGB(hue,saturation,luminosity,&valRed,&valGreen,&valBlue);
+			HSVtoRGB(hue,saturation,luminosity,&valRed,&valGreen,&valBlue);
 			break;
 		}
 		//red
@@ -422,7 +335,7 @@ void D_ColorPicker::RefreshSliders(){
 			valRed = float(255-pRgbcolor2->cury) / 255.0f;
 			valGreen = float(pRgbcolor->curx) / 255.0f;
 			valBlue = float(255-pRgbcolor->cury) / 255.0f;
-			RGB2HSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
+			RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
 			break;
 		}
 		//green
@@ -431,36 +344,46 @@ void D_ColorPicker::RefreshSliders(){
 			valRed = float(pRgbcolor->curx) / 255.0f;
 			valGreen = float(255-pRgbcolor2->cury) / 255.0f;
 			valBlue = float(255-pRgbcolor->cury) / 255.0f;
-			RGB2HSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
+			RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
 			break;
 		}
-		
+
 		//blue
 		case 5:
 		{
 			valRed = float(pRgbcolor->curx) / 255.0f;
 			valGreen = float(255-pRgbcolor->cury) / 255.0f;
 			valBlue = float(255-pRgbcolor2->cury) / 255.0f;
-			RGB2HSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
+			RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
 			break;
 		}
-	}
+	}*/
 	//red->setValue(valRed);
 	//green->setValue(valGreen);
 	//blue->setValue(valBlue);
+    pRgbcolor->GetColor(&valRed,&valGreen,&valBlue);
+    RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
 
+    pSRed->SetValue(valRed*255);
+	pSGreen->SetValue(valGreen*255);
+	pSBlue->SetValue(valBlue*255);
+	pSHue->SetValue(hue);
+	pSSaturation->SetValue(saturation*100);
+	pSLuminosity->SetValue(luminosity*100);
+	/*
 	pSRed->SetValue(valRed * 255.0f);
 	pSGreen->SetValue(valGreen * 255.0f);
 	pSBlue->SetValue(valBlue * 255.0f);
 	pSHue->SetValue(hue);
 	pSSaturation->SetValue(saturation*100);
 	pSLuminosity->SetValue(luminosity*100);
-
+*/
 	pAftercolor->SetColor(valRed, valGreen, valBlue);
 }
 
 
 void D_ColorPicker::SetPicker(float valRed,float valGreen,float valBlue){
+    /*
 	switch (mode)
 	{
 
@@ -468,7 +391,7 @@ void D_ColorPicker::SetPicker(float valRed,float valGreen,float valBlue){
 		case 0:
 		{
 			float hue,saturation,luminosity;
-			RGB2HSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
+			RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
 			pRgbcolor2->cury = int(255 - hue / 360*255);
 			pRgbcolor->curx = int(saturation * 255);
 			pRgbcolor->cury = int(255 - luminosity * 255);
@@ -478,18 +401,18 @@ void D_ColorPicker::SetPicker(float valRed,float valGreen,float valBlue){
 		case 1:
 		{
 			float hue,saturation,luminosity;
-			RGB2HSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
+			RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
 			pRgbcolor->curx = int(hue / 360*255);
 			pRgbcolor2->cury = int(255 - saturation * 255);
 			pRgbcolor->cury = int(255 - luminosity * 255);
 			break;
 		}
-		
+
 		//luminosity
 		case 2:
 		{
 			float hue,saturation,luminosity;
-			RGB2HSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
+			RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
 			pRgbcolor->curx = int(hue / 360*255);
 			pRgbcolor->cury = int(255 - saturation * 255);
 			pRgbcolor2->cury = int(255 - luminosity * 255);
@@ -511,7 +434,7 @@ void D_ColorPicker::SetPicker(float valRed,float valGreen,float valBlue){
 			pRgbcolor->cury = int(255 - valBlue * 255);
 			break;
 		}
-		
+
 		//blue
 		case 5:
 		{
@@ -521,19 +444,19 @@ void D_ColorPicker::SetPicker(float valRed,float valGreen,float valBlue){
 			break;
 		}
 
-	}
-	
+	}*/
+
 }
 
-float D_ColorPicker::GetActiveColor(int RGB)
+float D_ColorPicker::GetActiveColor(colorSelector RGB)
 {
 		switch (RGB)
 		{
-		case RED:
+		case R:
 			return pSRed->GetValue()/255.0f;
-		case GREEN:
+		case G:
 			return pSGreen->GetValue()/255.0f;
-		case BLUE:
+		case B:
 			return pSBlue->GetValue()/255.0f;
 		default:
 			return 0;

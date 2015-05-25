@@ -9,7 +9,7 @@
 ///
 // based on Crafter (Leaf) Library by Wybren van Keulen (www.funnyfarm.tv)
 // based on GLFW Library (www.glfw.org)
-// 
+//
 // ColorPicker.cpp
 // This file is the ColorPicker dialog box file
 // File created by Tricoire Sebastien
@@ -38,10 +38,9 @@ class W_colorDisplay;
 
 class D_ColorPicker : public UI_dialog		// Mix Material Block
 {
-	
+
 private:
 	W_colorSelectdisplay* pRgbcolor;
-	W_colorSelectdisplay* pRgbcolor2;
 	W_slider* pSRed;
 	W_slider* pSGreen;
 	W_slider* pSBlue;
@@ -53,30 +52,31 @@ private:
 
 	float redColor, greenColor, blueColor;
 
-	int mode; 
+	int mode;
 	bool active;
 public:
 
 	D_ColorPicker(int x, int y,float initRed, float initGreen, float initBlue);
 
-	
+
 	~D_ColorPicker();
-		
+
+
+    void ChangeColor(W_colorSelectdisplay* caller,float red, float green, float blue);
+
 	void CalcOutput(int iOutputNumber, void* Result);
 
-	void OnMouseMove(int x, int y, int prevx, int prevy);
+//	void OnMouseMove(int x, int y, int prevx, int prevy);
 
-	void OnKeyPressed(int key){};
+	//void OnKeyPressed(int key){};
 
 
-	void RefreshImage();
-
-	void RefreshBand();
+	void RefreshSelect();
 	void RefreshSliders();
 
 
 	void SetPicker(float valRed,float valGreen,float valBlue);
-	float GetActiveColor(int RGB);
+	float GetActiveColor(colorSelector RGB);
 
 	void Callback(UI_base * pCallObject, unsigned char callIndex );
 

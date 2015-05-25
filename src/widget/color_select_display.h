@@ -40,11 +40,10 @@
 #define _SNICE_COLORSELECTDISPLAY_H_
 
 #include "widget/UI_widget.h"
+#include "include/color_conversion.h"
 
-#include "image.h"
+#include "UI_image.h"
 //#include "tgafile.h"
-
-enum colorSelector {H, S, V, R, G, B};
 
 class W_colorSelectdisplay : public UI_widget
 {

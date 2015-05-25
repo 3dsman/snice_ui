@@ -36,6 +36,7 @@
 
 #include "include/color_conversion.h"
 #include "../snice_UI.h"
+#include <GL/gl.h>
 #include "widget/color_select_display.h"
 #include <cmath>
 
@@ -441,7 +442,7 @@ void W_colorSelectdisplay::Draw()
 	//glTranslatef(curx*(width-20),cury*height,0);
     // cursor circle
 	for (int i = 0; i < 360 ;i+=5){
-		glVertex2d(curx*(width-20)+sin(DEG2RAD(float(i)))*6, cury*height-height+cos(DEG2RAD(float(i)))*6);
+		glVertex2d(curx*(width-20)+sin(DEG2RAD(float(i)))*PI/180.0f*6, cury*height-height+cos(DEG2RAD(float(i)))*6);
 	}
 	glEnd();
 	glBegin(GL_LINE_LOOP);
