@@ -53,13 +53,13 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 	g = 0.4f;
 	b = 0.4f;
 	/*
-    color_select_display = new W_colorSelectdisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
+    color_select_display = new W_colorSelectDisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
     color_select_display->OnChange(colorPickerContent);
 	pViewport->AddChild(color_select_display);
 	*/
-	pRgbcolor = new W_colorSelectdisplay(10, -35, 255, 255,H,0.2, 0.5, 0.8);
-	pRgbcolor->OnChange(D_ColorPicker::ChangeColor);
-	//pRgbcolor->OnChange([this]{ this->ChangeColor( W_colorSelectdisplay* caller,float red, float green, float blue); });
+	pRgbcolor = new W_colorSelectDisplay(10, -35, 255, 255,H,initRed, initGreen, initBlue);
+	pRgbcolor->OnChange(this, D_ColorPicker::StatChangeColorSelectDisplay);
+	//pRgbcolor->OnChange([this]{ this->ChangeColor( W_colorSelectDisplay* caller,float red, float green, float blue); });
 	AddChild(pRgbcolor);
 
 	pBeforecolor = new W_colorDisplay(310, -35, 55, 64, "before");
@@ -72,22 +72,28 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 	blueColor = initBlue;
 	pBeforecolor->SetColor(initRed,initGreen,initBlue);
 
-	pSRed = new W_slider(310,-153,120,20,"red", 128.0f, 0.0f, 255.0f, 0, 1.0f, 0.3f, 0.3f);
+	pSRed = new W_slider(310,-153,120,20,"red", 128.0f, 0.0f, 255.0f, 0, 0, 1.0f, 0.3f, 0.3f);
 	AddChild(pSRed);
-	pSGreen = new W_slider(310,-175,120,20, "green" , 128.0f, 0.0f, 255.0f, 0 , 0.3f, 1.0f, 0.3f);
+	pSRed->OnSetValue(this, D_ColorPicker::StatChangeColorSliders);
+	pSGreen = new W_slider(310,-175,120,20, "green" , 128.0f, 0.0f, 255.0f, 0, 0, 0.3f, 1.0f, 0.3f);
 	AddChild(pSGreen);
-	pSBlue = new W_slider(310,-197,120,20, "blue" , 128.0f, 0.0f, 255.0f, 0,	0.3f, 0.3f, 1.0f);
+	pSGreen->OnSetValue(this, D_ColorPicker::StatChangeColorSliders);
+	pSBlue = new W_slider(310,-197,120,20, "blue" , 128.0f, 0.0f, 255.0f, 0, 0, 0.3f, 0.3f, 1.0f);
 	AddChild(pSBlue);
+	pSBlue->OnSetValue(this, D_ColorPicker::StatChangeColorSliders);
 
-	pSHue = new W_slider(310,-226,120,20,  "hue", 0.0f, 0.0f, 360.0f, 0,	0.3f, 0.3f, 0.3f);
+	pSHue = new W_slider(310,-226,120,20,  "hue", 0.0f, 0.0f, 360.0f, 0, 0, 0.3f, 0.3f, 0.3f);
 	AddChild(pSHue);
-	pSSaturation = new W_slider(310,-248,120,20,"Saturation", 0.0f, 0.0f, 100.0f, 0 ,		0.3f, 0.3f, 0.3f);
+	pSHue->OnSetValue(this, D_ColorPicker::StatChangeColorSliders);
+	pSSaturation = new W_slider(310,-248,120,20,"Saturation", 0.0f, 0.0f, 100.0f, 0 , 0, 0.3f, 0.3f, 0.3f);
 	AddChild(pSSaturation);
-	pSLuminosity = new W_slider(310,-270,120,20, "luminosity", 0.0f, 0.0f, 100.0f, 0,		0.3f, 0.3f, 0.3f);
+	pSSaturation->OnSetValue(this, D_ColorPicker::StatChangeColorSliders);
+	pSLuminosity = new W_slider(310,-270,120,20, "luminosity", 0.0f, 0.0f, 100.0f, 0, 0, 0.3f, 0.3f, 0.3f);
 	AddChild(pSLuminosity);
+	pSLuminosity->OnSetValue(this, D_ColorPicker::StatChangeColorSliders);
 
-	SetPicker(initRed,initGreen,initBlue);
-	RefreshSelect();
+	//SetPicker(initRed,initGreen,initBlue);
+	//RefreshSelect();
 
 	RefreshSliders();
 
@@ -180,10 +186,77 @@ void D_ColorPicker::OnMouseMove(int x, int y, int prevx, int prevy)
 };
 */
 
-void D_ColorPicker::ChangeColor(W_colorSelectdisplay* caller,float red, float green, float blue)
+void D_ColorPicker::StatChangeColorSelectDisplay(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue)
 {
-
+		(dynamic_cast<D_ColorPicker*> (asker))->ChangeColorSelectDisplay(caller, red,  green,  blue);
 };
+
+void D_ColorPicker::ChangeColorSelectDisplay(W_colorSelectDisplay* caller,float red, float green, float blue)
+{
+	
+    redColor = red;
+    greenColor = green;
+	blueColor = blue;
+	RefreshSliders();
+}
+
+void D_ColorPicker::StatChangeColorSliders(UI_base * asker, W_slider* caller,float value, bool realtime)
+{
+		(dynamic_cast<D_ColorPicker*> (asker))->ChangeColorSliders(caller, value, realtime);
+};
+
+void D_ColorPicker::ChangeColorSliders(W_slider* caller,float value, bool realtime)
+{
+		float hue, saturation, luminosity;
+		
+		if ((caller == pSRed)||(caller == pSGreen)||(caller == pSBlue))
+		{
+			//red
+			if (caller == pSRed)
+				redColor = value/255.0f;
+
+			//green
+			if (caller == pSGreen)
+				greenColor = value/255.0f;
+
+			//blue
+			if (caller == pSBlue)
+				blueColor = value/255.0f;
+			
+			// set the hsv sliders
+			RGBtoHSV(redColor, greenColor, blueColor, &hue, &saturation, &luminosity);
+			pSHue->SetValue(hue, false);
+			pSSaturation->SetValue(saturation*100, false);
+			pSLuminosity->SetValue(luminosity*100, false);
+		}else{
+			
+			RGBtoHSV(redColor, greenColor, blueColor, &hue, &saturation, &luminosity);
+			
+			//hue
+			if (caller == pSHue)
+			{
+				hue = value;
+			}else
+			//saturation
+			if (caller == pSSaturation)
+			{
+				saturation = value/100.0f;
+			}else
+			//luminosity
+			if (caller == pSLuminosity)
+			{
+				luminosity = value/100.0f;
+			}
+			
+			HSVtoRGB(hue,saturation,luminosity,&redColor,&greenColor,&blueColor);
+			pSRed->SetValue(redColor*255.0f, false);
+			pSGreen->SetValue(greenColor*255.0f, false);
+			pSBlue->SetValue(blueColor*255.0f, false);
+			
+		}
+	pRgbcolor->SetColor(redColor, greenColor, blueColor);
+	pAftercolor->SetColor(redColor, greenColor, blueColor);
+}
 
 void D_ColorPicker::RefreshSelect(){
 /*
@@ -361,24 +434,18 @@ void D_ColorPicker::RefreshSliders(){
 	//red->setValue(valRed);
 	//green->setValue(valGreen);
 	//blue->setValue(valBlue);
-    pRgbcolor->GetColor(&valRed,&valGreen,&valBlue);
-    RGBtoHSV(valRed, valGreen, valBlue, &hue, &saturation, &luminosity);
+    //pRgbcolor->GetColor(&valRed,&valGreen,&valBlue);
+    RGBtoHSV(redColor, greenColor, blueColor, &hue, &saturation, &luminosity);
 
-    pSRed->SetValue(valRed*255);
-	pSGreen->SetValue(valGreen*255);
-	pSBlue->SetValue(valBlue*255);
-	pSHue->SetValue(hue);
-	pSSaturation->SetValue(saturation*100);
-	pSLuminosity->SetValue(luminosity*100);
-	/*
-	pSRed->SetValue(valRed * 255.0f);
-	pSGreen->SetValue(valGreen * 255.0f);
-	pSBlue->SetValue(valBlue * 255.0f);
-	pSHue->SetValue(hue);
-	pSSaturation->SetValue(saturation*100);
-	pSLuminosity->SetValue(luminosity*100);
-*/
-	pAftercolor->SetColor(valRed, valGreen, valBlue);
+
+    pSRed->SetValue(redColor*255, false);
+	pSGreen->SetValue(greenColor*255, false);
+	pSBlue->SetValue(blueColor*255, false);
+	if (!((redColor==greenColor)&&(redColor==blueColor))) pSHue->SetValue(hue, false);
+	pSSaturation->SetValue(saturation*100, false);
+	pSLuminosity->SetValue(luminosity*100, false);
+
+	pAftercolor->SetColor(redColor, greenColor, blueColor);
 }
 
 
@@ -444,8 +511,8 @@ void D_ColorPicker::SetPicker(float valRed,float valGreen,float valBlue){
 			break;
 		}
 
-	}*/
-
+	}
+*/
 }
 
 float D_ColorPicker::GetActiveColor(colorSelector RGB)

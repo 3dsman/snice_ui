@@ -74,13 +74,13 @@ UI_base::~UI_base()
 void UI_base::SetWidth(int w)
 {
 	 width = w;
-	if(onResize) onResize(this, width, height);
+	if(onResize) onResize(onResizeAsker, this, width, height);
 };
 
 void UI_base::SetHeight(int h)
 {
 	 height = h;
-	if(onResize) onResize(this, width, height);
+	if(onResize) onResize(onResizeAsker, this, width, height);
 };
 
 void UI_base::SetPosX(int x)
@@ -103,7 +103,7 @@ void UI_base::SetPos(int x, int y)
 		{
 			((UI_base*)childList.GetCurrentObjectPointer())->SetParentPos(parentx + x, parenty + y);
 		}while(childList.ToNext());
-	if(onMove) onMove(this, x, y);
+	if(onMove) onMove(onMoveAsker, this, x, y);
 }
 
 void UI_base::GetPos(int *x, int *y)
@@ -438,14 +438,16 @@ void UI_base::Set(char* order)
 };
 
 
-void UI_base::OnResize(void (*function)(UI_base* caller, int w, int h))
+void UI_base::OnResize(UI_base * asker, void (*function)(UI_base * asker, UI_base* caller, int w, int h))
 {
     onResize = function;
+	onResizeAsker = asker;
 }
 
-void UI_base::OnMove(void (*function)(UI_base* caller, int x, int y))
+void UI_base::OnMove(UI_base * asker, void (*function)(UI_base * asker, UI_base* caller, int x, int y))
 {
     onMove = function;
+	onMoveAsker = asker;
 }
 
 bool UI_base::SetTexture(UI_image *texture, string path)

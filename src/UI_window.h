@@ -59,9 +59,12 @@ protected:
 	W_label* pTitlelabel;	/**<	\brief title of the window (you can get it with GetName()).*/
 
 
-	void (*onClose)(UI_window* caller) = NULL;
-	void (*onFold)(UI_window* caller) = NULL;
-	void (*onUnfold)(UI_window* caller) = NULL;
+	void (*onClose)(UI_base * asker, UI_window* caller) = NULL;
+	UI_base* onCloseAsker = NULL;
+	void (*onFold)(UI_base * asker, UI_window* caller) = NULL;
+	UI_base* onFoldAsker = NULL;
+	void (*onUnfold)(UI_base * asker, UI_window* caller) = NULL;
+	UI_base* onUnfoldAsker = NULL;
 
 public:
 
@@ -95,11 +98,11 @@ public:
 	//void MakeUniqueName(char* winName);
 
     /**	\brief function to set the onClose callback function.*/
-	void OnClose(void (*function)(UI_window* caller));
+	void OnClose(UI_base * asker, void (*function)(UI_base * asker, UI_window* caller));
     /**	\brief function to set the OnFold callback function.*/
-	void OnFold(void (*function)(UI_window* caller));
+	void OnFold(UI_base * asker, void (*function)(UI_base * asker, UI_window* caller));
     /**	\brief function to set the OnUnfold callback function.*/
-	void OnUnfold(void (*function)(UI_window* caller));
+	void OnUnfold(UI_base * asker, void (*function)(UI_base * asker, UI_window* caller));
 
 
 	/**	\brief Function that draw the window.*/

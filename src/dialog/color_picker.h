@@ -33,7 +33,7 @@
 
 #include "UI_dialog.h"
 #include "include/color_conversion.h"
-class W_colorSelectdisplay;
+class W_colorSelectDisplay;
 class W_slider;
 class W_colorDisplay;
 
@@ -41,7 +41,7 @@ class D_ColorPicker : public UI_dialog		// Mix Material Block
 {
 
 private:
-	W_colorSelectdisplay* pRgbcolor;
+	W_colorSelectDisplay* pRgbcolor;
 	W_slider* pSRed;
 	W_slider* pSGreen;
 	W_slider* pSBlue;
@@ -63,7 +63,11 @@ public:
 	~D_ColorPicker();
 
 
-    static void ChangeColor(W_colorSelectdisplay* caller,float red, float green, float blue);
+    static void StatChangeColorSelectDisplay(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue);
+    void ChangeColorSelectDisplay( W_colorSelectDisplay* caller,float red, float green, float blue);
+	
+	static void StatChangeColorSliders(UI_base * asker, W_slider* caller,float value, bool realtime);
+    void ChangeColorSliders( W_slider* caller,float value, bool realtime);
 
 	void CalcOutput(int iOutputNumber, void* Result);
 

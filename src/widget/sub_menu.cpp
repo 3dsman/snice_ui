@@ -359,7 +359,7 @@ UI_base* W_subMenu::OnLButtonUp(int x, int y)
     UI_widget::OnLButtonUp(x, y);
     if((pInterceptChild==this)&&(pSelectedOption)&&(!(pSelectedOption->optionSubMenu)))
 	{
-		if(onPickOption) onPickOption(this, GetOption());
+		if(onPickOption) onPickOption(onPickOptionAsker, this, GetOption());
 	}
 	pInterceptChild = 0;
 	visible = false;
@@ -495,9 +495,10 @@ void W_subMenu::Flush() // delete all options
 	//height = height;
 }
 
-void W_subMenu::OnPickOption(void (*function)(W_subMenu* caller, unsigned char option))
+void W_subMenu::OnPickOption(UI_base * asker, void (*function)(UI_base * asker, W_subMenu* caller, unsigned char option))
 {
     onPickOption = function;
+	onPickOptionAsker = asker;
 }
 
 void W_subMenu::LoadXML(TiXmlElement* element)

@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -50,9 +50,12 @@ protected:
 
 	bool pressed;
 	bool active;
-	std::function<void(W_button* caller)> onMouseOver = NULL;
-	std::function<void(W_button* caller)> onMouseOut = NULL;
-	std::function<void(W_button* caller)> onClick = NULL;
+	std::function<void(UI_base * asker, W_button* caller)> onMouseOver = NULL;
+	UI_base * onMouseOverAsker = NULL; 
+	std::function<void(UI_base * asker, W_button* caller)> onMouseOut = NULL;
+	UI_base * onMouseOutAsker = NULL; 
+	std::function<void(UI_base * asker, W_button* caller)> onClick = NULL;
+	UI_base * onClickAsker = NULL; 
 	/*void (*onMouseOver)(W_button* caller) = NULL;
 	void (*onMouseOut)(W_button* caller) = NULL;
 	void (*onClick)(W_button* caller) = NULL;*/
@@ -84,11 +87,11 @@ public:
 	void SetPressed(bool p);
 
     /**	\brief function to set the OnMouseOver callback function.*/
-	void OnMouseOver(std::function<void(W_button* caller)> function);
+	void OnMouseOver(UI_base * asker, std::function<void(UI_base * asker, W_button* caller)> function);
     /**	\brief function to set the OnMouseOut callback function.*/
-	void OnMouseOut(std::function<void(W_button* caller)> function);
+	void OnMouseOut(UI_base * asker, std::function<void(UI_base * asker, W_button* caller)> function);
     /**	\brief function to set the OnClick callback function.*/
-	void OnClick(std::function<void(W_button* caller)> function);
+	void OnClick(UI_base * asker, std::function<void(UI_base * asker, W_button* caller)> function);
 
     /**	\brief draw the button.*/
 	void Draw();

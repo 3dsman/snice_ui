@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -81,7 +81,7 @@ public:
 	void Flush(); // delete all options
 
     /**	\brief function to set the OnPickOption callback function.*/
-	void OnPickOption(void (*function)(W_subMenu* caller, unsigned char option));
+	void OnPickOption(UI_base * asker, void (*function)(UI_base * asker, W_subMenu* caller, unsigned char option));
 
 	void LoadXML(TiXmlElement* element);
 

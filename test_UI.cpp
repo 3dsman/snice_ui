@@ -32,7 +32,7 @@ W_button* progressToggle;
 W_textbox* textbox;
 W_slider* slider;
 W_progress* progress;
-W_colorSelectdisplay* color_select_display;
+W_colorSelectDisplay* color_select_display;
 W_colorDisplay* color_display;
 W_colorBand* color_band;
 W_slidedPanel* slided_panel;
@@ -57,60 +57,60 @@ bool keys[320];			// Array Used For The Keyboard Routine
 // List of functions.
 // Main functions for SNICE program
 //////////////////////////////////////////////////
-void test(W_button* caller)
+void test(UI_base * asker, W_button* caller)
 {
     caller->SetPressed(true);
 };
 
-void test2(W_button* caller)
+void test2(UI_base * asker, W_button* caller)
 {
     caller->SetPressed(false);
 };
 
-void test3(W_button* caller)
+void test3(UI_base * asker, W_button* caller)
 {
     caller->killMe = true;
 };
 
-void buttonHa(W_button* caller)
+void buttonHa(UI_base * asker, W_button* caller)
 {
     progress->SetAction(!progress->GetAction());
 };
 
 
-void test4(W_button* caller)
+void test4(UI_base * asker, W_button* caller)
 {
     caller->SetPressed( !caller->IsPressed());
     textbox->SetWidth(150);
 };
-void testwin(UI_window* caller)
+void testwin(UI_base * asker, UI_window* caller)
 {
     pValid->SetName( "ca marche");
 };
 
-void colorPickerContent(W_colorSelectdisplay* caller,float red, float green, float blue)
+void colorPickerContent(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue)
 {
     if(progress) progress->SetColor( red, green, blue);
     if(color_display) color_display->SetColor( red, green, blue);
 
 };
 
-void viewport_resize(UI_base* caller, int w, int h)
+void viewport_resize(UI_base * asker, UI_base* caller, int w, int h)
 {
     if(pValid) pValid->SetPosX(w-150);
 };
 
-void textboxContent(W_textbox* caller, string content)
+void textboxContent(UI_base * asker, W_textbox* caller, string content)
 {
     if(pValid) pValid->SetName( content);
 };
 
-void sliderValue(W_slider* caller, float value, bool realtime)
+void sliderValue(UI_base * asker, W_slider* caller, float value, bool realtime)
 {
     if(textbox) textbox->SetPosX( (int)value);
 };
 
-void pickOption(W_subMenu* caller, unsigned char option)
+void pickOption(UI_base * asker, W_subMenu* caller, unsigned char option)
 {
     if((caller)&&(pValid)) pValid->SetName( caller->GetString());
 };
@@ -154,14 +154,14 @@ void create_interface()
 
     pViewport = pSnice_UI->GetViewport();
 	//pViewport = new Viewport(0,0,640,480);
-	pViewport->OnResize(viewport_resize);
+	pViewport->OnResize(NULL,viewport_resize);
 
     pwind = new UI_window(50, 550, 500, 250, "test");
-	pwind->OnClose(testwin);
+	pwind->OnClose(NULL,testwin);
 	pViewport->AddChild(pwind);
 
-    pcpik = new D_ColorPicker(50, 550, 10,10,10);
-	pcpik->OnClose(testwin);
+    pcpik = new D_ColorPicker(50, 550, 0.2,0.5,0.8);
+	pcpik->OnClose(NULL,testwin);
 	pViewport->AddChild(pcpik);
 
     slided_panel = new W_slidedPanel(50, 350, 300, 200,500,500);
@@ -174,51 +174,51 @@ void create_interface()
 
 	pValid = new W_button(200,100, 120,20, "COOL");
 	pViewport->AddChild(pValid);
-	pValid->OnClick(test4);
+	pValid->OnClick(NULL,test4);
 
 	pUnvalid = new W_button(250,-100, 120,20, "PAS COOL");
 	slided_panel->AddChild(pUnvalid);
-	pUnvalid->OnMouseOver(test2);
-	pUnvalid->OnMouseOut(test);
+	pUnvalid->OnMouseOver(NULL,test2);
+	pUnvalid->OnMouseOut(NULL,test);
 
 	ppouet = new W_button(100,-110, 50,20, "Ha");
 	slided_panel->AddChild(ppouet);
-	ppouet->OnMouseOver(test3);
+	ppouet->OnMouseOver(NULL,test3);
 
 	progressToggle = new W_button(150,-110, 50,20, "toggle");
 	pwind->AddChild(progressToggle);
-	progressToggle->OnClick(buttonHa);
+	progressToggle->OnClick(NULL,buttonHa);
 
 	textbox = new W_textbox(50,130, 150,20, "tutu","titi");
 	pViewport->AddChild(textbox);
-	textbox->OnSetContent(textboxContent);
+	textbox->OnSetContent(NULL,textboxContent);
 
 	slider = new W_slider(100, -60, 150, 20, "Ha", 120, 100, 200, 0, 0);
 	pwind->AddChild(slider);
-	slider->OnSetValue(sliderValue);
+	slider->OnSetValue(NULL,sliderValue);
 
 	submenu2 = new W_subMenu(100,10,100);
 	submenu2->AddOption("aaaaa");
 	submenu2->AddOption("bbbbb");
 	submenu2->AddOption("ccccc");
-	submenu2->OnPickOption(pickOption);
+	submenu2->OnPickOption(NULL,pickOption);
 
 	submenu = new W_subMenu(200,100, 100);
     submenu->AddOption("ddddd");
 	submenu->AddOption("eeeee", submenu2);
 	submenu->AddOption("fffff");
-	submenu->OnPickOption(pickOption);
+	submenu->OnPickOption(NULL,pickOption);
 
 	menu = new W_menu(250,130, 150,20, "menu");
 	menu->AddOption("ggggg", submenu);
 	menu->AddOption("hhhhh");
 	menu->AddOption("iiiii");
-	menu->OnPickOption(pickOption);
+	menu->OnPickOption(NULL,pickOption);
 	pViewport->AddChild(menu);
 
 
-    color_select_display = new W_colorSelectdisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
-    color_select_display->OnChange(colorPickerContent);
+    color_select_display = new W_colorSelectDisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
+    color_select_display->OnChange(NULL,colorPickerContent);
 	pViewport->AddChild(color_select_display);
 
 	color_display = new W_colorDisplay(670,300, 50,30,"color",0.2, 0.5, 0.8);

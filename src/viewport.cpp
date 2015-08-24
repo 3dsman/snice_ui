@@ -64,7 +64,7 @@ void Viewport::Resize(int x, int y,int w, int h)
 	posy = y;
 	width = w;
 	height = h;
-	if(onResize) onResize(this, w, h);
+	if(onResize) onResize(onResizeAsker, this, w, h);
 };
 
 void Viewport::setOnDraw(void (*function)(UI_base* caller))

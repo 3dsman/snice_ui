@@ -61,8 +61,8 @@ private:
 	bool drawContour;
 
     //void (*onSetContent)(W_textbox* caller, string content) = NULL;
-	std::function<void(W_textbox* caller, string content)> onSetContent = NULL;
-
+	std::function<void(UI_base * asker, W_textbox* caller, string content)> onSetContent = NULL;
+	UI_base * onSetContentAsker = NULL;
 
 	void SetLabel(string l);
 
@@ -100,7 +100,7 @@ public:
 */
 
     /**	\brief function to set the OnSetContent callback function.*/
-	void OnSetContent(void (*function)(W_textbox* caller, string content));
+	void OnSetContent(UI_base * asker, void (*function)(UI_base * asker, W_textbox* caller, string content));
 
 	/**	\brief left button down function.*/
 	virtual UI_base* OnLButtonDown(int x, int y);

@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -56,9 +56,11 @@ private:
 	//D_ColorPicker* pColorPicker;
 
 	//void (*onClick)(W_colorDisplay* caller) = NULL;
-	std::function<void(W_colorDisplay* caller)> onClick = NULL;
+	std::function<void(UI_base * asker, W_colorDisplay* caller)> onClick = NULL;
+	UI_base * onClickAsker = NULL;
 	//void (*onChange)(W_colorDisplay* caller,float red,float green, float blue) = NULL;
-	std::function<void(W_colorDisplay* caller,float red,float green, float blue)> onChange = NULL;
+	std::function<void(UI_base * asker, W_colorDisplay* caller,float red,float green, float blue)> onChange = NULL;
+	UI_base * onChangeAsker = NULL;
 public:
 
 	W_colorDisplay(int x, int y, int w, int h, string name, float r = 0.8f, float g = 0.8f, float b = 0.8f);
@@ -72,10 +74,10 @@ public:
 	void GetColor(float * r, float * g, float * b);
 
     /**	\brief function to set the onClic callback function.*/
-	void OnClick(void (*function)(W_colorDisplay* caller));
+	void OnClick(UI_base * asker, void (*function)(UI_base * asker, W_colorDisplay* caller));
 
     /**	\brief function to set the onChange callback function.*/
-	void OnChange(void (*function)(W_colorDisplay* caller,float red,float green, float blue));
+	void OnChange(UI_base * asker, void (*function)(UI_base * asker, W_colorDisplay* caller,float red,float green, float blue));
 
 	float GetColor(int RGB);
 

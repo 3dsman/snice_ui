@@ -125,9 +125,10 @@ void W_textbox::SetWidth(int w)
     SetLabel();
 }
 
-void W_textbox::OnSetContent(void (*function)(W_textbox* caller, string content))
+void W_textbox::OnSetContent(UI_base * asker, void (*function)(UI_base * asker, W_textbox* caller, string content))
 {
     onSetContent = function;
+	onSetContentAsker = asker; 
 }
 
 void W_textbox::Draw()
@@ -336,7 +337,7 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
         		width = initialWidth;
         		action = false;
     	        SetLabel();
-    	        if(onSetContent) onSetContent(this, contents);
+    	        if(onSetContent) onSetContent(onSetContentAsker, this, contents);
             }
     		//free the inteception pointers
             pInterceptChild = 0;
@@ -410,7 +411,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
         			//then set the label
     	            SetLabel();
 
-    	            if(onSetContent) onSetContent(this, contents);
+    	            if(onSetContent) onSetContent(onSetContentAsker, this, contents);
 
             		//free the inteception pointers
                     pInterceptChild = 0;

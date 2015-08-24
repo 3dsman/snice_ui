@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -248,14 +248,16 @@ float W_colorDisplay::GetColor(int RGB)
 		}
 }
 
-void W_colorDisplay::OnClick(void (*function)(W_colorDisplay* caller))
+void W_colorDisplay::OnClick(UI_base * asker, void (*function)(UI_base * asker, W_colorDisplay* caller))
 {
     onClick = function;
+	onClickAsker = asker;
 }
 
-void W_colorDisplay::OnChange(void (*function)(W_colorDisplay* caller,float red,float green, float blue))
+void W_colorDisplay::OnChange(UI_base * asker, void (*function)(UI_base * asker, W_colorDisplay* caller,float red,float green, float blue))
 {
     onChange = function;
+	onChangeAsker = asker;
 }
 
 UI_base* W_colorDisplay::OnLButtonDown(int x, int y)
@@ -272,7 +274,7 @@ UI_base* W_colorDisplay::OnLButtonUp(int x, int y)
 {
 	if (Hittest(x,y))
         if(onClick)
-            onClick(this);
+            onClick(onClickAsker, this);
 		pInterceptChild = 0;
 	return 0;
 		//if (pParentUI_base) pParentUI_base->Callback(this,1);

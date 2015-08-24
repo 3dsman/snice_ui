@@ -138,7 +138,7 @@ void W_slider::SetFrom(float f)
 	if (value<from)
 	{
 	   value = from;
-	   if(onSetValue) onSetValue(this, value, 0);
+	   if(onSetValue) onSetValue(onSetValueAsker, this, value, 0);
     }
 	barSize = min(barSize,to-value);
 }
@@ -150,7 +150,7 @@ void W_slider::SetTo(float t)
 	if (value>to)
 	{
 	   value = to;
-	   if(onSetValue) onSetValue(this, value, 0);
+	   if(onSetValue) onSetValue(onSetValueAsker, this, value, 0);
     }
 	barSize = min(barSize,to-value);
 }
@@ -398,9 +398,10 @@ void W_slider::Draw()
     UI_widget::Draw();
 }
 
-void W_slider::OnSetValue(void (*function)(W_slider* caller, float value, bool realtime))
+void W_slider::OnSetValue(UI_base * asker, void (*function)(UI_base * asker, W_slider* caller, float value, bool realtime))
 {
     onSetValue = function;
+	onSetValueAsker = asker;
 }
 
 UI_base* W_slider::OnLButtonDown(int x, int y)
@@ -443,7 +444,7 @@ UI_base* W_slider::OnLButtonDown(int x, int y)
 UI_base* W_slider::OnLButtonUp(int x, int y)
 {
     if (pInterceptChild == this)
-       if(onSetValue) onSetValue(this, value, false);
+       if(onSetValue) onSetValue(onSetValueAsker, this, value, false);
 	pInterceptChild = 0;
 	return 0;
 }
@@ -467,13 +468,13 @@ float W_slider::GetValue()
 	return value;
 }
 
-void W_slider::SetValue(float v)
+void W_slider::SetValue(float v, bool callback)
 {
 	value = v;
 	if (value > to) value = to;
 	if (value < from) value = from;
 	SetLabel();
-    if(onSetValue) onSetValue(this, value, true);
+    if(onSetValue&&callback) onSetValue(onSetValueAsker, this, value, true);
 }
 
 void W_slider::LoadXML(TiXmlElement* element)

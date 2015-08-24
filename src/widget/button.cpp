@@ -249,19 +249,22 @@ void W_button::Draw()
 }
 
 
-void W_button::OnMouseOver(std::function<void(W_button* caller)> function)
+void W_button::OnMouseOver(UI_base * asker, std::function<void(UI_base * asker, W_button* caller)> function)
 {
     onMouseOver = function;
+	onMouseOverAsker = asker;
 }
 
-void W_button::OnMouseOut(std::function<void(W_button* caller)> function)
+void W_button::OnMouseOut(UI_base * asker, std::function<void(UI_base * asker, W_button* caller)> function)
 {
     onMouseOut = function;
+	onMouseOutAsker = asker;
 }
 
-void W_button::OnClick(std::function<void(W_button* caller)> function)
+void W_button::OnClick(UI_base * asker, std::function<void(UI_base * asker, W_button* caller)> function)
 {
     onClick = function;
+	onClickAsker = asker;
 }
 
 UI_base* W_button::OnLButtonDown(int x, int y)
@@ -281,7 +284,7 @@ UI_base* W_button::OnLButtonUp(int x, int y)
 	{
         if (Hittest(x,y))
 	    {
-            if(onClick) onClick(this);
+            if(onClick) onClick(onClickAsker, this);
         }
             pressed = !pressed;
     }
@@ -296,14 +299,14 @@ UI_base* W_button::OnMouseMove(int x, int y, int prevx, int prevy)
         if(!active)
         {
             active = true;
-            if(onMouseOver) onMouseOver(this);
+            if(onMouseOver) onMouseOver(onMouseOverAsker, this);
         }
     }else
     {
         if(active)
         {
             active = false;
-            if(onMouseOut) onMouseOut(this);
+            if(onMouseOut) onMouseOut(onMouseOutAsker, this);
         }
     }
     if (pInterceptChild) return this;

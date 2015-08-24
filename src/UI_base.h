@@ -97,9 +97,10 @@ protected:
 
 	List childList; /**< \brief List of childs*/
 
-	void (*onResize)(UI_base* caller, int w, int h) = NULL; /**<		\brief resize callback function */
-	void (*onMove)(UI_base* caller, int x, int y) = NULL; /**<		\brief move callback function */
-
+	void (*onResize)(UI_base * asker, UI_base* caller, int w, int h) = NULL; /**<		\brief resize callback function */
+	UI_base * onResizeAsker = NULL;
+	void (*onMove)(UI_base * asker, UI_base* caller, int x, int y) = NULL; /**<		\brief move callback function */
+	UI_base * onMoveAsker = NULL;
 	/**	\brief to check ant treat autokill on the child.*/
 	void Autokill(UI_base * child);
 
@@ -216,10 +217,10 @@ public:
 
 
 	/**	\brief to set OnResize callback function.*/
-	void OnResize(void (*function)(UI_base* caller, int w, int h));
+	void OnResize(UI_base * asker, void (*function)(UI_base * asker, UI_base* caller, int w, int h));
 
     /**	\brief to set OnMove callback function.*/
-	void OnMove(void (*function)(UI_base* caller, int x, int y));
+	void OnMove(UI_base * asker, void (*function)(UI_base * asker, UI_base* caller, int x, int y));
 
 
 	/**< \brief set the texture "texture" with the file "path" */

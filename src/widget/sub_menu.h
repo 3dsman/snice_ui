@@ -74,7 +74,8 @@ private:
 	Option* pSelectedOption;
 
 	//void (*onPickOption)(W_subMenu* caller, unsigned char option) = NULL;
-	std::function<void(W_subMenu* caller, unsigned char option)> onPickOption = NULL;
+	std::function<void(UI_base * asker, W_subMenu* caller, unsigned char option)> onPickOption = NULL;
+	UI_base * onPickOptionAsker = NULL;
 
 
 public:
@@ -105,7 +106,7 @@ public:
 	void Flush(); // delete all options
 
     /**	\brief function to set the OnPickOption callback function.*/
-	void OnPickOption(void (*function)(W_subMenu* caller, unsigned char option));
+	void OnPickOption(UI_base * asker, void (*function)(UI_base * asker, W_subMenu* caller, unsigned char option));
 
 	void LoadXML(TiXmlElement* element);
 

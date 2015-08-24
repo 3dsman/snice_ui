@@ -138,19 +138,22 @@ void UI_window::SetName(char* winName)
 }
 
 /**	\brief function to set the onClose callback function.*/
-void UI_window::OnClose(void (*function)(UI_window* caller))
+void UI_window::OnClose(UI_base * asker, void (*function)(UI_base * asker, UI_window* caller))
 {
     onClose = function;
+	onCloseAsker = asker;
 }
 /**	\brief function to set the OnFold callback function.*/
-void UI_window::OnFold(void (*function)(UI_window* caller))
+void UI_window::OnFold(UI_base * asker, void (*function)(UI_base * asker, UI_window* caller))
 {
     onFold = function;
+	onFoldAsker = asker;
 }
 /**	\brief function to set the OnUnfold callback function.*/
-void UI_window::OnUnfold(void (*function)(UI_window* caller))
+void UI_window::OnUnfold(UI_base * asker, void (*function)(UI_base * asker, UI_window* caller))
 {
     onUnfold = function;
+	onUnfoldAsker = asker;
 }
 
 void UI_window::Draw()
@@ -178,7 +181,7 @@ void UI_window::Draw()
             {
                 tmpheight = height;
         		folded = false;
-        		if(onUnfold) onUnfold(this);
+        		if(onUnfold) onUnfold(onUnfoldAsker, this);
             }
         }else
         {
@@ -187,7 +190,7 @@ void UI_window::Draw()
             {
                 tmpheight = 26;
         		folded = true;
-        		if(onFold) onFold(this);
+        		if(onFold) onFold(onFoldAsker, this);
             }
         }
 
@@ -540,7 +543,7 @@ UI_base* UI_window::OnLButtonUp(int x, int y)
     	if ((x >= posx + width - 20) && (x <= posx + width - 11) && (y <= posy - 8) && (y >= posy - 17)&& (closeable))
     	{
     		killMe = true;
-    		if(onClose) onClose(this);
+    		if(onClose) onClose(onCloseAsker, this);
     	}
 
     	pInterceptChild = 0;

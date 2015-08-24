@@ -46,7 +46,7 @@
 #include <functional>
 //#include "tgafile.h"
 
-class W_colorSelectdisplay : public UI_widget
+class W_colorSelectDisplay : public UI_widget
 {
 
 private:
@@ -58,8 +58,9 @@ private:
     void SetCursorXY(float curx, float cury);
     void SetCursorZ(float curz);
 
-	//void (*onChange)(W_colorSelectdisplay* caller,float red,float green, float blue) = NULL;
-	std::function<void( W_colorSelectdisplay* caller,float red,float green, float blue)> onChange = NULL;
+	//void (*onChange)(W_colorSelectDisplay* caller,float red,float green, float blue) = NULL;
+	std::function<void(UI_base * asker,  W_colorSelectDisplay* caller,float red,float green, float blue)> onChange = NULL;
+	UI_base * onChangeAsker = NULL;
 
 public:
 	float curx;
@@ -72,19 +73,21 @@ public:
 	UI_image lineImage;
 
 
-	W_colorSelectdisplay(int x, int y, int w, int h, colorSelector mode, float red = 0.8f, float green = 0.8f, float blue = 0.8f, int pImageWidth = 256, int pImageHeight = 256);
+	W_colorSelectDisplay(int x, int y, int w, int h, colorSelector mode, float red = 0.8f, float green = 0.8f, float blue = 0.8f, int pImageWidth = 256, int pImageHeight = 256);
 
-	~W_colorSelectdisplay();
+	~W_colorSelectDisplay();
 
 
 	void Draw();
 
 	void UpdateColor(int x, int y);
+	
+	void SetColor(float red, float green, float blue);
 
 	void GetColor(float* red, float* green, float* blue);
 
     /**	\brief function to set the onChange callback function.*/
-	void OnChange(std::function<void(W_colorSelectdisplay* caller,float red,float green, float blue)>);
+	void OnChange(UI_base * asker, std::function<void(UI_base * asker, W_colorSelectDisplay* caller,float red,float green, float blue)>);
 
 	/**	\brief left button down function.*/
 	virtual UI_base* OnLButtonDown(int x, int y);

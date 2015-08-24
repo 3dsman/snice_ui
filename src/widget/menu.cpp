@@ -165,9 +165,9 @@ void W_menu::Flush() // delete all options
 		childMenu->Flush();
 }
 
-void W_menu::OnPickOption(void (*function)(W_subMenu* caller, unsigned char option))
+void W_menu::OnPickOption(UI_base * asker, void (*function)(UI_base * asker, W_subMenu* caller, unsigned char option))
 {
-    childMenu->OnPickOption(function);
+    childMenu->OnPickOption(asker, function);
 }
 
 void W_menu::LoadXML(TiXmlElement* element)

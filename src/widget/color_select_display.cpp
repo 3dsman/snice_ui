@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -40,7 +40,7 @@
 #include "widget/color_select_display.h"
 #include <cmath>
 
-W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSelector selectorType, float red, float green, float blue, int pImageWidth, int pImageHeight)
+W_colorSelectDisplay::W_colorSelectDisplay(int x, int y, int w, int h, colorSelector selectorType, float red, float green, float blue, int pImageWidth, int pImageHeight)
 		:UI_widget(x, y, w, h, red, green, blue)
 {
 	posx = x;
@@ -49,7 +49,7 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 	height = h;
 
 	mode=selectorType;
-
+/*
     if ((mode==H)||(mode==S)||(mode==V))
         RGBtoHSV(red,green,blue,&redHue,&greenSat,&blueVal);
     else
@@ -73,7 +73,7 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
                     curx = redHue; cury = blueVal; curz = greenSat; break;
 				case B:
                     curx = redHue; cury = greenSat; curz = blueVal; break;
-			}
+			}*/
 
 	quadImage.SetWidth(pImageWidth);
 	quadImage.SetHeight(pImageHeight);
@@ -82,7 +82,7 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 	//glGenTextures(1, &quadImage.texID);
 	quadImage.gentex();
 
-    RefreshImageXY();
+    //RefreshImageXY();
 
     //gentex(lineImage);
 	lineImage.SetWidth(4);
@@ -91,7 +91,9 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 	lineImage.SetData((GLubyte *)malloc(lineImage.GetWidth()*lineImage.GetHeight()*3));
 	lineImage.gentex();
 	//glGenTextures(1, &lineImage.texID);
-    RefreshImageZ();
+	
+	SetColor(red,green,blue);
+    //RefreshImageZ();
 
 	//glBindTexture(GL_TEXTURE_2D, quadImage.texID);
 	quadImage.BindTex();
@@ -107,7 +109,7 @@ W_colorSelectdisplay::W_colorSelectdisplay(int x, int y, int w, int h, colorSele
 
 }
 
-W_colorSelectdisplay::~W_colorSelectdisplay()
+W_colorSelectDisplay::~W_colorSelectDisplay()
 {
 	/*if (quadImage.GetData())
     {
@@ -120,7 +122,7 @@ W_colorSelectdisplay::~W_colorSelectdisplay()
 }
 
 
-void W_colorSelectdisplay::SetCursorXY(float curx, float cury){
+void W_colorSelectDisplay::SetCursorXY(float curx, float cury){
 
 	switch (mode)
     {
@@ -145,7 +147,7 @@ void W_colorSelectdisplay::SetCursorXY(float curx, float cury){
 }
 
 
-void W_colorSelectdisplay::SetCursorZ(float curz){
+void W_colorSelectDisplay::SetCursorZ(float curz){
 
 	switch (mode)
 			{
@@ -170,7 +172,7 @@ void W_colorSelectdisplay::SetCursorZ(float curz){
 			RefreshImageXY();
 }
 
-void W_colorSelectdisplay::RefreshImageXY(){
+void W_colorSelectDisplay::RefreshImageXY(){
 
 	int k = 0;
 	float red, green, blue;
@@ -224,7 +226,7 @@ void W_colorSelectdisplay::RefreshImageXY(){
 
 };
 
-void W_colorSelectdisplay::RefreshImageZ(){
+void W_colorSelectDisplay::RefreshImageZ(){
 
 	int k = 0;
 	float red = redHue;
@@ -284,14 +286,12 @@ image = lineImage.GetData();
         }
 	}
 
-	//glBindTexture(GL_TEXTURE_2D, lineImage.texID);
 	lineImage.BindTex();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, lineImage.GetWidth(), lineImage.GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, lineImage.GetData());
-
 };
 
 
-void W_colorSelectdisplay::Draw()
+void W_colorSelectDisplay::Draw()
 {
 
 	glEnable(GL_TEXTURE_2D);
@@ -300,7 +300,6 @@ void W_colorSelectdisplay::Draw()
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-	//glBindTexture(GL_TEXTURE_2D, quadImage.texID);
 	quadImage.BindTex();
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f);
@@ -316,7 +315,6 @@ void W_colorSelectdisplay::Draw()
 		glVertex2d(1, -height+1);
 	glEnd();
 
-	//glBindTexture(GL_TEXTURE_2D, lineImage.texID);
 	lineImage.BindTex();
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f);
@@ -334,13 +332,10 @@ void W_colorSelectdisplay::Draw()
 
 	glDisable(GL_TEXTURE_2D);
 
-//if (refresh){refresh =false;};
-
 	// draw the border
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	//glBindTexture(GL_TEXTURE_2D, textures.slider.texID);//textures[8].texID
 	textures.slider.BindTex();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -436,35 +431,72 @@ void W_colorSelectdisplay::Draw()
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
+	glTranslatef(curx*(width-20),cury*height-height,0);
 	glBegin(GL_LINE_LOOP);
 	glLineWidth(1);
 
-	//glTranslatef(curx*(width-20),cury*height,0);
-    // cursor circle
-	for (int i = 0; i < 360 ;i+=5){
-		glVertex2d(curx*(width-20)+sin(DEG2RAD(float(i)))*PI/180.0f*6, cury*height-height+cos(DEG2RAD(float(i)))*6);
+    // xy cursor circle
+	for (int i = 0; i <= 360 ;i+=30){
+		glVertex2d(sin(DEG2RAD(float(i)))*6, cos(DEG2RAD(float(i)))*6);
 	}
+	
 	glEnd();
+	glTranslatef(-curx*(width-20),-(cury*height-height),0);
+	
+	// z cursor capsule
+	glTranslatef(0,curz*height-height,0);
 	glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < 180 ;i+=5){
-		glVertex2d((width-3)+sin(DEG2RAD(float(i)))*4, curz*height-height+cos(DEG2RAD(float(i)))*4);
+    for (int i = 0; i <= 180 ;i+=30){
+		glVertex2d((width-3)+sin(DEG2RAD(float(i)))*4, cos(DEG2RAD(float(i)))*4);
 	}
-    for (int i = 180; i < 360 ;i+=5){
-		glVertex2d((width-12)+sin(DEG2RAD(float(i)))*4, curz*height-height+cos(DEG2RAD(float(i)))*4);
+    for (int i = 180; i <= 360 ;i+=30){
+		glVertex2d((width-12)+sin(DEG2RAD(float(i)))*4, cos(DEG2RAD(float(i)))*4);
 	}
-	//glTranslatef(-curx*(width-20),-cury*height,0);
+	
     glEnd();
+	glTranslatef(0,-(curz*height-height),0);
 	glTranslated(-posx,-posy,0);
 }
 
-void W_colorSelectdisplay::UpdateColor(int x, int y){
+void W_colorSelectDisplay::UpdateColor(int x, int y){
 
 	/*redHue = float(x)/float(width);
 	greenSat = -(float(y)/float(height));
 	blueVal = 0;*/
 }
 
-void W_colorSelectdisplay::GetColor(float* red, float* green, float* blue){
+void W_colorSelectDisplay::SetColor(float red, float green, float blue)
+{
+	if ((mode==H)||(mode==S)||(mode==V))
+        RGBtoHSV(red, green, blue,&redHue,&greenSat,&blueVal);
+    else
+    {
+        redHue = red;
+        greenSat = green;
+        blueVal = blue;
+    }
+	switch (mode)
+	{
+		case H:
+			curx = greenSat; cury = blueVal; curz = redHue/360.0f;break;
+		case S:
+			curx = redHue/360.0f; cury = blueVal; curz = greenSat; break;
+		case V:
+			curx = redHue/360.0f; cury = greenSat; curz = blueVal; break;
+		case R:
+			curx = greenSat; cury = blueVal; curz = redHue; break;
+		case G:
+			curx = redHue; cury = blueVal; curz = greenSat; break;
+		case B:
+			curx = redHue; cury = greenSat; curz = blueVal; break;
+	}
+	RefreshImageXY();
+	RefreshImageZ();
+	//SetCursorXY(curx, cury);
+	//SetCursorZ(curz);
+}
+
+void W_colorSelectDisplay::GetColor(float* red, float* green, float* blue){
     if ((mode==H)||(mode==S)||(mode==V))
         HSVtoRGB(redHue,greenSat,blueVal, red, green, blue);
     else
@@ -475,12 +507,13 @@ void W_colorSelectdisplay::GetColor(float* red, float* green, float* blue){
     }
 };
 
-void W_colorSelectdisplay::OnChange(std::function<void(W_colorSelectdisplay* caller,float red,float green, float blue)> function)
+void W_colorSelectDisplay::OnChange(UI_base * asker, std::function<void(UI_base * asker, W_colorSelectDisplay* caller,float red,float green, float blue)> function)
 {
     onChange = function;
+	onChangeAsker = asker;
 }
 
-UI_base* W_colorSelectdisplay::OnLButtonDown(int x, int y)
+UI_base* W_colorSelectDisplay::OnLButtonDown(int x, int y)
 {
 	if (Hittest(x,y))
 	{
@@ -495,7 +528,7 @@ UI_base* W_colorSelectdisplay::OnLButtonDown(int x, int y)
             {
                 float r,g,b;
                 GetColor(&r,&g,&b);
-                onChange(this,r,g,b);
+                onChange(onChangeAsker, this,r,g,b);
             }
             return 0;
 		}
@@ -508,7 +541,7 @@ UI_base* W_colorSelectdisplay::OnLButtonDown(int x, int y)
             {
                 float r,g,b;
                 GetColor(&r,&g,&b);
-                onChange(this,r,g,b);
+                onChange(onChangeAsker, this,r,g,b);
             }
             return 0;
 		}
@@ -518,7 +551,7 @@ UI_base* W_colorSelectdisplay::OnLButtonDown(int x, int y)
 
 }
 
-UI_base* W_colorSelectdisplay::OnLButtonUp(int x, int y)
+UI_base* W_colorSelectDisplay::OnLButtonUp(int x, int y)
 {
     UI_widget::OnLButtonUp(x, y);
 	//action = false;
@@ -526,7 +559,7 @@ UI_base* W_colorSelectdisplay::OnLButtonUp(int x, int y)
     return 0;
 }
 
-UI_base* W_colorSelectdisplay::OnMouseMove(int x, int y, int prevx, int prevy)
+UI_base* W_colorSelectDisplay::OnMouseMove(int x, int y, int prevx, int prevy)
 {
 	if(pInterceptChild == this)
 	{
@@ -545,7 +578,7 @@ UI_base* W_colorSelectdisplay::OnMouseMove(int x, int y, int prevx, int prevy)
             {
                 float r,g,b;
                 GetColor(&r,&g,&b);
-                onChange(this,r,g,b);
+                onChange(onChangeAsker, this,r,g,b);
             }
 		return this;
 	}
@@ -554,7 +587,7 @@ UI_base* W_colorSelectdisplay::OnMouseMove(int x, int y, int prevx, int prevy)
 
 
 
-void W_colorSelectdisplay::LoadXML(TiXmlElement* element)
+void W_colorSelectDisplay::LoadXML(TiXmlElement* element)
 {
 
 }

@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -59,7 +59,8 @@ private:
 	bool vertical;
 
 	//void (*onSetValue)(W_slider* caller, float value, bool realtime) = NULL;
-	std::function<void(W_slider* caller, float value, bool realtime)> onSetValue = NULL;
+	std::function<void(UI_base * asker, W_slider* caller, float value, bool realtime)> onSetValue = NULL;
+	UI_base * onSetValueAsker = NULL; 
 
 	void Init(int x, int y, int w, int h, string l, float v, float f, float t, int p, float bar, float r, float g, float b);
 
@@ -101,7 +102,7 @@ public:
 	void Draw();
 
 	    /**	\brief function to set the OnValue callback function.*/
-	void OnSetValue(void (*function)(W_slider* caller, float value, bool realtime));
+	void OnSetValue(UI_base * asker, void (*function)(UI_base * asker, W_slider* caller, float value, bool realtime));
 
 	virtual UI_base* OnLButtonDown(int x, int y);
 
@@ -111,7 +112,7 @@ public:
 
 	float GetValue();
 
-	void SetValue(float v);
+	void SetValue(float v, bool callback = true);
 
 	void LoadXML(TiXmlElement* element);
 
