@@ -31,7 +31,7 @@
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
 				<Linker>
-					<Add library="glfw3" />
+					<Add library="glfw" />
 					<Add library="GL" />
 					<Add library="GLU" />
 					<Add library="pthread" />
@@ -45,38 +45,33 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-std=c++11" />
 			<Add directory="." />
 			<Add directory="./src" />
 		</Compiler>
 		<Unit filename="TODO.h" />
 		<Unit filename="src/UI_base.cpp" />
 		<Unit filename="src/UI_base.h" />
+		<Unit filename="src/UI_image.cpp" />
+		<Unit filename="src/UI_image.h" />
 		<Unit filename="src/UI_window.cpp" />
 		<Unit filename="src/UI_window.h" />
 		<Unit filename="src/dialog/UI_dialog.cpp" />
 		<Unit filename="src/dialog/UI_dialog.h" />
-		<Unit filename="src/dialog/color_picker.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="src/dialog/color_picker.cpp" />
 		<Unit filename="src/dialog/color_picker.h" />
 		<Unit filename="src/dialog/file_picker.cpp">
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
 		<Unit filename="src/dialog/file_picker.h" />
-		<Unit filename="src/image.cpp" />
-		<Unit filename="src/image.h" />
+		<Unit filename="src/include/color_conversion.cpp" />
+		<Unit filename="src/include/color_conversion.h" />
 		<Unit filename="src/include/glfw.h" />
 		<Unit filename="src/mylist.cpp" />
 		<Unit filename="src/mylist.h" />
 		<Unit filename="src/snice_UI.cpp" />
 		<Unit filename="src/snice_UI.h" />
-		<Unit filename="src/tgafile.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/tgafile.h" />
 		<Unit filename="src/viewport.cpp" />
 		<Unit filename="src/viewport.h" />
 		<Unit filename="src/viewports_array.cpp">

@@ -55,7 +55,7 @@ protected:
 	Node * callbackNode; /**< \brief The node we use for callback */
 public:
 	/**	\brief default constructor.*/
-	UI_dialog(int _x, int _y, int _w, int _h, char* _nodeName, bool _minimized = false, bool _minimizeable = false);
+	UI_dialog(int _x, int _y, int _w, int _h, string _nodeName, bool _minimized = false, bool _minimizeable = false);
 
 	/**	\brief default destructor.*/
 	virtual ~UI_dialog();

@@ -475,7 +475,7 @@ void W_colorSelectdisplay::GetColor(float* red, float* green, float* blue){
     }
 };
 
-void W_colorSelectdisplay::OnChange(void (*function)(W_colorSelectdisplay* caller,float red,float green, float blue))
+void W_colorSelectdisplay::OnChange(std::function<void(W_colorSelectdisplay* caller,float red,float green, float blue)> function)
 {
     onChange = function;
 }

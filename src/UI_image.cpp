@@ -412,14 +412,17 @@ GLubyte * UI_image::GetData()
 bool UI_image::SetWidth(GLuint width)
 {
     tex.width = width;
+	return true;
 }
 bool UI_image::SetHeight(GLuint height)
 {
     tex.height = height;
+	return true;
 }
 bool UI_image::SetBpp(GLuint bpp)
 {
     tex.bpp = bpp;
+	return true;
 }
 bool UI_image::SetData(GLubyte * data)
 {
@@ -428,6 +431,7 @@ bool UI_image::SetData(GLubyte * data)
         free(tex.imageData);
     }
     tex.imageData = data;
+	return true;
 }
 
 bool UI_image::BindTex()

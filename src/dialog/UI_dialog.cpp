@@ -38,7 +38,7 @@
 //#include "include/color_conversion.h"
 #include "UI_dialog.h"
 
-UI_dialog::UI_dialog(int _x, int _y, int _w, int _h, char* _nodeName, bool _minimized, bool _minimizeable)
+UI_dialog::UI_dialog(int _x, int _y, int _w, int _h, string _nodeName, bool _minimized, bool _minimizeable)
 		  :UI_window(_x, _y, _w, _h, _nodeName, _minimized, _minimizeable)
 {
 	callbackNode = 0;

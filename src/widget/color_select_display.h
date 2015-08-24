@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // colorSelectDisplay.h
@@ -43,6 +43,7 @@
 #include "include/color_conversion.h"
 
 #include "UI_image.h"
+#include <functional>
 //#include "tgafile.h"
 
 class W_colorSelectdisplay : public UI_widget
@@ -57,7 +58,8 @@ private:
     void SetCursorXY(float curx, float cury);
     void SetCursorZ(float curz);
 
-	void (*onChange)(W_colorSelectdisplay* caller,float red,float green, float blue) = NULL;
+	//void (*onChange)(W_colorSelectdisplay* caller,float red,float green, float blue) = NULL;
+	std::function<void( W_colorSelectdisplay* caller,float red,float green, float blue)> onChange = NULL;
 
 public:
 	float curx;
@@ -82,7 +84,7 @@ public:
 	void GetColor(float* red, float* green, float* blue);
 
     /**	\brief function to set the onChange callback function.*/
-	void OnChange(void (*function)(W_colorSelectdisplay* caller,float red,float green, float blue));
+	void OnChange(std::function<void(W_colorSelectdisplay* caller,float red,float green, float blue)>);
 
 	/**	\brief left button down function.*/
 	virtual UI_base* OnLButtonDown(int x, int y);

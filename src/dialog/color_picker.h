@@ -32,6 +32,7 @@
 #define _SNICE_COLORPICKER_H_
 
 #include "UI_dialog.h"
+#include "include/color_conversion.h"
 class W_colorSelectdisplay;
 class W_slider;
 class W_colorDisplay;
@@ -62,7 +63,7 @@ public:
 	~D_ColorPicker();
 
 
-    void ChangeColor(W_colorSelectdisplay* caller,float red, float green, float blue);
+    static void ChangeColor(W_colorSelectdisplay* caller,float red, float green, float blue);
 
 	void CalcOutput(int iOutputNumber, void* Result);
 
@@ -81,6 +82,8 @@ public:
 	void Callback(UI_base * pCallObject, unsigned char callIndex );
 
 	void SetSliders();
+	
+	static D_ColorPicker* currentWindow;
 };
 
 #endif // _SNICE_COLORPICKER_H_

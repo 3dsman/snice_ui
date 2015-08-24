@@ -55,8 +55,10 @@ private:
 
 	//D_ColorPicker* pColorPicker;
 
-	void (*onClick)(W_colorDisplay* caller) = NULL;
-	void (*onChange)(W_colorDisplay* caller,float red,float green, float blue) = NULL;
+	//void (*onClick)(W_colorDisplay* caller) = NULL;
+	std::function<void(W_colorDisplay* caller)> onClick = NULL;
+	//void (*onChange)(W_colorDisplay* caller,float red,float green, float blue) = NULL;
+	std::function<void(W_colorDisplay* caller,float red,float green, float blue)> onChange = NULL;
 public:
 
 	W_colorDisplay(int x, int y, int w, int h, string name, float r = 0.8f, float g = 0.8f, float b = 0.8f);

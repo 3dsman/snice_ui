@@ -249,17 +249,17 @@ void W_button::Draw()
 }
 
 
-void W_button::OnMouseOver(void (*function)(W_button* caller))
+void W_button::OnMouseOver(std::function<void(W_button* caller)> function)
 {
     onMouseOver = function;
 }
 
-void W_button::OnMouseOut(void (*function)(W_button* caller))
+void W_button::OnMouseOut(std::function<void(W_button* caller)> function)
 {
     onMouseOut = function;
 }
 
-void W_button::OnClick(void (*function)(W_button* caller))
+void W_button::OnClick(std::function<void(W_button* caller)> function)
 {
     onClick = function;
 }

@@ -40,6 +40,7 @@
 
 #include "widget/UI_widget.h"
 #include "widget/label.h"
+#include <functional>
 
 class W_textbox : public UI_widget
 {
@@ -59,7 +60,8 @@ private:
 	bool action;
 	bool drawContour;
 
-    void (*onSetContent)(W_textbox* caller, string content) = NULL;
+    //void (*onSetContent)(W_textbox* caller, string content) = NULL;
+	std::function<void(W_textbox* caller, string content)> onSetContent = NULL;
 
 
 	void SetLabel(string l);

@@ -161,7 +161,7 @@ void create_interface()
 	pViewport->AddChild(pwind);
 
     pcpik = new D_ColorPicker(50, 550, 10,10,10);
-	//pcpik->OnClose(testwin);
+	pcpik->OnClose(testwin);
 	pViewport->AddChild(pcpik);
 
     slided_panel = new W_slidedPanel(50, 350, 300, 200,500,500);

@@ -34,7 +34,6 @@
 
 //#include "color_conversion.h"
 
-#include "include/color_conversion.h"
 #include "widget/color_select_display.h"
 #include "widget/color_display.h"
 #include "widget/slider.h"
@@ -58,8 +57,9 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
     color_select_display->OnChange(colorPickerContent);
 	pViewport->AddChild(color_select_display);
 	*/
-	pRgbcolor = new W_colorSelectdisplay(10, -35, 255, 300,H,0.2, 0.5, 0.8);
-	//pRgbcolor->OnChange(ChangeColor);
+	pRgbcolor = new W_colorSelectdisplay(10, -35, 255, 255,H,0.2, 0.5, 0.8);
+	pRgbcolor->OnChange(D_ColorPicker::ChangeColor);
+	//pRgbcolor->OnChange([this]{ this->ChangeColor( W_colorSelectdisplay* caller,float red, float green, float blue); });
 	AddChild(pRgbcolor);
 
 	pBeforecolor = new W_colorDisplay(310, -35, 55, 64, "before");

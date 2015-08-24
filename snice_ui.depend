@@ -194,7 +194,7 @@
 	"tinyxml.h"
 	<ctype.h>
 
-1397721146 source:/home/seb/projets/snice_ui/src/dialog/UI_dialog.cpp
+1429168419 source:/home/seb/projets/snice_ui/src/dialog/UI_dialog.cpp
 	"UI_dialog.h"
 
 1334215640 /home/seb/projets/snice_ui/src/dialog/UI_dialog.h
@@ -210,7 +210,7 @@
 	"snice_UI.h"
 	"include/glfw.h"
 
-1428947979 /home/seb/projets/snice_ui/src/snice_UI.h
+1429186401 /home/seb/projets/snice_ui/src/snice_UI.h
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 	<GL/gl.h>
@@ -219,7 +219,7 @@
 	"UI_window.h"
 	"widget/button.h"
 	"mylist.h"
-	"image.h"
+	"UI_image.h"
 	"widget/label.h"
 	"widget/text_box.h"
 	"widget/slider.h"
@@ -230,13 +230,14 @@
 	"widget/color_select_display.h"
 	"widget/color_band.h"
 	"widget/slided_panel.h"
+	"dialog/color_picker.h"
 
 1412928214 /home/seb/projets/snice_ui/src/viewport.h
 	"UI_base.h"
 
-1429083490 /home/seb/projets/snice_ui/src/UI_base.h
+1429166616 /home/seb/projets/snice_ui/src/UI_base.h
 	"mylist.h"
-	"image.h"
+	"UI_image.h"
 	<fstream>
 	<iostream>
 	<sstream>
@@ -248,25 +249,29 @@
 1412927828 /home/seb/projets/snice_ui/src/UI_window.h
 	"UI_base.h"
 
-1412928214 /home/seb/projets/snice_ui/src/widget/button.h
+1432620674 /home/seb/projets/snice_ui/src/widget/button.h
+	<functional>
 	"widget/UI_widget.h"
 	"widget/label.h"
 
 1397810190 /home/seb/projets/snice_ui/src/widget/label.h
 	"widget/UI_widget.h"
 
-1427789710 /home/seb/projets/snice_ui/src/widget/text_box.h
+1432617857 /home/seb/projets/snice_ui/src/widget/text_box.h
 	"widget/UI_widget.h"
 	"widget/label.h"
+	<functional>
 
-1427789818 /home/seb/projets/snice_ui/src/widget/slider.h
+1432617795 /home/seb/projets/snice_ui/src/widget/slider.h
 	"widget/UI_widget.h"
 	"widget/label.h"
+	<functional>
 
-1412928216 /home/seb/projets/snice_ui/src/widget/sub_menu.h
+1432617620 /home/seb/projets/snice_ui/src/widget/sub_menu.h
 	"widget/UI_widget.h"
 	"widget/label.h"
 	"mylist.h"
+	<functional>
 
 1412697648 /home/seb/projets/snice_ui/src/widget/menu.h
 	"widget/UI_widget.h"
@@ -304,7 +309,7 @@
 	"viewport.h"
 	<stdio.h>
 
-1429084320 source:/home/seb/projets/snice_ui/src/widget/button.cpp
+1432620683 source:/home/seb/projets/snice_ui/src/widget/button.cpp
 	"../snice_UI.h"
 	"widget/button.h"
 	"include/glfw.h"
@@ -322,7 +327,7 @@
 	"../snice_UI.h"
 	"widget/sub_menu.h"
 
-1429120456 source:/home/seb/projets/snice_ui/src/widget/text_box.cpp
+1429185536 source:/home/seb/projets/snice_ui/src/widget/text_box.cpp
 	"../snice_UI.h"
 	"widget/text_box.h"
 
@@ -422,7 +427,7 @@
 	"widget/UI_widget.h"
 	"widget/label.h"
 
-1413216312 source:/home/seb/projets/snice_ui/test_UI.cpp
+1432618029 source:/home/seb/projets/snice_ui/test_UI.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -506,31 +511,34 @@
 	"widget/button.h"
 	"mylist.h"
 
-1428949226 /home/seb/projets/snice_ui/src/widget/color_select_display.h
+1432620908 /home/seb/projets/snice_ui/src/widget/color_select_display.h
 	"widget/UI_widget.h"
-	"image.h"
+	"include/color_conversion.h"
+	"UI_image.h"
+	<functional>
 
-1429120178 source:/home/seb/projets/snice_ui/src/widget/color_select_display.cpp
+1429185523 source:/home/seb/projets/snice_ui/src/widget/color_select_display.cpp
 	"include/color_conversion.h"
 	"../snice_UI.h"
+	<GL/gl.h>
 	"widget/color_select_display.h"
 	<cmath>
 
-1412777204 /home/seb/projets/snice_ui/src/include/color_conversion.h
-	<cmath>
+1429185373 /home/seb/projets/snice_ui/src/include/color_conversion.h
 
-1412929588 /home/seb/projets/snice_ui/src/widget/color_display.h
+1432558017 /home/seb/projets/snice_ui/src/widget/color_display.h
 	"widget/UI_widget.h"
 
 1429084367 source:/home/seb/projets/snice_ui/src/widget/color_display.cpp
 	"../snice_UI.h"
 	"widget/color_display.h"
 
-1429084344 source:/home/seb/projets/snice_ui/src/widget/color_band.cpp
+1429165124 source:/home/seb/projets/snice_ui/src/widget/color_band.cpp
 	"../snice_UI.h"
 	"widget/color_band.h"
+	<math.h>
 
-1412966312 /home/seb/projets/snice_ui/src/widget/color_band.h
+1429165110 /home/seb/projets/snice_ui/src/widget/color_band.h
 	"widget/UI_widget.h"
 
 1413215898 /home/seb/projets/snice_ui/src/widget/slided_panel.h
@@ -541,7 +549,7 @@
 	"../snice_UI.h"
 	"widget/slided_panel.h"
 
-1429121307 source:/home/seb/projets/snice_ui/src/image.cpp
+1429161434 source:/home/seb/projets/snice_ui/src/image.cpp
 	"image.h"
 	<stdio.h>
 	"snice_UI.h"
@@ -550,4 +558,30 @@
 	<iostream>
 	<string.h>
 	"stdio.h"
+
+1429161453 /home/seb/projets/snice_ui/src/UI_image.h
+	<iostream>
+	<string.h>
+	"stdio.h"
+
+1432620526 source:/home/seb/projets/snice_ui/src/dialog/color_picker.cpp
+	"widget/color_select_display.h"
+	"widget/color_display.h"
+	"widget/slider.h"
+	"widget/label.h"
+	"color_picker.h"
+	"UI_image.h"
+
+1432618109 /home/seb/projets/snice_ui/src/dialog/color_picker.h
+	"UI_dialog.h"
+	"include/color_conversion.h"
+
+1432460541 source:/home/seb/projets/snice_ui/src/UI_image.cpp
+	<stdio.h>
+	<stdlib.h>
+	<GL/gl.h>
+	"UI_image.h"
+
+1429185381 source:/home/seb/projets/snice_ui/src/include/color_conversion.cpp
+	<cmath>
 

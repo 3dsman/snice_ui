@@ -37,9 +37,9 @@
 #ifndef _SNICE_BUTTON_H_
 #define _SNICE_BUTTON_H_
 
+#include <functional>
 #include "widget/UI_widget.h"
 #include "widget/label.h"
-
 
 class W_button : public UI_widget
 {
@@ -50,9 +50,12 @@ protected:
 
 	bool pressed;
 	bool active;
-	void (*onMouseOver)(W_button* caller) = NULL;
+	std::function<void(W_button* caller)> onMouseOver = NULL;
+	std::function<void(W_button* caller)> onMouseOut = NULL;
+	std::function<void(W_button* caller)> onClick = NULL;
+	/*void (*onMouseOver)(W_button* caller) = NULL;
 	void (*onMouseOut)(W_button* caller) = NULL;
-	void (*onClick)(W_button* caller) = NULL;
+	void (*onClick)(W_button* caller) = NULL;*/
 
 	void SetLabel(string l);
 
@@ -81,11 +84,11 @@ public:
 	void SetPressed(bool p);
 
     /**	\brief function to set the OnMouseOver callback function.*/
-	void OnMouseOver(void (*function)(W_button* caller));
+	void OnMouseOver(std::function<void(W_button* caller)> function);
     /**	\brief function to set the OnMouseOut callback function.*/
-	void OnMouseOut(void (*function)(W_button* caller));
+	void OnMouseOut(std::function<void(W_button* caller)> function);
     /**	\brief function to set the OnClick callback function.*/
-	void OnClick(void (*function)(W_button* caller));
+	void OnClick(std::function<void(W_button* caller)> function);
 
     /**	\brief draw the button.*/
 	void Draw();

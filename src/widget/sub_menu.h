@@ -40,6 +40,7 @@
 #include "widget/UI_widget.h"
 #include "widget/label.h"
 #include "mylist.h"
+#include <functional>
 
 class W_subMenu;
 
@@ -72,7 +73,9 @@ private:
 	List options;
 	Option* pSelectedOption;
 
-	void (*onPickOption)(W_subMenu* caller, unsigned char option) = NULL;
+	//void (*onPickOption)(W_subMenu* caller, unsigned char option) = NULL;
+	std::function<void(W_subMenu* caller, unsigned char option)> onPickOption = NULL;
+
 
 public:
 

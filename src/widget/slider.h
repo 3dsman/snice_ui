@@ -40,6 +40,7 @@
 
 #include "widget/UI_widget.h"
 #include "widget/label.h"
+#include <functional>
 
 class W_slider : public UI_widget
 {
@@ -57,7 +58,8 @@ private:
 
 	bool vertical;
 
-	void (*onSetValue)(W_slider* caller, float value, bool realtime) = NULL;
+	//void (*onSetValue)(W_slider* caller, float value, bool realtime) = NULL;
+	std::function<void(W_slider* caller, float value, bool realtime)> onSetValue = NULL;
 
 	void Init(int x, int y, int w, int h, string l, float v, float f, float t, int p, float bar, float r, float g, float b);
 
