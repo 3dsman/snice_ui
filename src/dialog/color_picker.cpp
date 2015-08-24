@@ -102,89 +102,17 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 
 
 D_ColorPicker::~D_ColorPicker(){}
-/*
-void D_ColorPicker::Callback(UI_base * pCallObject, unsigned char callIndex )
+
+UI_base* D_ColorPicker::OnMouseMove(int x, int y, int prevx, int prevy)
 {
-	if (callIndex == 1)
-	{
-		//if the callback comme from the pRgbcolor or pRgbcolor2
-		if ((pCallObject == pRgbcolor)||(pCallObject == pRgbcolor2))
+	if (!Hittest(x, y))
 		{
-			RefreshSliders();
-			RefreshBand();
-			RefreshImage();
-
-			if (callbackNode)
-			{
-				callbackNode->Callback(this,1);
-			}else
-				if (pParentUI_base) pParentUI_base->Callback(this,1);
-
-			return;
+			killMe = true;
+			return nullptr;
 		}
-
-		//if the callback comme from the pBeforecolor
-		if (pCallObject == pBeforecolor)
-		{
-			pBeforecolor->GetColor(&redColor,&greenColor,&blueColor);
-			SetPicker(redColor, greenColor, blueColor);
-			RefreshSliders();
-			RefreshBand();
-			RefreshImage();
-
-			if (callbackNode)
-			{
-				callbackNode->Callback(this,1);
-			}else
-				if (pParentUI_base) pParentUI_base->Callback(this,1);
-
-
-			return;
-		}
-
-
-		//if the callback comme from the pSHue
-		if (pCallObject == pSHue)		{mode = 0;}
-
-		//if the callback comme from the pSSaturation
-		if (pCallObject == pSSaturation){mode = 1;}
-
-		//if the callback comme from the pSLuminosity
-		if (pCallObject == pSLuminosity){mode = 2;}
-
-		//if the callback comme from the pSRed
-		if (pCallObject == pSRed)		{mode = 3;}
-
-		//if the callback comme from the pSHue
-		if (pCallObject == pSGreen)		{mode = 4;}
-
-		//if the callback comme from the pSSaturation
-		if (pCallObject == pSBlue)		{mode = 5;}
-
-		pAftercolor->GetColor(&redColor,&greenColor,&blueColor);
-		SetPicker(redColor, greenColor, blueColor);
-
-		RefreshBand();
-		RefreshImage();
-	}
-
-}*/
-
-/*
-void D_ColorPicker::OnMouseMove(int x, int y, int prevx, int prevy)
-{
-
-
-	pRgbcolor->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
-	pRgbcolor2->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
-
-	OnMouseMoveBase(x, y, prevx, prevy);
-
-	// if the mouse is out of the menu, delete it
-	if ((x < posx || x > posx+width || y < posy-height || y > posy) && !(((pRgbcolor->action)||(pRgbcolor2->action))))
-	{ pViewports->deletewhendone = this;}
+	return UI_window::OnMouseMove(x, y, prevx, prevy);
 };
-*/
+
 
 void D_ColorPicker::StatChangeColorSelectDisplay(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue)
 {

@@ -61,6 +61,7 @@ public:
 
 
 	~D_ColorPicker();
+	UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
 
     static void StatChangeColorSelectDisplay(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue);
