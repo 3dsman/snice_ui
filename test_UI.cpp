@@ -88,7 +88,14 @@ void testwin(UI_base * asker, UI_window* caller)
     pValid->SetName( "ca marche");
 };
 
-void colorPickerContent(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue)
+void colorSelectDisplayContent(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue)
+{
+    if(progress) progress->SetColor( red, green, blue);
+    if(color_display) color_display->SetColor( red, green, blue);
+
+};
+
+void colorPickerContent(UI_base * asker, D_ColorPicker* caller,float red, float green, float blue)
 {
     if(progress) progress->SetColor( red, green, blue);
     if(color_display) color_display->SetColor( red, green, blue);
@@ -162,6 +169,7 @@ void create_interface()
 
     pcpik = new D_ColorPicker(50, 550, 0.2,0.5,0.8);
 	pcpik->OnClose(NULL,testwin);
+	pcpik->OnColorChange(NULL,colorPickerContent);
 	pViewport->AddChild(pcpik);
 
     slided_panel = new W_slidedPanel(50, 350, 300, 200,500,500);
@@ -218,7 +226,7 @@ void create_interface()
 
 
     color_select_display = new W_colorSelectDisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
-    color_select_display->OnChange(NULL,colorPickerContent);
+    color_select_display->OnChange(NULL,colorSelectDisplayContent);
 	pViewport->AddChild(color_select_display);
 
 	color_display = new W_colorDisplay(670,300, 50,30,"color",0.2, 0.5, 0.8);
@@ -226,6 +234,7 @@ void create_interface()
 
 	color_band = new W_colorBand(670,250, 30,100,"colorband");
 	pViewport->AddChild(color_band);
+	
 }
 
 

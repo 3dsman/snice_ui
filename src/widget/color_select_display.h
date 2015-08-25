@@ -58,7 +58,6 @@ private:
     void SetCursorXY(float curx, float cury);
     void SetCursorZ(float curz);
 
-	//void (*onChange)(W_colorSelectDisplay* caller,float red,float green, float blue) = NULL;
 	std::function<void(UI_base * asker,  W_colorSelectDisplay* caller,float red,float green, float blue)> onChange = NULL;
 	UI_base * onChangeAsker = NULL;
 

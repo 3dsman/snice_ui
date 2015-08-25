@@ -47,7 +47,7 @@ private:
 
     typedef struct
     {
-        GLubyte	* imageData;									// Image Data (Up To 32 Bits)
+        GLubyte	* imageData = 0;									// Image Data (Up To 32 Bits)
         GLuint	bpp;											// Image Color Depth In Bits Per Pixel
         GLuint	width;											// Image Width
         GLuint	height;											// Image Height

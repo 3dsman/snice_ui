@@ -113,11 +113,11 @@ W_colorSelectDisplay::~W_colorSelectDisplay()
 {
 	/*if (quadImage.GetData())
     {
-        free(quadImage.imageData);
+        free(quadImage.tex.imageData);
     }
-    if (lineImage.imageData)
+    if (lineImage.tex.imageData)
     {
-        free(lineImage.imageData);
+        free(lineImage.tex.imageData);
     }*/
 }
 

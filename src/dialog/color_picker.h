@@ -40,7 +40,7 @@ class W_colorDisplay;
 class D_ColorPicker : public UI_dialog		// Mix Material Block
 {
 
-private:
+protected:
 	W_colorSelectDisplay* pRgbcolor;
 	W_slider* pSRed;
 	W_slider* pSGreen;
@@ -52,6 +52,9 @@ private:
 	W_colorDisplay* pAftercolor;
 
 	float redColor, greenColor, blueColor;
+	
+	std::function<void(UI_base * asker, D_ColorPicker* caller, float red, float green, float blue)> onColorChange = NULL;
+	UI_base * onColorChangeAsker = NULL; 
 
 	int mode;
 	bool active;
@@ -64,18 +67,15 @@ public:
 	UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
 
+    /**	\brief static function to handle children colorSelectDisplay callbacks .*/
     static void StatChangeColorSelectDisplay(UI_base * asker, W_colorSelectDisplay* caller,float red, float green, float blue);
+    /**	\brief the function called by StatChangeColorSelectDisplay to push children callbacks to the good instance of D_ColorPicker.*/
     void ChangeColorSelectDisplay( W_colorSelectDisplay* caller,float red, float green, float blue);
 	
+    /**	\brief static function to handle children sliders callbacks .*/
 	static void StatChangeColorSliders(UI_base * asker, W_slider* caller,float value, bool realtime);
+    /**	\brief the function called by StatChangeColorSliders to push children callbacks to the good instance of D_ColorPicker.*/
     void ChangeColorSliders( W_slider* caller,float value, bool realtime);
-
-	void CalcOutput(int iOutputNumber, void* Result);
-
-//	void OnMouseMove(int x, int y, int prevx, int prevy);
-
-	//void OnKeyPressed(int key){};
-
 
 	void RefreshSelect();
 	void RefreshSliders();
@@ -88,7 +88,9 @@ public:
 
 	void SetSliders();
 	
-	static D_ColorPicker* currentWindow;
+    /**	\brief function to set the onColorChange callback function.*/
+	void OnColorChange(UI_base * asker, std::function<void(UI_base * asker, D_ColorPicker* caller, float red, float green, float blue)> function);
+	
 };
 
 #endif // _SNICE_COLORPICKER_H_

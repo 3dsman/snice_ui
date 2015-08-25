@@ -42,8 +42,6 @@
 #include "color_picker.h"
 #include "UI_image.h"
 
-//D_ColorPicker::D_ColorPicker(){}
-
 D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float initBlue)
 			  :UI_dialog(x, y, 450, 300, "ColorPicker",false, false)
 {
@@ -52,14 +50,9 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 	r = 0.4f;
 	g = 0.4f;
 	b = 0.4f;
-	/*
-    color_select_display = new W_colorSelectDisplay(400,300, 250,250,H,0.2, 0.5, 0.8);
-    color_select_display->OnChange(colorPickerContent);
-	pViewport->AddChild(color_select_display);
-	*/
+
 	pRgbcolor = new W_colorSelectDisplay(10, -35, 255, 255,H,initRed, initGreen, initBlue);
 	pRgbcolor->OnChange(this, D_ColorPicker::StatChangeColorSelectDisplay);
-	//pRgbcolor->OnChange([this]{ this->ChangeColor( W_colorSelectDisplay* caller,float red, float green, float blue); });
 	AddChild(pRgbcolor);
 
 	pBeforecolor = new W_colorDisplay(310, -35, 55, 64, "before");
@@ -92,9 +85,6 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 	AddChild(pSLuminosity);
 	pSLuminosity->OnSetValue(this, D_ColorPicker::StatChangeColorSliders);
 
-	//SetPicker(initRed,initGreen,initBlue);
-	//RefreshSelect();
-
 	RefreshSliders();
 
 }
@@ -108,6 +98,7 @@ UI_base* D_ColorPicker::OnMouseMove(int x, int y, int prevx, int prevy)
 	if (!Hittest(x, y))
 		{
 			killMe = true;
+    		if(onClose) onClose(onCloseAsker, this);
 			return nullptr;
 		}
 	return UI_window::OnMouseMove(x, y, prevx, prevy);
@@ -126,6 +117,9 @@ void D_ColorPicker::ChangeColorSelectDisplay(W_colorSelectDisplay* caller,float 
     greenColor = green;
 	blueColor = blue;
 	RefreshSliders();
+	
+	if(onColorChange)
+		onColorChange(onColorChangeAsker, this,redColor, greenColor, blueColor);
 }
 
 void D_ColorPicker::StatChangeColorSliders(UI_base * asker, W_slider* caller,float value, bool realtime)
@@ -184,6 +178,9 @@ void D_ColorPicker::ChangeColorSliders(W_slider* caller,float value, bool realti
 		}
 	pRgbcolor->SetColor(redColor, greenColor, blueColor);
 	pAftercolor->SetColor(redColor, greenColor, blueColor);
+	
+	if(onColorChange)
+		onColorChange(onColorChangeAsker, this,redColor, greenColor, blueColor);
 }
 
 void D_ColorPicker::RefreshSelect(){
@@ -458,12 +455,8 @@ float D_ColorPicker::GetActiveColor(colorSelector RGB)
 		}
 }
 
-
-///////////////////////////////////////////////////////////////////////////
-
-
-void D_ColorPicker::CalcOutput(int iOutputNumber, void* Result)
+void D_ColorPicker::OnColorChange(UI_base * asker, std::function<void(UI_base * asker, D_ColorPicker* caller, float red, float green, float blue)> function)
 {
-
+    onColorChange = function;
+	onColorChangeAsker = asker;
 }
-
