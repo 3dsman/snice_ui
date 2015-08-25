@@ -282,11 +282,11 @@ UI_base* W_button::OnLButtonUp(int x, int y)
 {
 	if (pInterceptChild == this)
 	{
-        if (Hittest(x,y))
+		pressed = !pressed;
+		if (Hittest(x,y))
 	    {
             if(onClick) onClick(onClickAsker, this);
         }
-            pressed = !pressed;
     }
     pInterceptChild = 0;
     return 0;

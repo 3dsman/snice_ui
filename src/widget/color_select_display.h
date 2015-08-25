@@ -79,11 +79,15 @@ public:
 
 	void Draw();
 
-	void UpdateColor(int x, int y);
+	void RefreshAll();
 	
 	void SetColor(float red, float green, float blue);
 
 	void GetColor(float* red, float* green, float* blue);
+	
+	void SetMode(colorSelector mode);
+	colorSelector GetMode();
+	
 
     /**	\brief function to set the onChange callback function.*/
 	void OnChange(UI_base * asker, std::function<void(UI_base * asker, W_colorSelectDisplay* caller,float red,float green, float blue)>);

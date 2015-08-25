@@ -458,23 +458,8 @@ void W_colorSelectDisplay::Draw()
 	glTranslated(-posx,-posy,0);
 }
 
-void W_colorSelectDisplay::UpdateColor(int x, int y){
+void W_colorSelectDisplay::RefreshAll(){
 
-	/*redHue = float(x)/float(width);
-	greenSat = -(float(y)/float(height));
-	blueVal = 0;*/
-}
-
-void W_colorSelectDisplay::SetColor(float red, float green, float blue)
-{
-	if ((mode==H)||(mode==S)||(mode==V))
-        RGBtoHSV(red, green, blue,&redHue,&greenSat,&blueVal);
-    else
-    {
-        redHue = red;
-        greenSat = green;
-        blueVal = blue;
-    }
 	switch (mode)
 	{
 		case H:
@@ -492,6 +477,19 @@ void W_colorSelectDisplay::SetColor(float red, float green, float blue)
 	}
 	RefreshImageXY();
 	RefreshImageZ();
+}
+
+void W_colorSelectDisplay::SetColor(float red, float green, float blue)
+{
+	if ((mode==H)||(mode==S)||(mode==V))
+        RGBtoHSV(red, green, blue,&redHue,&greenSat,&blueVal);
+    else
+    {
+        redHue = red;
+        greenSat = green;
+        blueVal = blue;
+    }
+	RefreshAll();
 	//SetCursorXY(curx, cury);
 	//SetCursorZ(curz);
 }
@@ -506,6 +504,27 @@ void W_colorSelectDisplay::GetColor(float* red, float* green, float* blue){
         *blue = blueVal;
     }
 };
+
+void W_colorSelectDisplay::SetMode(colorSelector mode)
+{
+	float red = redHue;
+	float green = greenSat;
+	float blue = blueVal;
+	
+	if (((this->mode==H)||(this->mode==S)||(this->mode==V))&&((mode==R)||(mode==G)||(mode==B)))
+        HSVtoRGB(red, green, blue,&redHue,&greenSat,&blueVal);
+	if (((this->mode==R)||(this->mode==G)||(this->mode==B))&&((mode==H)||(mode==S)||(mode==V)))
+        RGBtoHSV(red, green, blue,&redHue,&greenSat,&blueVal);
+		
+	this->mode = mode;
+	
+	RefreshAll();
+}
+
+colorSelector W_colorSelectDisplay::GetMode()
+{
+	return mode;
+}
 
 void W_colorSelectDisplay::OnChange(UI_base * asker, std::function<void(UI_base * asker, W_colorSelectDisplay* caller,float red,float green, float blue)> function)
 {

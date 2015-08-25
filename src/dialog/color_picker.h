@@ -35,6 +35,7 @@
 #include "include/color_conversion.h"
 class W_colorSelectDisplay;
 class W_slider;
+class W_button;
 class W_colorDisplay;
 
 class D_ColorPicker : public UI_dialog		// Mix Material Block
@@ -48,6 +49,14 @@ protected:
 	W_slider* pSHue;
 	W_slider* pSSaturation;
 	W_slider* pSLuminosity;
+	
+	W_button* pBRed;
+	W_button* pBGreen;
+	W_button* pBBlue;
+	W_button* pBHue;
+	W_button* pBSaturation;
+	W_button* pBLuminosity;
+	
 	W_colorDisplay* pBeforecolor;
 	W_colorDisplay* pAftercolor;
 
@@ -76,6 +85,11 @@ public:
 	static void StatChangeColorSliders(UI_base * asker, W_slider* caller,float value, bool realtime);
     /**	\brief the function called by StatChangeColorSliders to push children callbacks to the good instance of D_ColorPicker.*/
     void ChangeColorSliders( W_slider* caller,float value, bool realtime);
+	
+    /**	\brief static function to handle children buttons callbacks .*/
+	static void StatChangeMode(UI_base * asker, W_button* caller);
+    /**	\brief the function called by StatChangeColorSliders to push children callbacks to the good instance of D_ColorPicker.*/
+    void ChangeMode( W_button* caller);
 
 	void RefreshSelect();
 	void RefreshSliders();

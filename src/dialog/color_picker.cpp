@@ -37,6 +37,7 @@
 #include "widget/color_select_display.h"
 #include "widget/color_display.h"
 #include "widget/slider.h"
+#include "widget/button.h"
 #include "widget/label.h"
 
 #include "color_picker.h"
@@ -64,6 +65,27 @@ D_ColorPicker::D_ColorPicker(int x, int y,float initRed, float initGreen, float 
 	greenColor = initGreen;
 	blueColor = initBlue;
 	pBeforecolor->SetColor(initRed,initGreen,initBlue);
+
+	pBRed = new W_button(285,-153,20,20,"");
+	AddChild(pBRed);
+	pBRed->OnClick(this, D_ColorPicker::StatChangeMode);
+	pBGreen = new W_button(285,-175,20,20,"");
+	AddChild(pBGreen);
+	pBGreen->OnClick(this, D_ColorPicker::StatChangeMode);
+	pBBlue = new W_button(285,-197,20,20,"");
+	AddChild(pBBlue);
+	pBBlue->OnClick(this, D_ColorPicker::StatChangeMode);
+	pBHue = new W_button(285,-226,20,20,"");
+	pBHue->SetPressed(true);
+	AddChild(pBHue);
+	pBHue->OnClick(this, D_ColorPicker::StatChangeMode);
+	pBSaturation = new W_button(285,-248,20,20,"");
+	AddChild(pBSaturation);
+	pBSaturation->OnClick(this, D_ColorPicker::StatChangeMode);
+	pBLuminosity = new W_button(285,-270,20,20,"");
+	AddChild(pBLuminosity);
+	pBLuminosity->OnClick(this, D_ColorPicker::StatChangeMode);
+
 
 	pSRed = new W_slider(310,-153,120,20,"red", 128.0f, 0.0f, 255.0f, 0, 0, 1.0f, 0.3f, 0.3f);
 	AddChild(pSRed);
@@ -124,7 +146,7 @@ void D_ColorPicker::ChangeColorSelectDisplay(W_colorSelectDisplay* caller,float 
 
 void D_ColorPicker::StatChangeColorSliders(UI_base * asker, W_slider* caller,float value, bool realtime)
 {
-		(dynamic_cast<D_ColorPicker*> (asker))->ChangeColorSliders(caller, value, realtime);
+	(dynamic_cast<D_ColorPicker*> (asker))->ChangeColorSliders(caller, value, realtime);
 };
 
 void D_ColorPicker::ChangeColorSliders(W_slider* caller,float value, bool realtime)
@@ -183,6 +205,53 @@ void D_ColorPicker::ChangeColorSliders(W_slider* caller,float value, bool realti
 		onColorChange(onColorChangeAsker, this,redColor, greenColor, blueColor);
 }
 
+ void D_ColorPicker::StatChangeMode(UI_base * asker, W_button* caller)
+{
+	(dynamic_cast<D_ColorPicker*> (asker))->ChangeMode(caller);
+}
+    /**	\brief the function called by StatChangeColorSliders to push children callbacks to the good instance of D_ColorPicker.*/
+void D_ColorPicker::ChangeMode( W_button* caller)
+{
+	
+	pBRed->SetPressed(false);
+	pBGreen->SetPressed(false);
+	pBBlue->SetPressed(false);
+	pBHue->SetPressed(false);
+	pBSaturation->SetPressed(false);
+	pBLuminosity->SetPressed(false);
+	
+	if(caller == pBRed)
+		{
+			pRgbcolor->SetMode(R);
+			pBRed->SetPressed(true);
+		}
+	if(caller == pBGreen)
+		{
+			pRgbcolor->SetMode(G);
+			pBGreen->SetPressed(true);
+		}
+	if(caller == pBBlue)
+		{
+			pRgbcolor->SetMode(B);
+			pBBlue->SetPressed(true);
+		}
+	if(caller == pBHue)
+		{
+			pRgbcolor->SetMode(H);
+			pBHue->SetPressed(true);
+		}
+	if(caller == pBSaturation)
+		{
+			pRgbcolor->SetMode(S);
+			pBSaturation->SetPressed(true);
+		}
+	if(caller == pBLuminosity)
+		{
+			pRgbcolor->SetMode(V);
+			pBLuminosity->SetPressed(true);
+		}
+}
+	
 void D_ColorPicker::RefreshSelect(){
 /*
 	UI_image* Image;
