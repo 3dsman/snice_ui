@@ -103,9 +103,9 @@ public:
 	/**	\brief mouse move function.*/
 	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
-	virtual void LoadXML(TiXmlElement* element);
+	//virtual void LoadXML(TiXmlElement* element);
 
-	virtual void SaveXML(TiXmlElement* element);
+	//virtual void SaveXML(TiXmlElement* element);
 
 	virtual void Set(char* order);
 };

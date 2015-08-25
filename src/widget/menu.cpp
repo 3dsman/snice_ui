@@ -169,7 +169,7 @@ void W_menu::OnPickOption(UI_base * asker, void (*function)(UI_base * asker, W_s
 {
     childMenu->OnPickOption(asker, function);
 }
-
+/*
 void W_menu::LoadXML(TiXmlElement* element)
 {
 	const char * textElement = element->Attribute("Option");
@@ -187,7 +187,7 @@ void W_menu::SaveXML(TiXmlElement* element)
 	TiXmlElement NodeMenu( refName.c_str() );
 	NodeMenu.SetAttribute ("Option", GetString().c_str());
 	element->InsertEndChild( NodeMenu );
-}
+}*/
 
 void W_menu::Set(string order)
 {

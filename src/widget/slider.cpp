@@ -476,7 +476,7 @@ void W_slider::SetValue(float v, bool callback)
 	SetLabel();
     if(onSetValue&&callback) onSetValue(onSetValueAsker, this, value, true);
 }
-
+/*
 void W_slider::LoadXML(TiXmlElement* element)
 {
 	double progressValue;
@@ -503,7 +503,7 @@ void W_slider::SaveXML(TiXmlElement* element)
 
 	element->InsertEndChild( NodeSlider );
 }
-
+*/
 
 void W_slider::Set(char* order)
 {

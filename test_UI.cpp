@@ -75,6 +75,7 @@ void test3(UI_base * asker, W_button* caller)
 void buttonHa(UI_base * asker, W_button* caller)
 {
     progress->SetAction(!progress->GetAction());
+	slided_panel->SetPanelSurface(600,200);
 };
 
 

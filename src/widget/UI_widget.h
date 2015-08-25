@@ -67,13 +67,13 @@ public:
 	/**	\brief This function is called by a child of the object for callback.
 	
 	this function is'nt defined as a pure virtual because most of the widgets don't need it*/
-	virtual void Callback(UI_base * pCallObject, unsigned char callIndex ) {};
+	//virtual void Callback(UI_base * pCallObject, unsigned char callIndex ) {};
 
 	/** \brief To load widget's parameters whith XML */
-	virtual void LoadXML(TiXmlElement* element);
+	//virtual void LoadXML(TiXmlElement* element);
 
 	/** \brief To save widget's parameters whith XML */
-	virtual void SaveXML(TiXmlElement* element);
+	//virtual void SaveXML(TiXmlElement* element);
 
 };
 

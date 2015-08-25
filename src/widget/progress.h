@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -86,7 +86,7 @@ public:
 
     void SetSpeed(float s);
 
-	void LoadXML(TiXmlElement* element);
+	//void LoadXML(TiXmlElement* element);
 
 	//void SaveXML(TiXmlElement* element);
 

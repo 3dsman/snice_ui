@@ -91,9 +91,9 @@ public:
 
 	virtual void OnDraw();
 
-	void LoadXML(TiXmlElement* element);
+	//void LoadXML(TiXmlElement* element);
 
-	void SaveXML(TiXmlElement* element);
+	//void SaveXML(TiXmlElement* element);
 
 	virtual void Set(char* order);
 };

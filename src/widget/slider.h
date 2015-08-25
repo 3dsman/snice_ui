@@ -114,9 +114,9 @@ public:
 
 	void SetValue(float v, bool callback = true);
 
-	void LoadXML(TiXmlElement* element);
+	//void LoadXML(TiXmlElement* element);
 
-	void SaveXML(TiXmlElement* element);
+	//void SaveXML(TiXmlElement* element);
 
 	virtual void Set(char* order);
 

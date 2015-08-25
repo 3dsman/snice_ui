@@ -634,7 +634,7 @@ UI_base* W_colorBand::OnMouseMove(int x, int y, int prevx, int prevy)
     return 0;
 
 }
-
+/*
 void W_colorBand::LoadXML(TiXmlElement* element)
 {
 
@@ -714,7 +714,7 @@ void W_colorBand::SaveXML(TiXmlElement* element)
 	element->InsertEndChild( NodeColorBand );
 
 }
-
+*/
 void W_colorBand::Set(char* order)
 {
  	printf("->%s", refName.c_str());

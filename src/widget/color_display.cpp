@@ -287,7 +287,7 @@ UI_base* W_colorDisplay::OnLButtonUp(int x, int y)
 
 
 void W_colorDisplay::OnDraw(){};
-
+/*
 void W_colorDisplay::SaveXML(TiXmlElement* element)
 {
 
@@ -317,7 +317,7 @@ void W_colorDisplay::LoadXML(TiXmlElement* element)
 	SetColor((float)red, (float)green, (float)blue);
 
 }
-
+*/
 
 void W_colorDisplay::Set(char* order)
 {

@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -115,11 +115,11 @@ public:
 	virtual UI_base* OnLButtonUp(int x, int y);
 	/**	\brief mouse move function.*/
 	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
-
+/*
 	void LoadXML(TiXmlElement* element);
 
 	void SaveXML(TiXmlElement* element);
-
+*/
 	virtual void Set(char* order);
 };
 

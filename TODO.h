@@ -8,7 +8,6 @@ autre:
     rentrer la classe "option" comme sous classe de "submenu"
     creer une classe font derivée de UI_image
     integrer les viewport array
-    faire apparaitre/disparaitre automatiquement les sliders du slided_panel quand la surface ne les justifie pas
     ajouter fonction setMode (changement du mode hsvrgb) dans le colorSelectDispay
     permettre le choix du mode (hsvrgb) dans colorpicker (boutons a coté de chaque slider?)
     gerer les textures de curseur dans les viewports

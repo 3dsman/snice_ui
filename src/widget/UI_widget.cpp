@@ -45,9 +45,9 @@
 	UI_widget::~UI_widget(){};
 	
 
-	void UI_widget::LoadXML(TiXmlElement* element){};
+	//void UI_widget::LoadXML(TiXmlElement* element){};
 
-	void UI_widget::SaveXML(TiXmlElement* element){};
+	//void UI_widget::SaveXML(TiXmlElement* element){};
 
 	
 // End of file UI_widget.cpp

@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // thanks to nehe stencil buffer tutorial http://nehe.gamedev.net/
@@ -43,25 +43,31 @@
 W_slidedPanel::W_slidedPanel(int x, int y, int w, int h,int sx, int sy, float red, float green, float blue)
 		    :UI_widget(x, y, w, h, red, green, blue)
 {
-	surfacex = sx;
-	surfacey = sy;
-
-	pHorizontalSlider = new W_slider(0,-height+20,width-20,20,"", 0.0f, 0.0f, (float)surfacex, 0, (float)width);
-	//AddChild(pHorizontalSlider);
-	pVerticalSlider = new W_slider(width-20,0,20,height-20,"", 0.0f, 0.0f, (float)surfacey, 0, (float)height);
-	//AddChild(pVerticalSlider);
+	SetPanelSurface(sx,sy);
 }
 
 W_slidedPanel::~W_slidedPanel()
 {
-    delete pHorizontalSlider;
-    delete pVerticalSlider;
+    if (pHorizontalSlider) delete pHorizontalSlider;
+    if (pVerticalSlider) delete pVerticalSlider;
 }
+
+void W_slidedPanel::StatChangeSliders(UI_base * asker, W_slider* caller,float value, bool realtime)
+{
+		(dynamic_cast<W_slidedPanel*> (asker))->ChangeSliders(caller, value, realtime);
+}
+	
+void W_slidedPanel::ChangeSliders( W_slider* caller,float value, bool realtime)
+{
+	if (caller == pHorizontalSlider)
+		xOffset = value;
+	if (caller == pVerticalSlider)
+		yOffset = value;
+}
+
 
 void W_slidedPanel::Draw()
 {
-	float winHeight = height-20.0f;
-	float winWidth = width-20.0f;
 	glTranslated(posx, posy, 0);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -100,9 +106,9 @@ void W_slidedPanel::Draw()
 													// Keep if test fails, keep if test passes but buffer test fails replace if test passes
 	glBegin(GL_QUADS);
 		glVertex2d(1,-1);
-		glVertex2d(winWidth-1, -1);					// Draw the backgound to color and stencil buffers.
-		glVertex2d(winWidth-1, -winHeight+1);				// We Only Want To Mark It In The Stencil Buffer
-		glVertex2d(1, -winHeight+1);
+		glVertex2d(windSizeX-1, -1);					// Draw the backgound to color and stencil buffers.
+		glVertex2d(windSizeX-1, -windSizeY+1);				// We Only Want To Mark It In The Stencil Buffer
+		glVertex2d(1, -windSizeY+1);
 	glEnd();
 
 	glStencilFunc(GL_EQUAL, 1, 1);					// We draw only where the stencil is 1
@@ -110,7 +116,7 @@ void W_slidedPanel::Draw()
 	glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);			// Don't change the stencil buffer
 
 	glPushMatrix();									// Push the matrix for the slider translation
-	glTranslated(-pHorizontalSlider->GetValue(), pVerticalSlider->GetValue(), 0);
+	glTranslated(-xOffset, yOffset, 0);
 							// Slider translation
 
 //**********************************  draw the content of the window  ***********************
@@ -134,7 +140,6 @@ void W_slidedPanel::Draw()
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
 
 	glEnable(GL_TEXTURE_2D);
-	//glBindTexture(GL_TEXTURE_2D, textures.slider.texID);
 	textures.slider.BindTex();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -152,65 +157,65 @@ void W_slidedPanel::Draw()
 		glTexCoord2f(0.49f,1.0f);
 		glVertex2d(8, 0);
 		glTexCoord2f(0.51f,1.0f);
-		glVertex2d(winWidth-8, 0);
+		glVertex2d(windSizeX-8, 0);
 		glTexCoord2f(0.51f,0.75f);
-		glVertex2d(winWidth-8, -8);
+		glVertex2d(windSizeX-8, -8);
 		glTexCoord2f(0.49f,0.75f);
 		glVertex2d(8, -8);
 
 		glTexCoord2f(0.75f,1.0f);
-		glVertex2d(winWidth-8, 0);
+		glVertex2d(windSizeX-8, 0);
 		glTexCoord2f(1.00f,1.0f);
-		glVertex2d(winWidth, 0);
+		glVertex2d(windSizeX, 0);
 		glTexCoord2f(1.00f,0.75f);
-		glVertex2d(winWidth, -8);
+		glVertex2d(windSizeX, -8);
 		glTexCoord2f(0.75f,0.75f);
-		glVertex2d(winWidth-8, -8);
+		glVertex2d(windSizeX-8, -8);
 
 		glTexCoord2f(0.75f,0.75f);
-		glVertex2d(winWidth-8, -8);
+		glVertex2d(windSizeX-8, -8);
 		glTexCoord2f(1.00f,0.75f);
-		glVertex2d(winWidth, -8);
+		glVertex2d(windSizeX, -8);
 		glTexCoord2f(1.00f,0.25f);
-		glVertex2d(winWidth, -winHeight+8);
+		glVertex2d(windSizeX, -windSizeY+8);
 		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(winWidth-8, -winHeight+8);
+		glVertex2d(windSizeX-8, -windSizeY+8);
 
 		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(winWidth-8, -winHeight+8);
+		glVertex2d(windSizeX-8, -windSizeY+8);
 		glTexCoord2f(1.00f,0.25f);
-		glVertex2d(winWidth, -winHeight+8);
+		glVertex2d(windSizeX, -windSizeY+8);
 		glTexCoord2f(1.00f,0.00f);
-		glVertex2d(winWidth, -winHeight);
+		glVertex2d(windSizeX, -windSizeY);
 		glTexCoord2f(0.75f,0.00f);
-		glVertex2d(winWidth-8, -winHeight);
+		glVertex2d(windSizeX-8, -windSizeY);
 
 		glTexCoord2f(0.25f,0.25f);
-		glVertex2d(8, -winHeight+8);
+		glVertex2d(8, -windSizeY+8);
 		glTexCoord2f(0.75f,0.25f);
-		glVertex2d(winWidth-8, -winHeight+8);
+		glVertex2d(windSizeX-8, -windSizeY+8);
 		glTexCoord2f(0.75,0.00f);
-		glVertex2d(winWidth-8, -winHeight);
+		glVertex2d(windSizeX-8, -windSizeY);
 		glTexCoord2f(0.25f,0.00f);
-		glVertex2d(8, -winHeight);
+		glVertex2d(8, -windSizeY);
 
 		glTexCoord2f(0.0f,0.25f);
-		glVertex2d(0, -winHeight+8);
+		glVertex2d(0, -windSizeY+8);
 		glTexCoord2f(0.25f,0.25f);
-		glVertex2d(8, -winHeight+8);
+		glVertex2d(8, -windSizeY+8);
 		glTexCoord2f(0.25f,0.00f);
-		glVertex2d(8, -winHeight);
+		glVertex2d(8, -windSizeY);
 		glTexCoord2f(0.0f,0.00f);
-		glVertex2d(0, -winHeight);
+		glVertex2d(0, -windSizeY);
 
 		glTexCoord2f(0.00f,0.75f);
 		glVertex2d(0, -8);
 		glTexCoord2f(0.25f,0.75f);
 		glVertex2d(8, -8);
 		glTexCoord2f(0.25f,0.25f);
-		glVertex2d(8, -winHeight+8);
+		glVertex2d(8, -windSizeY+8);
 		glTexCoord2f(0.00f,0.25f);
-		glVertex2d(0, -winHeight+8);
+		glVertex2d(0, -windSizeY+8);
 	glEnd();
 
 	/*glBindTexture(GL_TEXTURE_2D, textures[10].texID);
@@ -227,9 +232,10 @@ void W_slidedPanel::Draw()
 	glEnd();*/
 
 	glDisable(GL_TEXTURE_2D);
-
-	pHorizontalSlider->Draw();
-	pVerticalSlider->Draw();
+	
+	if (pHorizontalSlider) pHorizontalSlider->Draw();
+	if (pVerticalSlider) pVerticalSlider->Draw();
+	
 	glTranslated(-posx,-posy,0);
 
 }
@@ -245,13 +251,52 @@ void W_slidedPanel::GetColor(float * red, float * green, float * blue)
 
 void W_slidedPanel::SetPanelSurface(int x, int y)
 {
-	//change the total surface of the panel so set the slider
-	surfacex = max(x,width-20);
-	surfacey = max(y,height-20);
-	pHorizontalSlider->SetTo((float)surfacex);
-	pHorizontalSlider->SetValue(0);
-	pVerticalSlider->SetTo((float)surfacey);
-	pVerticalSlider->SetValue(0);
+	surfacex = max(x,width);
+	surfacey = max(y,height);
+	windSizeX = width;
+	windSizeY = height;
+	xOffset = 0;
+	yOffset = 0;
+	if (width<x) windSizeY -= 20;
+	if (height<y) windSizeX -= 20;
+	
+	if (width<x)
+	{
+		if (!pHorizontalSlider)
+		{
+			pHorizontalSlider = new W_slider(0,-windSizeY,windSizeX,20,"", 0.0f, 0.0f, (float)surfacex, 0, (float)width);
+			pHorizontalSlider->OnSetValue(this, W_slidedPanel::StatChangeSliders);
+		}else
+		{
+			pHorizontalSlider->SetTo((float)surfacex);
+			pHorizontalSlider->SetWidth(windSizeX);
+		}
+	}
+	else
+		if (pHorizontalSlider)
+			{
+				delete pHorizontalSlider;
+				pHorizontalSlider = nullptr;
+			};
+		
+	if (height<y)
+	{
+		if (!pVerticalSlider)
+		{
+			pVerticalSlider = new W_slider(windSizeX,0,20,windSizeY,"", 0.0f, 0.0f, (float)surfacey, 0, (float)height);
+			pVerticalSlider->OnSetValue(this, W_slidedPanel::StatChangeSliders);
+		}else
+		{
+			pVerticalSlider->SetTo((float)surfacey);
+			pVerticalSlider->SetWidth(windSizeY);
+		}
+	}
+	else
+		if (pVerticalSlider)
+			{
+				delete pVerticalSlider;
+				pVerticalSlider = nullptr;
+			}
 }
 
 bool W_slidedPanel::HitPanel(int x, int y)
@@ -264,9 +309,6 @@ bool W_slidedPanel::HitPanel(int x, int y)
 
 UI_base* W_slidedPanel::OnLButtonDown(int x, int y)
 {
-		//PanelOnLButtonDown( x - posx + (int)(pHorizontalSlider->GetValue()), y - posy, 0, 0);
-    int xOffset = (int)(pHorizontalSlider->GetValue());
-    int yOffset = (int)(pVerticalSlider->GetValue());
     if (pInterceptChild)
     {
         if ((pInterceptChild==pVerticalSlider)||(pInterceptChild==pHorizontalSlider))
@@ -297,11 +339,17 @@ UI_base* W_slidedPanel::OnLButtonDown(int x, int y)
                 if (pInterceptChild) {return this;};
             }while(childList.ToNext());
     }else{
-
-        pInterceptChild = pHorizontalSlider->OnLButtonDown(x-posx,y-posy);
-        if (pInterceptChild) {return this;};
-        pInterceptChild = pVerticalSlider->OnLButtonDown(x-posx,y-posy);
-        if (pInterceptChild) {return this;};
+		if (pHorizontalSlider)
+		{
+			pInterceptChild = pHorizontalSlider->OnLButtonDown(x-posx,y-posy);
+			if (pInterceptChild) {return this;};
+		}
+		
+		if (pVerticalSlider)
+		{
+			pInterceptChild = pVerticalSlider->OnLButtonDown(x-posx,y-posy);
+			if (pInterceptChild) {return this;};
+		}
 	}
 
 	return 0;
@@ -309,8 +357,6 @@ UI_base* W_slidedPanel::OnLButtonDown(int x, int y)
 
 UI_base* W_slidedPanel::OnLButtonUp(int x, int y)
 {
-    int xOffset = (int)(pHorizontalSlider->GetValue());
-    int yOffset = (int)(pVerticalSlider->GetValue());
     if (pInterceptChild)
     {
         if ((pInterceptChild==pVerticalSlider)||(pInterceptChild==pHorizontalSlider))
@@ -341,11 +387,16 @@ UI_base* W_slidedPanel::OnLButtonUp(int x, int y)
                 if (pInterceptChild) {return this;};
             }while(childList.ToNext());
     }else{
-
-        pInterceptChild = pHorizontalSlider->OnLButtonUp(x-posx,y-posy);
-        if (pInterceptChild) {return this;};
-        pInterceptChild = pVerticalSlider->OnLButtonUp(x-posx,y-posy);
-        if (pInterceptChild) {return this;};
+		if (pHorizontalSlider)
+		{
+			pInterceptChild = pHorizontalSlider->OnLButtonUp(x-posx,y-posy);
+			if (pInterceptChild) {return this;};
+		}
+		if (pVerticalSlider)
+		{
+			pInterceptChild = pVerticalSlider->OnLButtonUp(x-posx,y-posy);
+			if (pInterceptChild) {return this;};
+		}
 	}
 
 	return 0;
@@ -357,8 +408,8 @@ UI_base* W_slidedPanel::OnLButtonUp(int x, int y)
 
 UI_base* W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
 {
-    int xOffset = (int)(pHorizontalSlider->GetValue());
-    int yOffset = (int)(pVerticalSlider->GetValue());
+    //int xOffset = (int)(pHorizontalSlider->GetValue());
+    //int yOffset = (int)(pVerticalSlider->GetValue());
     if (pInterceptChild)
     {
         if ((pInterceptChild==pVerticalSlider)||(pInterceptChild==pHorizontalSlider))
@@ -389,11 +440,16 @@ UI_base* W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
                 if (pInterceptChild) {return this;};
             }while(childList.ToNext());
     }else{
-
-        pInterceptChild = pHorizontalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
-        if (pInterceptChild) {return this;};
-        pInterceptChild = pVerticalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
-        if (pInterceptChild) {return this;};
+		if (pHorizontalSlider)
+		{
+			pInterceptChild = pHorizontalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
+			if (pInterceptChild) {return this;};
+		}
+		if (pVerticalSlider)
+		{
+			pInterceptChild = pVerticalSlider->OnMouseMove(x-posx,y-posy, prevx-posx, prevy-posy);
+			if (pInterceptChild) {return this;};
+		}
 	}
 
 	return 0;
@@ -416,6 +472,7 @@ void W_slidedPanel::panelOnKeyPressed(int key){};
 
 void W_slidedPanel::panelDraw(){};
 */
+/*
 void W_slidedPanel::LoadXML(TiXmlElement* element)
 {
 	double red, green, blue;
@@ -424,4 +481,4 @@ void W_slidedPanel::LoadXML(TiXmlElement* element)
 	element->Attribute("Blue",&blue);
 	SetColor((float)red, (float)green, (float)blue);
 
-}
+}*/

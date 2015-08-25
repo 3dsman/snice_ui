@@ -479,7 +479,7 @@ UI_base* W_textbox::OnCharPressed(int character)
 
 	return UI_base::OnCharPressed(character);
 }
-
+/*
 void W_textbox::LoadXML(TiXmlElement* element)
 {
 	const char * textElement = element->Attribute("Text");
@@ -498,7 +498,7 @@ void W_textbox::SaveXML(TiXmlElement* element)
 	NodeTextBox.SetAttribute ("Text", GetContent());
 	element->InsertEndChild( NodeTextBox );
 }
-
+*/
 
 void W_textbox::Set(char* order)
 {

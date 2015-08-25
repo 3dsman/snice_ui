@@ -287,10 +287,10 @@ void W_progress::SetSpeed(float s)
 {
 	speed = s;
 }
-
+/*
 void W_progress::LoadXML(TiXmlElement* element)
 {
 	double progressValue;
 	element->Attribute("Value",&progressValue);
 	SetValue((float)progressValue);
-}
+}*/

@@ -313,7 +313,7 @@ UI_base* W_button::OnMouseMove(int x, int y, int prevx, int prevy)
     return 0;
 }
 
-
+/*
 void W_button::LoadXML(TiXmlElement* element)
 {
 	const char * pressedAttribute = element->Attribute("Pressed");
@@ -336,7 +336,7 @@ void W_button::SaveXML(TiXmlElement* element)
 	NodeButton.SetAttribute ("Pressed", buf);
 	element->InsertEndChild( NodeButton );
 }
-
+*/
 
 void W_button::Set(char* order)
 {

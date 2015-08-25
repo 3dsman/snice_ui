@@ -585,9 +585,9 @@ UI_base* W_colorSelectDisplay::OnMouseMove(int x, int y, int prevx, int prevy)
     return 0;
 }
 
-
+/*
 
 void W_colorSelectDisplay::LoadXML(TiXmlElement* element)
 {
 
-}
+}*/

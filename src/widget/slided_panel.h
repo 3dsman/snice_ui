@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -45,9 +45,9 @@ class W_slidedPanel : public UI_widget
 {
 protected:
 
-	int surfacex;
-	int surfacey;
-
+	int surfacex, surfacey;
+	int xOffset, yOffset = 0;
+	int windSizeX, windSizeY;
 
 	W_slider * pHorizontalSlider;
 	W_slider * pVerticalSlider;
@@ -72,6 +72,11 @@ public:
 	void SetPanelSurface(int x, int y);
 
 	bool HitPanel(int x, int y);
+	
+    /**	\brief static function to handle children sliders callbacks .*/
+	static void StatChangeSliders(UI_base * asker, W_slider* caller,float value, bool realtime);
+    /**	\brief the function called by StatChangeColorSliders to push children callbacks to the good instance of D_ColorPicker.*/
+    void ChangeSliders( W_slider* caller,float value, bool realtime);
 
 	/**	\brief left button down function.*/
 	virtual UI_base* OnLButtonDown(int x, int y);
@@ -82,7 +87,7 @@ public:
 	/**	\brief char pressed function.*/
 	//virtual UI_base* OnKeyPressed(int key);
 
-	void LoadXML(TiXmlElement* element);
+	//void LoadXML(TiXmlElement* element);
 
 	//void SaveXML(TiXmlElement* element);
 

@@ -500,7 +500,7 @@ void W_subMenu::OnPickOption(UI_base * asker, void (*function)(UI_base * asker, 
     onPickOption = function;
 	onPickOptionAsker = asker;
 }
-
+/*
 void W_subMenu::LoadXML(TiXmlElement* element)
 {
 
@@ -578,7 +578,7 @@ void W_subMenu::SaveXML(TiXmlElement* element)
 				pCurrentOption = NULL;
 	}
 }
-
+*/
 void W_subMenu::Set(string order)
 {
 	printf("->%s=%s\n", refName.c_str(), order.c_str());

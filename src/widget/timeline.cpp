@@ -1,5 +1,5 @@
 // crafter interface library
-// copyright © 2004 Tricoire Sebastien
+// copyright Â© 2004 Tricoire Sebastien
 
 // File modified by Lionel Allorge
 // Date of modification : 2004 06 02
@@ -187,7 +187,7 @@ void W_timeline::SetValue(float v)
 {
 	pSliderTimeline->SetValue(v);
 }
-
+/*
 void W_timeline::LoadXML(TiXmlElement* element)
 {
 	double frame, from, to;
@@ -224,7 +224,7 @@ void W_timeline::SaveXML(TiXmlElement* element)
 
 	element->InsertEndChild( TimeLine );
 }
-
+*/
 
 void W_timeline::Set(char* order)
 {

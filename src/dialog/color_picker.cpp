@@ -291,7 +291,7 @@ void D_ColorPicker::RefreshSelect(){
 }
 
 void D_ColorPicker::RefreshSliders(){
-	float valRed, valGreen, valBlue;
+//	float valRed, valGreen, valBlue;
 	float hue, saturation, luminosity;
 
 /*

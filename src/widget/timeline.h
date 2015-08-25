@@ -1,5 +1,5 @@
 // crafter interface library
-// copyright © 2004 Tricoire Sebastien
+// copyright Â© 2004 Tricoire Sebastien
 
 // File modified by Lionel Allorge
 // Date of modification : 2004 06 02
@@ -86,9 +86,9 @@ public:
 */
 	void Callback(UI_base * pCallObject, unsigned char callIndex );
 
-	void LoadXML(TiXmlElement* element);
+	//void LoadXML(TiXmlElement* element);
 
-	void SaveXML(TiXmlElement* element);
+	//void SaveXML(TiXmlElement* element);
 
 	virtual void Set(char* order);
 };

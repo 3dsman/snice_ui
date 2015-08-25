@@ -83,9 +83,9 @@ public:
     /**	\brief function to set the OnPickOption callback function.*/
 	void OnPickOption(UI_base * asker, void (*function)(UI_base * asker, W_subMenu* caller, unsigned char option));
 
-	void LoadXML(TiXmlElement* element);
+	//void LoadXML(TiXmlElement* element);
 
-	void SaveXML(TiXmlElement* element);
+	//void SaveXML(TiXmlElement* element);
 
 	virtual void Set(string order);
 };

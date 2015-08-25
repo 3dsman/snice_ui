@@ -113,9 +113,9 @@ public:
 	/**	\brief char pressed function.*/
 	virtual UI_base* OnCharPressed(int character);
 
-	void LoadXML(TiXmlElement* element);
+	//void LoadXML(TiXmlElement* element);
 
-	void SaveXML(TiXmlElement* element);
+	//void SaveXML(TiXmlElement* element);
 
 	virtual void Set(char* order);
 };
