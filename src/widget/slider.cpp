@@ -146,6 +146,7 @@ void W_slider::SetFrom(float f)
 
 void W_slider::SetTo(float t)
 {
+	//std::cout<<t<<std::endl;
 	to = t;
 	if (value>to)
 	{

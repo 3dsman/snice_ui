@@ -1,6 +1,6 @@
 // crafter interface library
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 // File modified by Tricoire Sebastien
@@ -38,7 +38,7 @@
 #ifndef _SNICE_fileSelector_H_
 #define _SNICE_fileSelector_H_
 
-#include "include/glfw.h"
+//#include "include/glfw.h"
 #include "file_system.h"
 #include "widget/slided_panel.h"
 
@@ -54,6 +54,7 @@ private:
 	GLuint displayList;
 	bool oneFile;
 	char ext[256];
+	bool shift;
 
 	void RefreshSelectedFilesText();
 	void GenDisplayList();
@@ -62,13 +63,13 @@ private:
 	virtual void PanelOnLButtonDown(int x, int y, int px, int py);
 	virtual void PanelOnLButtonUp(int x, int y);
 	virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy);
-	virtual void PanelOnKeyPressed(int key);
+	virtual void PanelOnKeyPressed(int key, int action);
 
 	virtual void PanelDraw();
 
 public:
 
-	W_fileSelector(int x, int y, int w, int h,int sx, int sy, char * dir, char * ext, float r = 0.8f, float g = 0.8f, float b = 0.8f);
+	W_fileSelector(int x, int y, int w, int h,int sx, int sy, string dir, string ext, float r = 0.8f, float g = 0.8f, float b = 0.8f);
 
 	~W_fileSelector();
 

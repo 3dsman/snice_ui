@@ -324,13 +324,13 @@ UI_base* UI_base::OnMouseMove(int x, int y, int prevx, int prevy)
 	return 0;
 }
 
-UI_base* UI_base::OnKeyPressed(int key)
+UI_base* UI_base::OnKeyPressed(int key, int action)
 {
     if (pInterceptChild)
     {
         if (pInterceptChild!=this)
         {
-            pInterceptChild = (pInterceptChild)->OnKeyPressed(key);
+            pInterceptChild = (pInterceptChild)->OnKeyPressed(key, action);
             Autokill(pInterceptChild);
         }
         if (pInterceptChild)
@@ -342,7 +342,7 @@ UI_base* UI_base::OnKeyPressed(int key)
 		do
 		{
 			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnKeyPressed(key);
+			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnKeyPressed(key, action);
 			childList.Pop();
             Autokill((UI_base*)childList.GetCurrentObjectPointer());
 			if (pInterceptChild) {return this;};

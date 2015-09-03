@@ -90,7 +90,7 @@ void Snice_UI::MouseButton( int button, int action )
 
 void Snice_UI::KeyPressed( int button, int action)
 {
-    viewport->OnKeyPressed(button);
+    viewport->OnKeyPressed(button,action);
 }
 
 void Snice_UI::CharPressed( unsigned int character)

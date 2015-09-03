@@ -36,25 +36,26 @@
  * ***** END GPL LICENSE BLOCK *****
  */
 
-#include "snice.h"
+//#include "snice.h"
 //#include "file_system.h"
+#include "../snice_UI.h"
 #include "widget/file_selector.h"
 
 
 
-W_fileSelector::W_fileSelector(int x, int y, int w, int h,int sx, int sy, char * dir, char * ext, float r, float g, float b)
-             :W_slidedPanel(x, y, w, h,sx,sy,r,g,b)
+W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, string dir, string ext, float r, float g, float b)
+             :W_slidedPanel(x, y, w, h, sx, sy, r, g, b)
 {
 	displayList=glGenLists(1);								// Creating Display List
 
 	oneFile = false;
 
-	if ((strlen(ext)) <= EXTMAXLENGTH)
-		strcpy(this->ext,ext);
+	if ((strlen(ext.c_str())) <= EXTMAXLENGTH)
+		strcpy(this->ext,ext.c_str());
 	else
 		ext="";
 
-	directory = new DirInfo(dir);
+	directory = new DirInfo(dir.c_str());
 
 	ListDirectory();
 	//listDirectory(dir, this->ext);
@@ -113,6 +114,7 @@ void W_fileSelector::GenDisplayList(){
 		}
 
 		glEndList();							// Done Building The Display List
+		 
 };
 
 
@@ -120,21 +122,21 @@ void W_fileSelector::GenDisplayList(){
 void W_fileSelector::ListDirectory(){	
 
 		// delete the labelList content
-
+/*
 		if (labelList.ToFirst());
 			do
 			{
 				delete (W_label*)(labelList.GetCurrentObjectPointer());
 				labelList.RemoveCurrent();
 			}while (labelList.ToFirst());
-
+*/
 
 		directory->BrowseDirectory(ext, &fileList);
 
 		int labelPosx = 6;
 		int	labelPosy = -6;
 		//int	labelPosy = 7;
-		surfacex = colSize + 6;
+		//surfacex = colSize + 6;
 
 
 		fileList.ToFirst();
@@ -148,14 +150,17 @@ void W_fileSelector::ListDirectory(){
 			}
 			char labelText[PATHMAXLENGTH+EXTMAXLENGTH];
 			((PathElement*)(fileList.GetCurrentObjectPointer()))->GetName(labelText);
-			labelList.Add(new W_label(labelPosx, labelPosy, colSize - CHARLENGTH, 0, labelText));
+		std::cout<<labelText<<std::endl;
+			W_label * label = new W_label(labelPosx, labelPosy, colSize - 10, 0, labelText);
+			AddChild(label);
+			//labelList.Add(new W_label(labelPosx, labelPosy, colSize - 10, 0, labelText));
 			
 			//modify the position of the next label
 			labelPosy -= 13;
 
 		}while (fileList.ToNext());
-		SetPanelSurface(labelPosx + colSize, surfacey);
-		GenDisplayList();
+		SetPanelSurface(labelPosx + colSize+6, surfacey);
+		//GenDisplayList();
 
 };
 
@@ -165,7 +170,7 @@ void W_fileSelector::PanelOnLButtonDown(int x, int y, int px, int py){
 	//pickedIndex = (x/colSize)*13 + ((-y-6)/13);
 	pickedIndex = (x/colSize)*((surfacey-6)/13) + ((-y-6)/13);
 	fileList.ToFirst();
-	if ((!((keys[GLFW_KEY_LSHIFT]) || (keys[GLFW_KEY_RSHIFT])))  || (oneFile))
+	if ((!(shift))  || (oneFile))
 	do{
 		((PathElement*)(fileList.GetCurrentObjectPointer()))->Selected(false);
 
@@ -201,15 +206,15 @@ void W_fileSelector::PanelOnLButtonDown(int x, int y, int px, int py){
 			//listDirectory();
 			//listDirectory(dirName, this->ext);
 		}
-		if (pParentUI_base)
-				pParentUI_base->Callback(this,1);
+		//if (pParentUI_base)
+		//		pParentUI_base->Callback(this,1);
 	}
 	else
 	{
 		((PathElement*)(fileList.GetCurrentObjectPointer()))->Selected(true);
 		GenDisplayList();
-		if (pParentUI_base)
-			pParentUI_base->Callback(this,1);
+		//if (pParentUI_base)
+		//	pParentUI_base->Callback(this,1);
 	}
 
 };
@@ -219,7 +224,9 @@ void W_fileSelector::PanelOnLButtonUp(int x, int y){};
 	
 void W_fileSelector::PanelOnMouseMove(int x, int y, int prevx, int prevy){};
 
-void W_fileSelector::PanelOnKeyPressed(int key){
+void W_fileSelector::PanelOnKeyPressed(int key, int action){
+	if ((key == SNICEUI_KEY_LEFT_SHIFT)||(key == SNICEUI_KEY_RIGHT_SHIFT))
+		shift = (action == SNICEUI_PRESS);
 	printf( "fileSelector::panelOnKeyPressed\n" );
 };
 

@@ -50,7 +50,7 @@ W_textbox::W_textbox(int x, int y, int w, int h, string l, string c,bool num, bo
 	decimal = deci;
     integ = integer;
 
-	action = false;
+	typing = false;
 
     drawContour = contour;
 
@@ -88,7 +88,7 @@ void W_textbox::SetLabel()
 {
     //char buttontext[256];
     string texte = contents;
-	if (action) {
+	if (typing) {
         width = max(initialWidth,(prompt.size() + contents.size() + 3) * font.charWidth);
         texte.insert(curPos,"|");
 	};
@@ -301,7 +301,7 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
 	{
        	if (Hittest(x,y))
     	{
-            if (action)
+            if (typing)
             {
         		unsigned int position = (x - parentx - posx )/font.charWidth - (prompt.size() + 2);
         		position = min(max(position,0),contents.size());
@@ -317,7 +317,7 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
         	{
                  // if the textbox were clicked
         		curPos = contents.size();
-        		action = true;
+        		typing = true;
 
         	}
 
@@ -326,7 +326,7 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
             return this;
         }else
         {
-            if (action)
+            if (typing)
             {
 
         		//if the chain is empty and must contain a number then write "0"
@@ -335,7 +335,7 @@ UI_base* W_textbox::OnLButtonUp(int x, int y)
 
         		// put the width at his initial size
         		width = initialWidth;
-        		action = false;
+        		typing = false;
     	        SetLabel();
     	        if(onSetContent) onSetContent(onSetContentAsker, this, contents);
             }
@@ -356,9 +356,9 @@ UI_base* W_textbox::OnMouseMove(int x, int y, int prevx, int prevy)
 }
 
 
-UI_base* W_textbox::OnKeyPressed(int key)
+UI_base* W_textbox::OnKeyPressed(int key, int action)
 {
-    if (action)
+    if ((typing)&&(action == SNICEUI_PRESS))
     {
         switch (key)
     	{
@@ -407,7 +407,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
     				// put the width at his initial size
     				width = initialWidth;
     				// disable the textbox edit mode
-        			action = false;
+        			typing = false;
         			//then set the label
     	            SetLabel();
 
@@ -425,7 +425,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
     }
 
 	//if (pInterceptChild) return this;
-	return UI_base::OnKeyPressed(key);
+	return UI_base::OnKeyPressed(key, action);
 
 }
 
@@ -467,7 +467,7 @@ UI_base* W_textbox::OnKeyPressed(int key)
 */
 UI_base* W_textbox::OnCharPressed(int character)
 {
-	if((action)&&( character > 0 && character < 256 )&&
+	if((typing)&&( character > 0 && character < 256 )&&
     (( character >= 48 && character <= 57 )||((character == '.')&&decimal)||((character == '-')&&integ)||(!number)))
 		{
 

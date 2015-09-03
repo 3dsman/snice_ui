@@ -589,14 +589,14 @@ UI_base* UI_window::OnMouseMove(int x, int y, int prevx, int prevy)
 
 }
 
-UI_base* UI_window::OnKeyPressed(int key)
+UI_base* UI_window::OnKeyPressed(int key, int action)
 {
     if (pInterceptChild == this)
     {
         if (dragging) return this;
         pInterceptChild =0;
     }
-	UI_base::OnKeyPressed(key);
+	UI_base::OnKeyPressed(key, action);
 
     if (pInterceptChild)
 	   return this;

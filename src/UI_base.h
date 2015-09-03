@@ -181,7 +181,7 @@ public:
 	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
 	/**	\brief Function called when a keyPressed event occur on this object.*/
-	virtual UI_base* OnKeyPressed(int key);
+	virtual UI_base* OnKeyPressed(int key, int action);
 
 	/**	\brief Function called when a charPressed event occur on this object.*/
 	virtual UI_base* OnCharPressed(int character);

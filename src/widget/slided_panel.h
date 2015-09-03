@@ -45,12 +45,12 @@ class W_slidedPanel : public UI_widget
 {
 protected:
 
-	int surfacex, surfacey;
+	int surfacex, surfacey = 0;
 	int xOffset, yOffset = 0;
-	int windSizeX, windSizeY;
+	int windSizeX, windSizeY = 0;
 
-	W_slider * pHorizontalSlider;
-	W_slider * pVerticalSlider;
+	W_slider * pHorizontalSlider = 0;
+	W_slider * pVerticalSlider = 0;
 
 	//virtual void PanelOnLButtonDown(int x, int y, int px, int py)=0;
 	//virtual void PanelOnLButtonUp(int x, int y)=0;
@@ -60,7 +60,7 @@ protected:
 
 public:
 
-	W_slidedPanel(int x, int y, int w, int h,int sx = 10, int sy = 10, float r = 0.8f, float g = 0.8f, float b = 0.8f);
+	W_slidedPanel(int x, int y, int w, int h, int sx = 10, int sy = 10, float r = 0.8f, float g = 0.8f, float b = 0.8f);
 
 	virtual ~W_slidedPanel();
 

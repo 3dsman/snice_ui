@@ -118,7 +118,7 @@ public:
 	/**	\brief mouse move function.*/
 	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 	/**	\brief key pressed function.*/
-	virtual UI_base* OnKeyPressed(int key);
+	virtual UI_base* OnKeyPressed(int key, int action);
 
 	/**	\brief Return true if the coordinates are in the window (or only in the header if minimized).*/
 	virtual bool Hittest(int x, int y);

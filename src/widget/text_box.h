@@ -57,7 +57,7 @@ private:
 	bool number;
     bool integ;
 	bool decimal;
-	bool action;
+	bool typing;
 	bool drawContour;
 
     //void (*onSetContent)(W_textbox* caller, string content) = NULL;
@@ -109,7 +109,7 @@ public:
 	/**	\brief mouse move function.*/
 	virtual UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 	/**	\brief char pressed function.*/
-	virtual UI_base* OnKeyPressed(int key);
+	virtual UI_base* OnKeyPressed(int key, int action);
 	/**	\brief char pressed function.*/
 	virtual UI_base* OnCharPressed(int character);
 

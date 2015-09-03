@@ -37,6 +37,8 @@ W_colorDisplay* color_display;
 W_colorBand* color_band;
 W_slidedPanel* slided_panel;
 
+W_fileSelector* file_selector;
+
 UI_window* pwind;
 D_ColorPicker* pcpik;
 W_subMenu* submenu;
@@ -172,7 +174,12 @@ void create_interface()
 	pcpik->OnClose(NULL,testwin);
 	pcpik->OnColorChange(NULL,colorPickerContent);
 	pViewport->AddChild(pcpik);
-
+	string tot = "/";
+	string tit = "*";
+	//strcpy(&toti, tit.c_str());
+	file_selector = new W_fileSelector(50, 650, 400, 200,500,500, tot, tit);
+	pViewport->AddChild(file_selector);
+	
     slided_panel = new W_slidedPanel(50, 350, 300, 200,500,500);
 	pViewport->AddChild(slided_panel);
 
@@ -295,9 +302,10 @@ void ProcessKey(GLFWwindow* wind, int key, int scancode, int action, int mods)
     if( action == GLFW_RELEASE )
     {
 		keys[key]=false;
-        return;
+        //return;
     }
-	keys[key]=(action == GLFW_PRESS);
+	else
+		keys[key]=(action == GLFW_PRESS);
 
 	pSnice_UI->KeyPressed(key,action);
 }

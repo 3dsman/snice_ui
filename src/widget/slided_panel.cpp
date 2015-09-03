@@ -40,9 +40,11 @@
 #include "widget/slided_panel.h"
 
 
-W_slidedPanel::W_slidedPanel(int x, int y, int w, int h,int sx, int sy, float red, float green, float blue)
+W_slidedPanel::W_slidedPanel(int x, int y, int w, int h, int sx, int sy, float red, float green, float blue)
 		    :UI_widget(x, y, w, h, red, green, blue)
 {
+	width = w;
+	height = h;
 	SetPanelSurface(sx,sy);
 }
 
@@ -260,6 +262,8 @@ void W_slidedPanel::SetPanelSurface(int x, int y)
 	if (width<x) windSizeY -= 20;
 	if (height<y) windSizeX -= 20;
 	
+	std::cout<<width<<" "<<height<<std::endl;
+		
 	if (width<x)
 	{
 		if (!pHorizontalSlider)
@@ -288,7 +292,7 @@ void W_slidedPanel::SetPanelSurface(int x, int y)
 		}else
 		{
 			pVerticalSlider->SetTo((float)surfacey);
-			pVerticalSlider->SetWidth(windSizeY);
+			pVerticalSlider->SetHeight(windSizeY);
 		}
 	}
 	else

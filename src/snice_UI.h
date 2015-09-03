@@ -27,7 +27,9 @@
 #include "widget/color_select_display.h"
 #include "widget/color_band.h"
 #include "widget/slided_panel.h"
+#include "widget/file_selector.h"
 #include "dialog/color_picker.h"
+
 
 
 // Key and button state/action definitions
