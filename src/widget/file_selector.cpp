@@ -62,30 +62,33 @@ W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, strin
 }
 
 W_fileSelector::~W_fileSelector(){
-	glDeleteLists(displayList,1);
+	//glDeleteLists(displayList,1);
 
 	if (directory)
 	{
 		delete directory;
 	};
-	
+	/*
 	if (labelList.ToFirst())
 		do
 		{
 			delete (W_label*)(labelList.GetCurrentObjectPointer());
 			labelList.RemoveCurrent();
 		}while (labelList.ToFirst());
-	
-	if (fileList.ToFirst())
+	*/
+	if (fileList.size())
+		fileList.clear();
+		/*
+		for (std::list<int>::iterator it = fifth.begin(); it != fifth.end(); it++)
 		do
 		{
 			delete (PathElement*)(fileList.GetCurrentObjectPointer());
 			fileList.RemoveCurrent();
-		}while (fileList.ToFirst());	
+		}while (fileList.ToFirst());*/	
 }
 
 void W_fileSelector::RefreshSelectedFilesText(){};
-
+/*
 void W_fileSelector::GenDisplayList(){
 
 		glNewList(displayList,GL_COMPILE);		// Start Building A List
@@ -115,57 +118,57 @@ void W_fileSelector::GenDisplayList(){
 
 		glEndList();							// Done Building The Display List
 		 
-};
+};*/
 
 
 //void fileSelector::listDirectory(char * dir, char * ext){
 void W_fileSelector::ListDirectory(){	
 
-		// delete the labelList content
-/*
-		if (labelList.ToFirst());
-			do
-			{
-				delete (W_label*)(labelList.GetCurrentObjectPointer());
-				labelList.RemoveCurrent();
-			}while (labelList.ToFirst());
-*/
+	// delete the labelList content
 
-		directory->BrowseDirectory(ext, &fileList);
-
-		int labelPosx = 6;
-		int	labelPosy = -6;
-		//int	labelPosy = 7;
-		//surfacex = colSize + 6;
-
-
-		fileList.ToFirst();
+	if (childList.ToFirst())
 		do
 		{
-			if ((labelPosy - 19) < -surfacey)
-			{
-				labelPosy = -6;
-				labelPosx += colSize;
-				//setPanelSurface(surfacex + colSize, surfacey);
-			}
-			char labelText[PATHMAXLENGTH+EXTMAXLENGTH];
-			((PathElement*)(fileList.GetCurrentObjectPointer()))->GetName(labelText);
-		std::cout<<labelText<<std::endl;
-			W_label * label = new W_label(labelPosx, labelPosy, colSize - 10, 0, labelText);
-			AddChild(label);
-			//labelList.Add(new W_label(labelPosx, labelPosy, colSize - 10, 0, labelText));
-			
-			//modify the position of the next label
-			labelPosy -= 13;
+			delete ((UI_base*)childList.GetCurrentObjectPointer());
+			childList.RemoveCurrent();
+			childList.ToNext();
+		}while(childList.GetCurrentObjectPointer());
 
-		}while (fileList.ToNext());
-		SetPanelSurface(labelPosx + colSize+6, surfacey);
-		//GenDisplayList();
+	fileList = directory->BrowseDirectory(ext);
+
+	int labelPosx = 6;
+	int	labelPosy = -6;
+
+	/*fileList.ToFirst();
+	do
+	{*/
+	
+	std::list<PathElement>::iterator it;
+	for (it=fileList.begin(); it!=fileList.end(); ++it)
+	{
+		if ((labelPosy - 19) < -surfacey)
+		{
+			labelPosy = -6;
+			labelPosx += colSize;
+			//setPanelSurface(surfacex + colSize, surfacey);
+		}
+		string labelText = it->GetName();
+		W_label * label = new W_label(labelPosx, labelPosy, colSize - 10, 0, labelText.c_str());
+		if (it->IsDirectory())
+				label->SetColor(0.5f,0.0f,0.0f);
+		AddChild(label);
+		
+		//modify the position of the next label
+		labelPosy -= 13;
+
+	}//while (fileList.ToNext());
+	SetPanelSurface(labelPosx + colSize+6, -labelPosy+6);
+	//GenDisplayList();
 
 };
 
 void W_fileSelector::PanelOnLButtonDown(int x, int y, int px, int py){
-
+/*
 	int pickedIndex;
 	//pickedIndex = (x/colSize)*13 + ((-y-6)/13);
 	pickedIndex = (x/colSize)*((surfacey-6)/13) + ((-y-6)/13);
@@ -212,11 +215,11 @@ void W_fileSelector::PanelOnLButtonDown(int x, int y, int px, int py){
 	else
 	{
 		((PathElement*)(fileList.GetCurrentObjectPointer()))->Selected(true);
-		GenDisplayList();
+		//GenDisplayList();
 		//if (pParentUI_base)
 		//	pParentUI_base->Callback(this,1);
 	}
-
+*/
 };
 
 
@@ -240,32 +243,28 @@ void W_fileSelector::GetSelectedList(List * filenames){
 		filenames->RemoveCurrent();
 	}while (filenames->ToFirst());
 
-	fileList.ToFirst();
-	do
+	std::list<PathElement>::iterator it;
+	for (it=fileList.begin(); it!=fileList.end(); ++it)
 	{
-		if (((PathElement*)(fileList.GetCurrentObjectPointer()))->IsSelected()){
+		if (it->IsSelected()){
 		
-		    char name[256];
-			(((PathElement*)(fileList.GetCurrentObjectPointer()))->GetFullName(name));
+		    string name = it->GetFullName();
 			filenames->Add(new PathElement(name));
 		};
 
-	}while (fileList.ToNext());
+	}
 
 };
 
-void W_fileSelector::GetCurrentDirectory(char * dirName){
-	directory->GetFullName(dirName);
+string W_fileSelector::GetCurrentDirectory(){
+	return directory->GetFullName();
 }
 
-void W_fileSelector::SetCurrentDirectory(char * dirName){
-	if ((strlen(dirName)) <= PATHMAXLENGTH)
+void W_fileSelector::SetCurrentDirectory(string dirName){
+	free(directory);
+	if (directory = new DirInfo(dirName))
 	{
-		free(directory);
-		if ((directory = new DirInfo(dirName)))
-		{
-			ListDirectory();
-		}
+		ListDirectory();
 	}
 }
 
@@ -277,9 +276,9 @@ void W_fileSelector::SetExtensions(char * extensions){
 
 	}
 }
-
+/*
 void W_fileSelector::PanelDraw(){
 
 	glCallList(displayList);
 
-};
+};*/

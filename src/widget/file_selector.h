@@ -41,6 +41,7 @@
 //#include "include/glfw.h"
 #include "file_system.h"
 #include "widget/slided_panel.h"
+#include <list>
 
 #define colSize 300
 
@@ -48,8 +49,8 @@ class W_fileSelector : public W_slidedPanel
 {
 private:
 
-	List fileList;
-	List labelList;
+	std::list<PathElement> fileList;
+	//List labelList;
 	DirInfo * directory;
 	GLuint displayList;
 	bool oneFile;
@@ -57,7 +58,7 @@ private:
 	bool shift;
 
 	void RefreshSelectedFilesText();
-	void GenDisplayList();
+	//void GenDisplayList();
 	//void listDirectory(char * dir, char * ext);
 	void ListDirectory();
 	virtual void PanelOnLButtonDown(int x, int y, int px, int py);
@@ -65,7 +66,7 @@ private:
 	virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy);
 	virtual void PanelOnKeyPressed(int key, int action);
 
-	virtual void PanelDraw();
+	//virtual void PanelDraw();
 
 public:
 
@@ -74,8 +75,8 @@ public:
 	~W_fileSelector();
 
 	void GetSelectedList(List * filenames);
-	void GetCurrentDirectory(char * dirName);
-	void SetCurrentDirectory(char * dirName);
+	string GetCurrentDirectory();
+	void SetCurrentDirectory(string dirName);
 	void SetExtensions(char * extensions);
 
 	

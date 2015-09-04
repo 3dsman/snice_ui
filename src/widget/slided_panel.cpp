@@ -64,7 +64,10 @@ void W_slidedPanel::ChangeSliders( W_slider* caller,float value, bool realtime)
 	if (caller == pHorizontalSlider)
 		xOffset = value;
 	if (caller == pVerticalSlider)
-		yOffset = value;
+	{
+		yOffset = (surfacey-windSizeY)-value;
+		std::cout<<surfacey-windSizeY<<" "<<value<<std::endl;
+	}
 }
 
 
@@ -253,27 +256,31 @@ void W_slidedPanel::GetColor(float * red, float * green, float * blue)
 
 void W_slidedPanel::SetPanelSurface(int x, int y)
 {
-	surfacex = max(x,width);
-	surfacey = max(y,height);
 	windSizeX = width;
 	windSizeY = height;
 	xOffset = 0;
 	yOffset = 0;
-	if (width<x) windSizeY -= 20;
-	if (height<y) windSizeX -= 20;
-	
-	std::cout<<width<<" "<<height<<std::endl;
+	if (width<x) windSizeY = height - 20;
+	if (height<y) windSizeX = width - 20;
+	surfacex = max(x,windSizeX);
+	surfacey = max(y,windSizeY);
 		
 	if (width<x)
 	{
 		if (!pHorizontalSlider)
 		{
-			pHorizontalSlider = new W_slider(0,-windSizeY,windSizeX,20,"", 0.0f, 0.0f, (float)surfacex, 0, (float)width);
+			pHorizontalSlider = new W_slider(0,-windSizeY,windSizeX,20,"", 0.0f, 0.0f, (float)surfacex, 0, (float)windSizeX);
 			pHorizontalSlider->OnSetValue(this, W_slidedPanel::StatChangeSliders);
 		}else
 		{
+			//pHorizontalSlider->SetTo((float)surfacex);
+			//pHorizontalSlider->SetWidth(windSizeX);
+			
 			pHorizontalSlider->SetTo((float)surfacex);
+			pHorizontalSlider->SetValue((float)surfacex,false);
+			pHorizontalSlider->SetBarSize((float)windSizeX);
 			pHorizontalSlider->SetWidth(windSizeX);
+			pHorizontalSlider->SetPosY(-windSizeY);
 		}
 	}
 	else
@@ -287,12 +294,16 @@ void W_slidedPanel::SetPanelSurface(int x, int y)
 	{
 		if (!pVerticalSlider)
 		{
-			pVerticalSlider = new W_slider(windSizeX,0,20,windSizeY,"", 0.0f, 0.0f, (float)surfacey, 0, (float)height);
+			pVerticalSlider = new W_slider(windSizeX,0,20,windSizeY,"", (float)surfacey-(float)windSizeY,  0, (float)surfacey, 0, (float)windSizeY);
+	
 			pVerticalSlider->OnSetValue(this, W_slidedPanel::StatChangeSliders);
 		}else
 		{
 			pVerticalSlider->SetTo((float)surfacey);
+			pVerticalSlider->SetValue((float)surfacey-(float)windSizeY,false);
+			pVerticalSlider->SetBarSize((float)windSizeY);
 			pVerticalSlider->SetHeight(windSizeY);
+			pVerticalSlider->SetPosX(windSizeX);
 		}
 	}
 	else
@@ -305,7 +316,7 @@ void W_slidedPanel::SetPanelSurface(int x, int y)
 
 bool W_slidedPanel::HitPanel(int x, int y)
 {
-	if (x<posx || x>posx+width-20 || y>posy || y<posy-height+20)
+	if (x<posx || x>posx+windSizeX || y>posy || y<posy-windSizeY)
 		return 0;
 	else
 		return 1;

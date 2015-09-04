@@ -30,10 +30,13 @@
 
 #ifndef _SNICE_FILESYSTEM_H_
 #define _SNICE_FILESYSTEM_H_
-
+#include <string>
 #include "mylist.h"
+#include <list>
 
-#define PATHMAXLENGTH 2048	/**<	\brief Maximum length of a path*/
+using namespace std;
+
+//#define PATHMAXLENGTH 2048	/**<	\brief Maximum length of a path*/
 #define EXTMAXLENGTH 256	/**<	\brief Maximum length of the extensions*/
 
 /**	\brief Return true if the name is those of a directoy.
@@ -41,17 +44,17 @@
 	this function just look the end of the name to find \.
 	It do not verify if directory exist.
 */
-bool isDirectory(char * name);
+bool isDirectory(string name);
 
 
 /**	\brief Return true if verify if the name directory exist.*/
-bool directoryExist(char * name);
+bool directoryExist(string name);
 
 /**	\brief Return true if verify if the name file exist.*/
-bool fileExist(char * name);
+bool fileExist(string name);
 
 /**	\brief Get the roots manes (\ for linux and C:\, D:\,... for windows).*/
-void rootsNames(List * rootsList);
+void rootsNames(std::list<string> rootsList);
 
 
 /**	\brief Base class of file and directory path.*/
@@ -62,19 +65,19 @@ private:
 
 
 protected:
-	char Path[PATHMAXLENGTH];	/**<	\brief path name.*/
-	bool select;				/**<	\brief true if the path is selected.*/
-	bool file;					/**<	\brief true if it's a file (false for a directory).*/
+	string Path;	/**<	\brief path name.*/
+	bool select;	/**<	\brief true if the path is selected.*/
+	bool file;		/**<	\brief true if it's a file (false for a directory).*/
 
 public:
 
-	PathElement(const char *_name);
+	PathElement(const string _name);
 
 	virtual ~PathElement();
 
 	/**	\brief to get the full name of the path.*/
 	//virtual void getCompletteName(char * _completeName);
-	virtual void GetFullName(char * completeName);
+	virtual string GetFullName();
 
 	/**	\brief to get the name of the last element of the path.
 	
@@ -82,7 +85,7 @@ public:
 	- for the pathElement (type directory) "c:/this/is/my/path/" name = "path/".
 	- for (type file) "c:/this/is/my/path/andTheFile.tga" name = "andTheFile.tga".
 	*/
-	void GetName(char * name);
+	string GetName();
 
 	/**	\brief to get the name of the path only :-).
 	
@@ -92,7 +95,7 @@ public:
 	*/
 	//char * getPath();
 
-	void GetDirectory(char * dirName);
+	string GetDirectory();
 
 	/**	\brief clip the "clipingName" name at the size (add ".." at the end).
 	
@@ -104,7 +107,7 @@ public:
 
 	you get filename = "thisFile.."
 	*/
-	void GetClipingName(char * clipingName, unsigned int size);
+	string GetClipingName( unsigned int size);
 
 	/**	\brief return true if the pathElement is selected.*/
 	bool IsSelected();
@@ -124,15 +127,15 @@ private:
 
 public:
 
-	FileInfo(const char *name);
+	FileInfo(const string name);
 
 	virtual ~FileInfo();
 
 	/**	\brief to get file extension.*/
-	void GetExtension(const char * fileName, char * ext);
+	void GetExtension(const string fileName, char * ext);
 
 	/**	\brief test if the file exist.*/
-	bool FileExist(const char * name);
+	bool FileExist(const string name);
 	
 	int size;/**<	\brief file size.*/
 	int cDate;/**<	\brief file creation date.*/
@@ -149,12 +152,12 @@ private:
 
 public:
 
-	DirInfo(const char * name);
+	DirInfo(const string name);
 
 	virtual ~DirInfo();
 
 	/**	\brief to browse directory.*/
-	void BrowseDirectory(const char * exts, List * fileList);
+	std::list<PathElement> BrowseDirectory(const char * exts);
 
 	/**	\brief to get parent directory.*/
 	//void getParentDir(char * dirName);

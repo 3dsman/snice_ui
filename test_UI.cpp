@@ -174,10 +174,10 @@ void create_interface()
 	pcpik->OnClose(NULL,testwin);
 	pcpik->OnColorChange(NULL,colorPickerContent);
 	pViewport->AddChild(pcpik);
-	string tot = "/";
-	string tit = "*";
+	string tot = "/home/seb/Documents/";
+	string tit = ".*";
 	//strcpy(&toti, tit.c_str());
-	file_selector = new W_fileSelector(50, 650, 400, 200,500,500, tot, tit);
+	file_selector = new W_fileSelector(50, 600, 400, 200,500,500, tot, tit);
 	pViewport->AddChild(file_selector);
 	
     slided_panel = new W_slidedPanel(50, 350, 300, 200,500,500);

@@ -49,10 +49,10 @@
 #include "widget/slider.h"
 #include "../snice_UI.h"
 
-W_slider::W_slider(int x, int y, int w, int h, string l, float v, float f, float t, int p, float bar, float r, float g, float b)
+W_slider::W_slider(int x, int y, int w, int h, string label, float val, float from, float to, int prec, float bar, float r, float g, float b)
 		:UI_widget(x, y, w, h, r, g, b)
 {
-	Init(x,y,w,h,l,v,f,t,p,bar,r,g,b);
+	Init(x,y,w,h,label,val,from,to,prec,bar,r,g,b);
 }
 /*
 W_slider::W_slider(int x, int y, int w, int h, string l, float v, float f, float t, int p, float r, float g, float b)
@@ -71,9 +71,13 @@ void W_slider::Init(int x, int y, int w, int h, string l, float v, float f, floa
 	value = v;
 	from = f;
 	to = t;
+	//if (value > to) value = to;
+	//if (value < from) value = from;
 	precision = p;
 	barSize = bar;
 	mouseOffset = 0;
+	
+	barSize = min(bar,to-from);
 
 	vertical = h>w;
 
@@ -140,7 +144,7 @@ void W_slider::SetFrom(float f)
 	   value = from;
 	   if(onSetValue) onSetValue(onSetValueAsker, this, value, 0);
     }
-	barSize = min(barSize,to-value);
+	barSize = min(barSize,to-from);
 }
 
 
@@ -153,7 +157,7 @@ void W_slider::SetTo(float t)
 	   value = to;
 	   if(onSetValue) onSetValue(onSetValueAsker, this, value, 0);
     }
-	barSize = min(barSize,to-value);
+	barSize = min(barSize,to-from);
 }
 
 void W_slider::SetPrecision(int p)
@@ -163,7 +167,7 @@ void W_slider::SetPrecision(int p)
 
 void W_slider::SetBarSize(float b)
 {
-	barSize = min(b,to-value);
+	barSize = b;//min(b,to-value);
 }
 
 int W_slider::GetWidth()
@@ -416,7 +420,9 @@ UI_base* W_slider::OnLButtonDown(int x, int y)
             position = 1+((float)(y-posy)/(float)height);
         else
             position = ((float)(x-posx)/(float)width);
-
+			
+		tmpValue = value;
+		
         if (barSize)
         {
             if ((position*(to-from)+from)<value)
