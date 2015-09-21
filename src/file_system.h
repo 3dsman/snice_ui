@@ -117,6 +117,9 @@ public:
 
 	/**	\brief return true if the pathElement represent a directory.*/
 	bool IsDirectory();
+	
+	/**	\brief return a formated time value.*/
+	string formatdate( time_t val);
 
 };
 
@@ -138,9 +141,9 @@ public:
 	bool FileExist(const string name);
 	
 	int size;/**<	\brief file size.*/
-	int cDate;/**<	\brief file creation date.*/
-	int wDate;/**<	\brief last write date.*/
-	int aDate;/**<	\brief last acces date.*/
+	time_t cDate;/**<	\brief file creation date.*/
+	time_t wDate;/**<	\brief last write date.*/
+	time_t aDate;/**<	\brief last acces date.*/
 
 };
 
@@ -157,7 +160,7 @@ public:
 	virtual ~DirInfo();
 
 	/**	\brief to browse directory.*/
-	std::list<PathElement> BrowseDirectory(const char * exts);
+	std::list<PathElement*> BrowseDirectory(const char * exts);
 
 	/**	\brief to get parent directory.*/
 	//void getParentDir(char * dirName);

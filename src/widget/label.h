@@ -1,6 +1,6 @@
 // label class
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 /* ***** BEGIN GPL LICENSE BLOCK *****
@@ -37,13 +37,14 @@ class W_label : public UI_widget
 {
 private:
 	char text[256];
-	bool black;
+	bool bold;
 
 public:
 	W_label(int x, int y, int w, bool bw, string fmt, ...);
 	virtual ~W_label(){}
 	void SetText(string t,...);
-	void SetColor(float red, float green, float blue);
+	void SetBold(bool bold);
+	//void SetColor(float red, float green, float blue);
 	void SetWidth(int w);
 	int GetLength();
 

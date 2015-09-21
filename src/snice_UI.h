@@ -14,8 +14,7 @@
 #include "viewport.h"
 #include "UI_window.h"
 #include "widget/button.h"
-#include "mylist.h"
-//#include "tgafile.h"
+//#include "mylist.h"
 #include "UI_image.h"
 #include "widget/label.h"
 #include "widget/text_box.h"
@@ -28,6 +27,7 @@
 #include "widget/color_band.h"
 #include "widget/slided_panel.h"
 #include "widget/file_selector.h"
+#include "widget/array.h"
 #include "dialog/color_picker.h"
 
 

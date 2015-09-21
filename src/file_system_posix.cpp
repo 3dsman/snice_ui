@@ -102,8 +102,15 @@ void PathElement::Selected(bool selected)
 
 bool PathElement::IsDirectory()
 {	
-	return Path.find('/');
+	return (Path.find_last_of('/')==Path.length()-1);
 };
+
+string PathElement::formatdate( time_t val)
+{
+	char str[36];
+	strftime(str, 36, "%d/%m/%Y %H:%M:%S", localtime(&val));
+	return str;
+}
 
 
 //**********************************************************
@@ -134,9 +141,9 @@ DirInfo::DirInfo(const string dirName)
 
 DirInfo::~DirInfo(){};
 
-std::list<PathElement> DirInfo::BrowseDirectory(const char * exts)
+std::list<PathElement*> DirInfo::BrowseDirectory(const char * exts)
 {   
-	std::list<PathElement> fileList;
+	std::list<PathElement*> fileList;
 	struct dirent **namelist;
 	struct stat infos;
 	string catNamePath = Path;
@@ -157,11 +164,8 @@ std::list<PathElement> DirInfo::BrowseDirectory(const char * exts)
 	            if((S_ISDIR(infos.st_mode))&&(strcmp(namelist[file]->d_name,".")))
 	            {
 					catNamePath = Path + namelist[file]->d_name + "/";
-	            	//strcpy(catNamePath,Path);
-					//strcat(catNamePath,namelist[file]->d_name);
-					//strcat(catNamePath,"/");
 					DirInfo* dir = new DirInfo(catNamePath);
-	            	fileList.push_back((PathElement)*dir);
+	            	fileList.push_back((PathElement*)dir);
 	            	//printf("%s %s\n", "repertoire: " , catNamePath.c_str());
 	            }
 	        file++;
@@ -169,13 +173,13 @@ std::list<PathElement> DirInfo::BrowseDirectory(const char * exts)
         file = 0;
         while(file < n) {
 			catNamePath = Path + namelist[file]->d_name;
-        	//strcpy(catNamePath,Path);
-        	//strcat(catNamePath,namelist[file]->d_name);
         	if ( 0 > lstat(catNamePath.c_str(), &infos) )
         	{
+				//std::cout<<"file stat problem : "<<namelist[file]->d_name<<std::endl;
             	printf("%s %s\n", "file stat problem : " , namelist[file]->d_name);
         	}else
         	if(S_ISREG(infos.st_mode)){
+				
 	        		
 	        	// List Files
 				char ext[EXTMAXLENGTH];
@@ -213,7 +217,7 @@ std::list<PathElement> DirInfo::BrowseDirectory(const char * exts)
 						file->cDate = infos.st_ctime;
 						file->wDate = infos.st_mtime;
 						file->aDate = infos.st_atime;
-						fileList.push_back(*file);
+						fileList.push_back(file);
 						separator = 0;
 					}
 					

@@ -66,7 +66,7 @@ void W_slidedPanel::ChangeSliders( W_slider* caller,float value, bool realtime)
 	if (caller == pVerticalSlider)
 	{
 		yOffset = (surfacey-windSizeY)-value;
-		std::cout<<surfacey-windSizeY<<" "<<value<<std::endl;
+		//std::cout<<surfacey-windSizeY<<" "<<value<<std::endl;
 	}
 }
 

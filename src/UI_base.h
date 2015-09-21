@@ -124,7 +124,16 @@ public:
 	virtual void SetWidth(int w);
 
 	/**	\brief To set the height of the object.*/
-	virtual void SetHeight(int w);
+	virtual void SetHeight(int h);
+
+	/**	\brief To set the size of the object.*/
+	virtual void SetSize(int w, int h);
+	
+	/** \brief To get the width of the object.*/
+	virtual int GetWidth();
+
+	/**	\brief To get the height of the object.*/
+	virtual int GetHeight();
 
 	/**	\brief To set the pos x of the object.*/
 	virtual void SetPosX(int x);

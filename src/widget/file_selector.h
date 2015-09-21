@@ -41,6 +41,7 @@
 //#include "include/glfw.h"
 #include "file_system.h"
 #include "widget/slided_panel.h"
+#include "widget/array.h"
 #include <list>
 
 #define colSize 300
@@ -49,7 +50,8 @@ class W_fileSelector : public W_slidedPanel
 {
 private:
 
-	std::list<PathElement> fileList;
+	std::list<PathElement*> fileList;
+	W_array* array;
 	//List labelList;
 	DirInfo * directory;
 	GLuint displayList;

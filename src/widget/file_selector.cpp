@@ -46,7 +46,9 @@
 W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, string dir, string ext, float r, float g, float b)
              :W_slidedPanel(x, y, w, h, sx, sy, r, g, b)
 {
-	displayList=glGenLists(1);								// Creating Display List
+	array = new W_array(0,0,sx,sy,2,30, 200,15);
+	childList.Add(array);
+	//displayList=glGenLists(1);								// Creating Display List
 
 	oneFile = false;
 
@@ -55,7 +57,7 @@ W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, strin
 	else
 		ext="";
 
-	directory = new DirInfo(dir.c_str());
+	directory = new DirInfo(dir);
 
 	ListDirectory();
 	//listDirectory(dir, this->ext);
@@ -125,7 +127,7 @@ void W_fileSelector::GenDisplayList(){
 void W_fileSelector::ListDirectory(){	
 
 	// delete the labelList content
-
+/*
 	if (childList.ToFirst())
 		do
 		{
@@ -134,37 +136,48 @@ void W_fileSelector::ListDirectory(){
 			childList.ToNext();
 		}while(childList.GetCurrentObjectPointer());
 
-	fileList = directory->BrowseDirectory(ext);
-
 	int labelPosx = 6;
 	int	labelPosy = -6;
+*/
 
-	/*fileList.ToFirst();
-	do
-	{*/
+	fileList = directory->BrowseDirectory(ext);
+
 	
-	std::list<PathElement>::iterator it;
+	std::list<PathElement*>::iterator it;
+	array->resize(2,fileList.size());
+	unsigned int i =0;
 	for (it=fileList.begin(); it!=fileList.end(); ++it)
 	{
-		if ((labelPosy - 19) < -surfacey)
-		{
-			labelPosy = -6;
-			labelPosx += colSize;
-			//setPanelSurface(surfacex + colSize, surfacey);
-		}
-		string labelText = it->GetName();
-		W_label * label = new W_label(labelPosx, labelPosy, colSize - 10, 0, labelText.c_str());
-		if (it->IsDirectory())
-				label->SetColor(0.5f,0.0f,0.0f);
-		AddChild(label);
+		string labelText = (*it)->GetName();
+		W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
 		
-		//modify the position of the next label
-		labelPosy -= 13;
-
-	}//while (fileList.ToNext());
-	SetPanelSurface(labelPosx + colSize+6, -labelPosy+6);
-	//GenDisplayList();
-
+		DirInfo * dir = (dynamic_cast<DirInfo*> (*it));
+		if (dir)
+		{
+				label->SetColor(0.5f,0.0f,0.0f);
+				label->SetBold(true);
+		}
+		array->setContent(0,i,label);
+		
+		FileInfo * file = (dynamic_cast<FileInfo*> (*it));
+		if (file)
+		{
+			string labelText = file->formatdate(file->wDate);
+			W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
+			array->setContent(1,i,label);
+		}
+		i++;
+	}
+	//array->SetWidth(500);
+	/*
+	array->setContentPos(0,0,0,0,0,0);
+	array->setContentPos(0,1,1,0,0,0);
+	array->setContentPos(0,2,1,1,0,0);
+	array->setContentPos(0,3,0,1,0,0);
+	array->setLineHeight(3, 35);
+	array->setcollumnWidth(0, 150);*/
+	
+	SetPanelSurface(array->GetWidth(), array->GetHeight());
 };
 
 void W_fileSelector::PanelOnLButtonDown(int x, int y, int px, int py){
@@ -243,12 +256,12 @@ void W_fileSelector::GetSelectedList(List * filenames){
 		filenames->RemoveCurrent();
 	}while (filenames->ToFirst());
 
-	std::list<PathElement>::iterator it;
+	std::list<PathElement*>::iterator it;
 	for (it=fileList.begin(); it!=fileList.end(); ++it)
 	{
-		if (it->IsSelected()){
+		if ((*it)->IsSelected()){
 		
-		    string name = it->GetFullName();
+		    string name = (*it)->GetFullName();
 			filenames->Add(new PathElement(name));
 		};
 

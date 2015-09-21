@@ -28,9 +28,7 @@
 // if not, write to the Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //////////////////////////////////////////////////
 
-#include "snice.h"
-#include "viewports_array.h"
-#include "nodes/container.h"
+//#include "viewports_array.h"
 #include "file_system.h"
 
 #include "widget/label.h"

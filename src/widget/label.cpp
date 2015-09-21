@@ -1,6 +1,6 @@
 // label class
 // Funny Farm
-// copyright © 2002 Wybren van Keulen
+// copyright Â© 2002 Wybren van Keulen
 // www.funnyfarm.tv
 
 /* ***** BEGIN GPL LICENSE BLOCK *****
@@ -46,7 +46,7 @@ W_label::W_label(int x, int y, int w, bool bw, string fmt, ...)
 	posy = y;
 	width = w;*/
 
-	black = bw;
+	bold = bw;
 
 	va_list	ap;											// Pointer To List Of Arguments
 
@@ -75,20 +75,12 @@ void W_label::Draw()
 
 	glTranslated(posx,posy,0);
 
-
-	int bold = 0;
-
-	if (!black)
-	{
-		bold = 1;
-		glColor4f(r,g,b,0.6f);
-	}
-
-    glListBase(font.fontList-32+(128*bold));
-
+	glColor4f(r,g,b,0.6f);
+	if (bold)
+		glColor4f(r,g,b,0.8f);
+	glListBase(font.fontList-32+(128*bold));
 
 	glScalef(1.0f,-1.0f,1.0f);
-
 
 	char texttemp[256];
 	strcpy(texttemp,text);
@@ -117,18 +109,23 @@ void W_label::Draw()
 
 }
 
+void W_label::SetBold(bool bold)
+{
+	this->bold = bold;
+}
+
 /*void label::SetPos(int x, int y)
 {
 	posx = x;	// Store x value
 	posy = y;	// Store y value
-}*/
+}
 
 void W_label::SetColor(float red, float green, float blue)
 {
 	r = red;
 	g = green;
 	b = blue;
-};
+};*/
 
 void W_label::SetWidth(int w)
 {

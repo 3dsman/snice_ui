@@ -73,15 +73,26 @@ UI_base::~UI_base()
 
 void UI_base::SetWidth(int w)
 {
-	 width = w;
+	width = w;
 	if(onResize) onResize(onResizeAsker, this, width, height);
 };
 
 void UI_base::SetHeight(int h)
 {
-	 height = h;
+	height = h;
 	if(onResize) onResize(onResizeAsker, this, width, height);
 };
+
+void UI_base::SetSize(int w, int h)
+{
+	width = w;
+	height = h;
+	if(onResize) onResize(onResizeAsker, this, width, height);
+};
+	
+int UI_base::GetWidth(){return width;}
+
+int UI_base::GetHeight(){return height;}
 
 void UI_base::SetPosX(int x)
 {
