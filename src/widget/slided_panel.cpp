@@ -272,12 +272,9 @@ void W_slidedPanel::SetPanelSurface(int x, int y)
 			pHorizontalSlider = new W_slider(0,-windSizeY,windSizeX,20,"", 0.0f, 0.0f, (float)surfacex, 0, (float)windSizeX);
 			pHorizontalSlider->OnSetValue(this, W_slidedPanel::StatChangeSliders);
 		}else
-		{
-			//pHorizontalSlider->SetTo((float)surfacex);
-			//pHorizontalSlider->SetWidth(windSizeX);
-			
+		{			
 			pHorizontalSlider->SetTo((float)surfacex);
-			pHorizontalSlider->SetValue((float)surfacex,false);
+			pHorizontalSlider->SetValue((float)0,false);
 			pHorizontalSlider->SetBarSize((float)windSizeX);
 			pHorizontalSlider->SetWidth(windSizeX);
 			pHorizontalSlider->SetPosY(-windSizeY);
@@ -333,7 +330,7 @@ UI_base* W_slidedPanel::OnLButtonDown(int x, int y)
         }else
         if (pInterceptChild!=this)
         {
-            pInterceptChild = (pInterceptChild)->OnLButtonDown(x - posx + xOffset, y - posy + yOffset);
+            pInterceptChild = (pInterceptChild)->OnLButtonDown(x - posx + xOffset, y - posy - yOffset);
             Autokill(pInterceptChild);
         }
         if (pInterceptChild)
@@ -348,7 +345,7 @@ UI_base* W_slidedPanel::OnLButtonDown(int x, int y)
             do
             {
                 childList.Push();
-                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonDown(x - posx + xOffset, y - posy + yOffset);
+                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonDown(x - posx + xOffset, y - posy - yOffset);
                 childList.Pop();
                 Autokill((UI_base*)childList.GetCurrentObjectPointer());
                 if (pInterceptChild) {return this;};
@@ -381,7 +378,7 @@ UI_base* W_slidedPanel::OnLButtonUp(int x, int y)
         }else
         if (pInterceptChild!=this)
         {
-            pInterceptChild = (pInterceptChild)->OnLButtonUp(x - posx + xOffset, y - posy + yOffset);
+            pInterceptChild = (pInterceptChild)->OnLButtonUp(x - posx + xOffset, y - posy - yOffset);
             Autokill(pInterceptChild);
         }
         if (pInterceptChild)
@@ -396,7 +393,7 @@ UI_base* W_slidedPanel::OnLButtonUp(int x, int y)
             do
             {
                 childList.Push();
-                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonUp(x - posx + xOffset, y - posy + yOffset);
+                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonUp(x - posx + xOffset, y - posy - yOffset);
                 childList.Pop();
                 Autokill((UI_base*)childList.GetCurrentObjectPointer());
                 if (pInterceptChild) {return this;};
@@ -434,7 +431,7 @@ UI_base* W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
         }else
             if (pInterceptChild!=this)
             {
-                pInterceptChild = (pInterceptChild)->OnMouseMove( x - posx + xOffset, y - posy + yOffset, prevx - posx + xOffset, prevy - posy + yOffset);
+                pInterceptChild = (pInterceptChild)->OnMouseMove( x - posx + xOffset, y - posy - yOffset, prevx - posx + xOffset, prevy - posy - yOffset);
                 Autokill(pInterceptChild);
             }
         if (pInterceptChild)
@@ -449,7 +446,7 @@ UI_base* W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
             do
             {
                 childList.Push();
-                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnMouseMove( x - posx + xOffset, y - posy + yOffset, prevx - posx + xOffset, prevy - posy + yOffset);
+                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnMouseMove( x - posx + xOffset, y - posy - yOffset, prevx - posx + xOffset, prevy - posy - yOffset);
                 childList.Pop();
                 Autokill((UI_base*)childList.GetCurrentObjectPointer());
                 if (pInterceptChild) {return this;};

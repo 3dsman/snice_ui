@@ -15,8 +15,8 @@
 // File created by Tricoire Sebastien
 // Date of creation : 2004 10 13
 ///
-// File modified by 
-// Date of modification :
+// File modified by Tricoire Sebastien
+// Date of modification :2015 09 21
 ///
 // Copyright (C) 2004 Sebastien Tricoire and Lionel Allorge.
 // This program is free software; you can redistribute it and/or modify it

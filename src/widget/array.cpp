@@ -55,14 +55,15 @@ void W_array::SetHeight(int h)
 	refreshContentPos();
 }
 
-void W_array::setContent(unsigned int x, unsigned int y, UI_base* widget)
+void W_array::setContent(unsigned int x, unsigned int y, UI_base* widget, bool snapLeft, bool snapRight, bool snapTop, bool snapBottom)
 {
 	if ((y>ySizeArray.size())||(x>xSizeArray.size())) return;
 	
 	array[x][y].content = widget;
 	childList.Add(widget);
+	setContentPos(x, y, snapLeft, snapRight, snapTop, snapBottom);
 	
-	refreshContentPos(x, y);
+	//refreshContentPos(x, y);
 }
 
 UI_base* W_array::getContent(unsigned int x, unsigned int y)
@@ -79,6 +80,7 @@ void W_array::setContentPos(unsigned int x, unsigned int y, bool snapLeft, bool 
 	array[x][y].snapBottom = snapBottom;
 	
 	refreshContentPos(x, y);
+	//refreshContentPos();
 }
 
 void W_array::resize(unsigned int sizeX, unsigned int sizeY)
@@ -100,7 +102,7 @@ void W_array::resize(unsigned int sizeX, unsigned int sizeY)
 	unsigned int tmpPosy = 0;
 	for(unsigned int i=0;i<sizeX;i++){tmpPosx += xSizeArray[i];}
 	for(unsigned int i=0;i<sizeY;i++){tmpPosy += ySizeArray[i];}
-	SetSize(tmpPosx + (xSizeArray.size()-1) * marginX, tmpPosy + (ySizeArray.size()-1) * marginY);
+	SetSize(tmpPosx + (xSizeArray.size()-1) * marginX + 2*borderX, tmpPosy + (ySizeArray.size()-1) * marginY + 2*borderY);
 }
 
 void W_array::setLineHeight(unsigned int y, unsigned int lineHeight)
@@ -115,6 +117,31 @@ void W_array::setcollumnWidth(unsigned int x, unsigned int colWidth)
 	if (x>xSizeArray.size())return;
 	xSizeArray[x] = colWidth;
 	refreshContentPos();
+}
+void W_array::setMargin(unsigned int marginX, unsigned int marginY, unsigned int borderX, unsigned int borderY)
+{
+	this->marginX = marginX;
+	this->marginY = marginY;
+	this->borderX = borderX;
+	this->borderY = borderY;}
+
+void W_array::refreshContentPos()
+{
+
+	unsigned int tmpPosx = 0;
+	unsigned int tmpPosy = 0;
+	for (unsigned int i = 0; i < xSizeArray.size(); i++) {
+		tmpPosy=0;
+		for (unsigned int j = 0; j < ySizeArray.size(); j++) {
+			refreshContentPos(i, j, tmpPosx, tmpPosy);
+			
+			tmpPosy+=ySizeArray[j];
+		}
+		tmpPosx+=xSizeArray[i];
+	}
+	SetSize(tmpPosx + (xSizeArray.size()-1) * marginX + 2*borderX, tmpPosy + (ySizeArray.size()-1) * marginY+ 2*borderY);
+	//width = tmpPosx + xSizeArray.size() * marginX;
+	//height = tmpPosy + ySizeArray.size() * marginY;
 }
 
 void W_array::refreshContentPos(unsigned int x, unsigned int y)
@@ -131,8 +158,8 @@ void W_array::refreshContentPos(unsigned int x, unsigned int y, unsigned int cel
 	
 	if ((y>ySizeArray.size())||(x>xSizeArray.size())||!(array[x][y].content)) return;
 	
-	unsigned int contentPosX = cellPosx + x*marginX;
-	unsigned int contentPosY = cellPosy + y*marginY;
+	unsigned int contentPosX = cellPosx + x*marginX + borderX;
+	unsigned int contentPosY = cellPosy + y*marginY + borderY;
 	if (array[x][y].snapRight)
 	{
 		if (array[x][y].snapLeft)
@@ -157,24 +184,6 @@ void W_array::refreshContentPos(unsigned int x, unsigned int y, unsigned int cel
 	array[x][y].content->SetPos(contentPosX, -contentPosY);
 }
 
-void W_array::refreshContentPos()
-{
-
-	unsigned int tmpPosx = 0;
-	unsigned int tmpPosy = 0;
-	for (int i = 0; i < xSizeArray.size(); i++) {
-		tmpPosy=0;
-		for (int j = 0; j < ySizeArray.size(); j++) {
-			refreshContentPos(i, j, tmpPosx, tmpPosy);
-			
-			tmpPosy+=ySizeArray[j];
-		}
-		tmpPosx+=xSizeArray[i];
-	}
-	SetSize(tmpPosx + (xSizeArray.size()-1) * marginX, tmpPosy + (ySizeArray.size()-1) * marginY);
-	//width = tmpPosx + xSizeArray.size() * marginX;
-	//height = tmpPosy + ySizeArray.size() * marginY;
-}
 
 void W_array::PanelOnLButtonDown(int x, int y, int px, int py){
 /*

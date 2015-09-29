@@ -36,6 +36,9 @@
 
 Textures UI_base::textures;
 Font UI_base::font;
+float UI_base::defaultR = 0.3f;
+float UI_base::defaultG = 0.3f;
+float UI_base::defaultB = 0.3f;
 
 UI_base::UI_base(int x, int y, int w, int h, float red, float green, float blue)
 {
@@ -70,6 +73,13 @@ UI_base::~UI_base()
 			childList.ToNext();
 		}while(childList.GetCurrentObjectPointer());
 };
+
+void UI_base::SetDefaultColor(float r, float g, float b)
+{
+	defaultR = r;
+	defaultG = g;
+	defaultB = b;
+}
 
 void UI_base::SetWidth(int w)
 {

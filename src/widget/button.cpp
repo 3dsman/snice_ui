@@ -42,7 +42,7 @@
 #include "include/glfw.h"
 
 W_button::W_button(int x, int y, int w, int h, string l)
-		 :UI_widget(x, y, w, h, 0.3f, 0.3f, 0.3f)
+		 :UI_widget(x, y, w, h)
 {
 //	sprintf(refName, "%s", l);
 	/*int pos = 0;
@@ -59,7 +59,7 @@ W_button::W_button(int x, int y, int w, int h, string l)
 	//while((l[pos] != 0)&&(pos < 254));
 	//refName[pos] = 0;
 
-	text = new W_label(width/2-(l.size()*7)/2-4,8-(height/2), 0, 1, l);
+	text = new W_label(width/2-(l.size()*7)/2-4,8-(height/2), 0, 0, l);
     this->AddChild(text);
 	pressed = false;
 	active = false;
@@ -96,6 +96,24 @@ void W_button::SetWidth(int w)
 	SetLabel(refName);
 }
 
+void W_button::SetHeight(int h)
+{
+	height = h;
+	SetLabel(refName);
+}
+
+void W_button::SetSize(int w, int h)
+{
+	width = w;
+	height = h;
+	SetLabel(refName);
+}
+
+void W_button::SetBold(bool bold)
+{
+	text->SetBold(bold);
+}
+/*
 void W_button::SetPosX(int x)
 {
 	posx = x;
@@ -107,7 +125,7 @@ void W_button::SetPosY(int y)
 	posy = y;
 	SetLabel(refName);
 }
-
+*/
 bool W_button::IsPressed()
 {
 	return pressed;

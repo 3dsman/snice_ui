@@ -34,6 +34,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <cstring>
+#include <vector>
 
 #include "mylist.h"
 #include "file_system.h"
@@ -141,7 +142,7 @@ DirInfo::DirInfo(const string dirName)
 
 DirInfo::~DirInfo(){};
 
-std::list<PathElement*> DirInfo::BrowseDirectory(const char * exts)
+std::list<PathElement*> DirInfo::BrowseDirectory(const vector<string> exts)
 {   
 	std::list<PathElement*> fileList;
 	struct dirent **namelist;
@@ -155,8 +156,6 @@ std::list<PathElement*> DirInfo::BrowseDirectory(const char * exts)
     	int file = 0;
         while(file < n) {
 			catNamePath = Path + namelist[file]->d_name;
-        	//strcpy(catNamePath,Path);
-        	//strcat(catNamePath,namelist[file]->d_name);
         	if ( 0 > lstat(catNamePath.c_str(), &infos) )
         	{
             	printf("%s %s\n", "file stat problem : " , namelist[file]->d_name);
@@ -179,37 +178,8 @@ std::list<PathElement*> DirInfo::BrowseDirectory(const char * exts)
             	printf("%s %s\n", "file stat problem : " , namelist[file]->d_name);
         	}else
         	if(S_ISREG(infos.st_mode)){
-				
-	        		
-	        	// List Files
-				char ext[EXTMAXLENGTH];
-				char extsc[EXTMAXLENGTH];
-				
-				strcpy(extsc,exts);
-	
-				char * curPos= extsc;
-				char * separator;
-				if(strlen( extsc))
-				do{
-					// Find the next "|" character in the string
-					separator = strchr(curPos,'|');
-					
-					// if there is one
-					if (separator)
-					{
-						// copy to and add a null char at the end
-						strncpy(ext,curPos,separator - curPos);
-						ext[separator - curPos] = 0;
-	
-						//change the current position
-						curPos = separator + 1;
-					}else
-					{
-						//else just copy the string
-						strcpy( ext, curPos);
-					}
-					
-					if((strstr(namelist[file]->d_name,ext))||!(strcmp(ext,".*")))
+				for(int i=0; i<exts.size(); ++i){
+					if((strstr(namelist[file]->d_name,(exts[i]).c_str()))||(exts[i]==".*"))
 					{
 						catNamePath = Path + namelist[file]->d_name;
 						FileInfo* file = new FileInfo(catNamePath);
@@ -218,12 +188,8 @@ std::list<PathElement*> DirInfo::BrowseDirectory(const char * exts)
 						file->wDate = infos.st_mtime;
 						file->aDate = infos.st_atime;
 						fileList.push_back(file);
-						separator = 0;
 					}
-					
-					
-					
-				}while( separator);
+				}
         	}
 	        file++;
         }

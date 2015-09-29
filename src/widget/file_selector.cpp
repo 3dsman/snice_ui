@@ -47,29 +47,31 @@ W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, strin
              :W_slidedPanel(x, y, w, h, sx, sy, r, g, b)
 {
 	array = new W_array(0,0,sx,sy,2,30, 200,15);
+	array->setMargin(0,0,10,10);
 	childList.Add(array);
-	//displayList=glGenLists(1);								// Creating Display List
 
 	oneFile = false;
-
+/*
 	if ((strlen(ext.c_str())) <= EXTMAXLENGTH)
 		strcpy(this->ext,ext.c_str());
 	else
-		ext="";
+		ext="";*/
 
 	directory = new DirInfo(dir);
-
-	ListDirectory();
-	//listDirectory(dir, this->ext);
+	SetExtensions(ext);
+	//ListDirectory();
 }
 
 W_fileSelector::~W_fileSelector(){
-	//glDeleteLists(displayList,1);
 
 	if (directory)
 	{
 		delete directory;
 	};
+	while(!fileList.empty()) delete fileList.front(), fileList.pop_front();
+	fileList.clear();
+	delete array;
+
 	/*
 	if (labelList.ToFirst())
 		do
@@ -78,8 +80,6 @@ W_fileSelector::~W_fileSelector(){
 			labelList.RemoveCurrent();
 		}while (labelList.ToFirst());
 	*/
-	if (fileList.size())
-		fileList.clear();
 		/*
 		for (std::list<int>::iterator it = fifth.begin(); it != fifth.end(); it++)
 		do
@@ -135,12 +135,9 @@ void W_fileSelector::ListDirectory(){
 			childList.RemoveCurrent();
 			childList.ToNext();
 		}while(childList.GetCurrentObjectPointer());
-
-	int labelPosx = 6;
-	int	labelPosy = -6;
 */
 
-	fileList = directory->BrowseDirectory(ext);
+	fileList = directory->BrowseDirectory(exts);
 
 	
 	std::list<PathElement*>::iterator it;
@@ -149,25 +146,28 @@ void W_fileSelector::ListDirectory(){
 	for (it=fileList.begin(); it!=fileList.end(); ++it)
 	{
 		string labelText = (*it)->GetName();
-		W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
+		//W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
+		W_button * button = new W_button(0, 0, 10, 0, labelText.c_str());
 		
 		DirInfo * dir = (dynamic_cast<DirInfo*> (*it));
 		if (dir)
 		{
-				label->SetColor(0.5f,0.0f,0.0f);
-				label->SetBold(true);
+				button->SetColor(0.5f,0.0f,0.0f);
+				button->SetBold(true);
 		}
-		array->setContent(0,i,label);
+		array->setContent(0,i,button,true,true,true,true);
 		
 		FileInfo * file = (dynamic_cast<FileInfo*> (*it));
 		if (file)
 		{
 			string labelText = file->formatdate(file->wDate);
-			W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
-			array->setContent(1,i,label);
+			//W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
+			W_button * button = new W_button(0, 0, 10, 0, labelText.c_str());
+			array->setContent(1,i,button,true,true,true,true);
 		}
 		i++;
 	}
+	//array->setLineHeight(3,10);
 	//array->SetWidth(500);
 	/*
 	array->setContentPos(0,0,0,0,0,0);
@@ -281,17 +281,20 @@ void W_fileSelector::SetCurrentDirectory(string dirName){
 	}
 }
 
-void W_fileSelector::SetExtensions(char * extensions){
-	if ((strlen(extensions)) <= EXTMAXLENGTH)
-	{
-		strcpy(ext,extensions);
+void W_fileSelector::SetExtensions(string extensions){
+	
+		string::size_type lastPos = 0;
+	    string::size_type pos = extensions.find_first_of(";", lastPos);
+
+		while (string::npos != pos || string::npos != lastPos)
+		{
+			// Found a token, add it to the vector.
+			exts.push_back(extensions.substr(lastPos, pos - lastPos));
+			// Skip delimiters.  Note the "not_of"
+			lastPos = extensions.find_first_not_of(";", pos);
+			// Find next "non-delimiter"
+			pos = extensions.find_first_of(";", lastPos);
+		}
+
 		ListDirectory();
-
-	}
 }
-/*
-void W_fileSelector::PanelDraw(){
-
-	glCallList(displayList);
-
-};*/

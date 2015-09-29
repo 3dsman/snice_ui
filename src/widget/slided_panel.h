@@ -52,15 +52,9 @@ protected:
 	W_slider * pHorizontalSlider = 0;
 	W_slider * pVerticalSlider = 0;
 
-	//virtual void PanelOnLButtonDown(int x, int y, int px, int py)=0;
-	//virtual void PanelOnLButtonUp(int x, int y)=0;
-	//virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy)=0;
-	//virtual void PanelOnKeyPressed(int key)=0;
-	//virtual void PanelDraw()=0;
-
 public:
 
-	W_slidedPanel(int x, int y, int w, int h, int sx = 10, int sy = 10, float r = 0.8f, float g = 0.8f, float b = 0.8f);
+	W_slidedPanel(int x, int y, int w, int h, int sx = 10, int sy = 10, float red = defaultR*2.5, float green = defaultG*2.5, float blue = defaultB*2.5);
 
 	virtual ~W_slidedPanel();
 

@@ -44,8 +44,10 @@ private:
 		bool snapBottom = false;
     };
 	//unsigned int x, y = 0;
-	unsigned int marginX = 20;
+	unsigned int marginX = 2;
 	unsigned int marginY = 2;
+	unsigned int borderX = 10;
+	unsigned int borderY = 10;
 	unsigned int defWidth = 200;
 	unsigned int defHeight = 20;
 	bool shift;
@@ -64,7 +66,7 @@ private:
 
 public:
 
-	W_array(int x, int y, int w, int h,unsigned int sizeX, unsigned int sizeY,unsigned int defWidth, unsigned int defHeight, float r = 0.8f, float g = 0.8f, float b = 0.8f);
+	W_array(int x, int y, int w, int h,unsigned int sizeX, unsigned int sizeY,unsigned int defWidth, unsigned int defHeight, float red = defaultR, float green = defaultG, float blue = defaultB);
 
 	~W_array();
 
@@ -74,11 +76,12 @@ public:
 	/**	\brief To set the height of the object.*/
 	virtual void SetHeight(int w);
 	
-	void setContent(unsigned int x, unsigned int y, UI_base* widget);
+	void setContent(unsigned int x, unsigned int y, UI_base* widget, bool snapLeft = true, bool snapRight = false, bool snapTop = false, bool snapBottom = false);
 	UI_base* getContent(unsigned int x, unsigned int y);
 	void setContentPos(unsigned int x, unsigned int y, bool snapLeft, bool snapRight, bool snapTop, bool snapBottom);
 	void setLineHeight(unsigned int y, unsigned int lineHeight);
 	void setcollumnWidth(unsigned int x, unsigned int colWidth);
+	void setMargin(unsigned int marginX, unsigned int marginY, unsigned int borderX, unsigned int borderY);
 	void resize(unsigned int sizeX, unsigned int sizeY);
 
 	void GetSelectedList();

@@ -92,6 +92,7 @@ protected:
 	*/
 	//char refName[256];
 
+	static float defaultR, defaultG ,defaultB; /**<			\brief Color of the object */
     static struct Textures textures; /**< \brief creation of the static structure where textures are stored */
     static struct Font font; /**< \brief creation of the static structure where font is stored */
 
@@ -116,9 +117,11 @@ public:
 		 \param green green color as float [0;1]
 		 \param blue blue color as float [0;1]
 	*/
-	UI_base(int x, int y, int w, int h, float red = 0.3f, float green = 0.3f, float blue = 0.3f);
+	UI_base(int x, int y, int w, int h, float red = defaultR, float green = defaultG, float blue = defaultB);
 
 	virtual ~UI_base();
+	
+	static void SetDefaultColor(float r, float g, float b);
 
 	/** \brief To set the width of the object.*/
 	virtual void SetWidth(int w);

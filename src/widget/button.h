@@ -73,12 +73,21 @@ public:
 
     /**	\brief Set the width.*/
 	void SetWidth(int w);
+	
+    /**	\brief Set the height.*/
+	void SetHeight(int h);
+	
+    /**	\brief Set the size of the widget.*/
+	void SetSize(int w, int h);
+	
+    /**	\brief Set the text style.*/
+	void SetBold(bool bold);
 
     /**	\brief Set the horizontal position of the button.*/
-	void SetPosX(int x);
+	//void SetPosX(int x);
 
     /**	\brief Set the vertical position of the button.*/
-	void SetPosY(int y);
+	//void SetPosY(int y);
 
     /**	\brief return true if the button is pressed.*/
 	bool IsPressed();

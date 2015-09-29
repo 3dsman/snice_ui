@@ -33,6 +33,8 @@
 #include <string>
 #include "mylist.h"
 #include <list>
+#include <vector>
+
 
 using namespace std;
 
@@ -160,7 +162,7 @@ public:
 	virtual ~DirInfo();
 
 	/**	\brief to browse directory.*/
-	std::list<PathElement*> BrowseDirectory(const char * exts);
+	std::list<PathElement*> BrowseDirectory(const vector<string> exts);
 
 	/**	\brief to get parent directory.*/
 	//void getParentDir(char * dirName);

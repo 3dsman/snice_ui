@@ -51,35 +51,30 @@ class W_fileSelector : public W_slidedPanel
 private:
 
 	std::list<PathElement*> fileList;
+	std::vector<string> exts;
 	W_array* array;
-	//List labelList;
 	DirInfo * directory;
-	GLuint displayList;
+	//GLuint displayList;
 	bool oneFile;
-	char ext[256];
 	bool shift;
 
 	void RefreshSelectedFilesText();
-	//void GenDisplayList();
-	//void listDirectory(char * dir, char * ext);
 	void ListDirectory();
 	virtual void PanelOnLButtonDown(int x, int y, int px, int py);
 	virtual void PanelOnLButtonUp(int x, int y);
 	virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy);
 	virtual void PanelOnKeyPressed(int key, int action);
 
-	//virtual void PanelDraw();
-
 public:
 
-	W_fileSelector(int x, int y, int w, int h,int sx, int sy, string dir, string ext, float r = 0.8f, float g = 0.8f, float b = 0.8f);
+	W_fileSelector(int x, int y, int w, int h,int sx, int sy, string dir, string ext, float red = defaultR*2.5, float green = defaultG*2.5, float blue = defaultB*2.5);
 
 	~W_fileSelector();
 
 	void GetSelectedList(List * filenames);
 	string GetCurrentDirectory();
 	void SetCurrentDirectory(string dirName);
-	void SetExtensions(char * extensions);
+	void SetExtensions(string extensions);
 
 	
 	

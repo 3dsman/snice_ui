@@ -52,7 +52,7 @@ private:
 
 public:
 
-	W_menu(int x, int y, int w, int h, string l, float r = 0.3f, float g = 0.3f, float b = 0.3f);
+	W_menu(int x, int y, int w, int h, string l, float red = defaultR, float green = defaultG, float blue = defaultB);
 
 	virtual ~W_menu();
 
