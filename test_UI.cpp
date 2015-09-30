@@ -95,6 +95,7 @@ void colorSelectDisplayContent(UI_base * asker, W_colorSelectDisplay* caller,flo
 {
     if(progress) progress->SetColor( red, green, blue);
     if(color_display) color_display->SetColor( red, green, blue);
+	if(color_band) color_band->SetActiveColor(red, green, blue,1.0f);
 
 };
 

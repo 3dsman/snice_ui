@@ -91,15 +91,12 @@ void W_subMenu::AddOption(const string l, W_subMenu * optionsubMenu)
 	if (optionsubMenu)
 	{
 		stringSize += 10;//3* font.charWidth;
-		//optionsubMenu->GetOption();
 		optionsubMenu->SetPos(width,-20*numberofoptions);
-		//optionsubMenu->parentMenu = this;
 		AddChild(optionsubMenu);
 	}
 
-	options.Add((void*)new Option(l,optionsubMenu));
-
-	pSelectedOption = (Option*)options.GetCurrentObjectPointer();
+	options.push_back(new Option(l,optionsubMenu));
+	pSelectedOption = options.back();
 	if (pSelectedOption->optionSubMenu)
         pSelectedOption->optionSubMenu->SetVisible(false);
 
@@ -112,7 +109,13 @@ void W_subMenu::AddOption(const string l, W_subMenu * optionsubMenu)
 
 		if (width > subMenumax)
 			width = subMenumax;
-
+			
+		for(std::list<Option*>::iterator iter = options.begin(); iter != options.end(); iter ++)
+		{
+			if ((*iter)->optionSubMenu)
+				(*iter)->optionSubMenu->SetPosX(width);
+		}
+		/*
 		Option* pCurrentOption;
 		if (options.ToFirst())
 			do
@@ -120,7 +123,7 @@ void W_subMenu::AddOption(const string l, W_subMenu * optionsubMenu)
 				pCurrentOption = (Option*)options.GetCurrentObjectPointer();
 				if (pCurrentOption->optionSubMenu)
 					pCurrentOption->optionSubMenu->SetPosX(width);
-			}while(options.ToNext());
+			}while(options.ToNext());*/
 	}
 
 	height = 6+20*numberofoptions;
@@ -279,13 +282,11 @@ void W_subMenu::Draw()
 			glVertex2d(6, 0);
 		glEnd();
 
-		// draw the options
 		Option* pCurrentOption;
-
-		if (options.ToFirst())
-		do
+		// draw the options
+		for(std::list<Option*>::iterator iter = options.begin(); iter != options.end(); iter ++)
 		{
-			pCurrentOption = (Option*)options.GetCurrentObjectPointer();
+			pCurrentOption = (*iter);//(Option*)options.GetCurrentObjectPointer();
 
 			glEnable(GL_BLEND);
 			glBegin(GL_QUADS);
@@ -316,7 +317,7 @@ void W_subMenu::Draw()
             pCurrentOption->optionLabel->Draw();
 
 		    glTranslated(0,-20,0);
-		}while(options.ToNext());
+		}//while(options.ToNext());
 
         glTranslated(0,20*numberofoptions,0);
 
@@ -417,32 +418,45 @@ string W_subMenu::GetString()
 			return pSelectedOption->optionSubMenu->GetString();
 		return pSelectedOption->label;
 	}
-
-	options.ToFirst();
-	return ((Option*)(options.GetCurrentObjectPointer()))->label;
+	return (*options.begin())->label;
+	//options.ToFirst();
+	//return ((Option*)(options.GetCurrentObjectPointer()))->label;
 }
 
 unsigned char W_subMenu::GetOption()
 {
 	unsigned char v = 1;
+	for(std::list<Option*>::iterator iter = options.begin(); iter != options.end(); iter ++)
+	{
+		if (pSelectedOption == *iter)
+				return v;
+			v++;
+	}
+	/*
 	if (options.ToFirst())
 		do{
 			if (pSelectedOption == (Option*)(options.GetCurrentObjectPointer()))
 				return v;
 			v++;
-		}while(options.ToNext());
+		}while(options.ToNext());*/
 
 	return 0;
 }
 
 bool W_subMenu::SetOption(int v)
 {
+	if (options.size() <= v) return false;
+
+    std::list<Option*>::iterator iter = options.begin();
+    std::advance(iter, v);
+	Option* pNewOption = (*iter);
+	/*
 	options.ToFirst();
 	while(v>0){
 		options.ToNext();
 		v--;
 	}
-	Option* pNewOption = (Option*)(options.GetCurrentObjectPointer());
+	Option* pNewOption = (Option*)(options.GetCurrentObjectPointer());*/
 	if (pNewOption!=pSelectedOption)
 	{
     	if (pSelectedOption->optionSubMenu)
@@ -462,6 +476,15 @@ bool W_subMenu::SetOption(int v)
 
 bool W_subMenu::SetOption(string text)
 {
+	for(std::list<Option*>::iterator iter = options.begin(); iter != options.end(); iter ++)
+	{
+		if ((*iter)->label == text.c_str())
+		{
+			pSelectedOption = (*iter);
+			return true;
+		}
+	}
+	/*
 	options.ToFirst();
 	do{
 		//if (!strcmp(((Option*)(options.GetCurrentObjectPointer()))->label, text.c_str()))// || ((((option*)(options.GetCurrentObjectPointer()))->optionSubMenu)&&((( (option*)(options.GetCurrentObjectPointer()) )->optionSubMenu)->setOption(text))))
@@ -471,12 +494,21 @@ bool W_subMenu::SetOption(string text)
 			return true;
 		}
 
-	}while(options.ToNext());
+	}while(options.ToNext());*/
 	return false;
 }
 
 void W_subMenu::Flush() // delete all options
 {
+	std::list<Option*>::iterator iter = options.begin();
+	while (iter != options.end())
+	{
+		if ((*iter)->optionSubMenu)
+			(*iter)->optionSubMenu->Flush();
+			delete(*iter);
+			options.erase(iter++);
+	}
+	/*
 	options.ToFirst();
 	Option* pCurrentOption = (Option*)options.GetCurrentObjectPointer();
 
@@ -489,7 +521,7 @@ void W_subMenu::Flush() // delete all options
 		numberofoptions--;
 
 		pCurrentOption = (Option*)(options.GetCurrentObjectPointer());
-	}
+	}*/
 
 	//width = width;
 	//height = height;

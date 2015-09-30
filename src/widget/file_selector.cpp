@@ -48,7 +48,8 @@ W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, strin
 {
 	array = new W_array(0,0,sx,sy,2,30, 200,15);
 	array->setMargin(0,0,10,10);
-	childList.Add(array);
+	childList.push_back(array);
+	//childList.Add(array);
 
 	oneFile = false;
 /*
@@ -245,7 +246,7 @@ void W_fileSelector::PanelOnKeyPressed(int key, int action){
 		shift = (action == SNICEUI_PRESS);
 	printf( "fileSelector::panelOnKeyPressed\n" );
 };
-
+/*
 void W_fileSelector::GetSelectedList(List * filenames){
 
 
@@ -267,7 +268,7 @@ void W_fileSelector::GetSelectedList(List * filenames){
 
 	}
 
-};
+};*/
 
 string W_fileSelector::GetCurrentDirectory(){
 	return directory->GetFullName();

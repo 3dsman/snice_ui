@@ -6,8 +6,6 @@ dialogs:
     ajouter alertbox
 autre:
 	file system posix -> revoir toutes les fonctions
-	eliminer la classe list de UI_base
-	passer width et height en unsigned
 	dans le set content de la classe array, gerer le remplacement (supprimer l'ancien child)
     rentrer la classe "option" comme sous classe de "submenu"
     creer une classe font derivée de UI_image
@@ -15,6 +13,7 @@ autre:
     integrer les viewport array
     gerer les textures de curseur dans les viewports
     UI_window -> ajouter un resize a la souris?
+	corriger les sous menu qui s'affichent en dessous des autres elements
     infobulles?
 widgets:
 	

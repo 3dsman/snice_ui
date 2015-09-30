@@ -36,7 +36,6 @@
 #include <cstring>
 #include <vector>
 
-#include "mylist.h"
 #include "file_system.h"
 
 using namespace std;

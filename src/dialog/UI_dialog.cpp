@@ -49,11 +49,16 @@ UI_dialog::~UI_dialog(){}
 void UI_dialog::DrawInterface()
 {
 	if((openclosing == false)&&(folded == false))
-		if (childList.ToLast())
+		
+		for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+		{
+			(*iter)->Draw();
+		}
+		/*if (childList.ToLast())
 			do
 			{
 				((UI_base*)childList.GetCurrentObjectPointer())->Draw();
-			}while(childList.ToPrevious());
+			}while(childList.ToPrevious());*/
 }
 
 void UI_dialog::SetCallbackNode(Node * _node)

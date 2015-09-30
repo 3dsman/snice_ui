@@ -460,11 +460,17 @@ void UI_window::Draw()
 		if (folded == false)
 		{
 			//DrawInterface();
+			
+			for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+			{
+				(*iter)->Draw(); 
+			}
+			/*
 			if (childList.ToLast())
     		do
     		{
     			((UI_base*)childList.GetCurrentObjectPointer())->Draw();
-    		}while(childList.ToPrevious());
+    		}while(childList.ToPrevious());*/
 		}
 	}
 	//DrawInterface();

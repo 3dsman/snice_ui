@@ -125,12 +125,17 @@ void W_slidedPanel::Draw()
 							// Slider translation
 
 //**********************************  draw the content of the window  ***********************
-
+	
+	for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+	{
+		(*iter)->Draw();
+	}
+	/*
 	if (childList.ToFirst())
 			do
 			{
 				((UI_base*)childList.GetCurrentObjectPointer())->Draw();
-			}while(childList.ToNext());
+			}while(childList.ToNext());*/
 	//PanelDraw();
 
 //*******************************************************************************************
@@ -341,15 +346,13 @@ UI_base* W_slidedPanel::OnLButtonDown(int x, int y)
 
 	if (HitPanel(x,y))
 	{
-        if (childList.ToFirst())
-            do
-            {
-                childList.Push();
-                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonDown(x - posx + xOffset, y - posy - yOffset);
-                childList.Pop();
-                Autokill((UI_base*)childList.GetCurrentObjectPointer());
-                if (pInterceptChild) {return this;};
-            }while(childList.ToNext());
+		std::list<UI_base*>::iterator iter = childList.begin();
+		while (iter != childList.end())
+		{
+			pInterceptChild = (*iter)->OnLButtonDown(x - posx + xOffset, y - posy - yOffset);
+			Autokill(*iter++);
+			if (pInterceptChild) {return this;};
+		}
     }else{
 		if (pHorizontalSlider)
 		{
@@ -389,15 +392,13 @@ UI_base* W_slidedPanel::OnLButtonUp(int x, int y)
 
 	if (HitPanel(x,y))
 	{
-        if (childList.ToFirst())
-            do
-            {
-                childList.Push();
-                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonUp(x - posx + xOffset, y - posy - yOffset);
-                childList.Pop();
-                Autokill((UI_base*)childList.GetCurrentObjectPointer());
-                if (pInterceptChild) {return this;};
-            }while(childList.ToNext());
+		std::list<UI_base*>::iterator iter = childList.begin();
+		while (iter != childList.end())
+		{
+			pInterceptChild = (*iter)->OnLButtonUp(x - posx + xOffset, y - posy - yOffset);
+			Autokill(*iter++);
+			if (pInterceptChild) {return this;};
+		}
     }else{
 		if (pHorizontalSlider)
 		{
@@ -442,15 +443,14 @@ UI_base* W_slidedPanel::OnMouseMove(int x, int y, int prevx, int prevy)
 
 	if (HitPanel(x,y))
 	{
-        if (childList.ToFirst())
-            do
-            {
-                childList.Push();
-                pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnMouseMove( x - posx + xOffset, y - posy - yOffset, prevx - posx + xOffset, prevy - posy - yOffset);
-                childList.Pop();
-                Autokill((UI_base*)childList.GetCurrentObjectPointer());
-                if (pInterceptChild) {return this;};
-            }while(childList.ToNext());
+		std::list<UI_base*>::iterator iter = childList.begin();
+		while (iter != childList.end())
+		{
+			pInterceptChild = (*iter)->OnMouseMove( x - posx + xOffset, y - posy - yOffset, prevx - posx + xOffset, prevy - posy - yOffset);
+			Autokill(*iter++);
+			if (pInterceptChild) {return this;};
+		}
+		
     }else{
 		if (pHorizontalSlider)
 		{

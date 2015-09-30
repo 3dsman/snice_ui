@@ -60,7 +60,8 @@ void W_array::setContent(unsigned int x, unsigned int y, UI_base* widget, bool s
 	if ((y>ySizeArray.size())||(x>xSizeArray.size())) return;
 	
 	array[x][y].content = widget;
-	childList.Add(widget);
+	childList.push_back(widget);
+	//childList.Add(widget);
 	setContentPos(x, y, snapLeft, snapRight, snapTop, snapBottom);
 	
 	//refreshContentPos(x, y);

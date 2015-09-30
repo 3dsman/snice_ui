@@ -39,7 +39,6 @@
 
 #include "widget/UI_widget.h"
 #include "widget/button.h"
-#include "mylist.h"
 
 
 class W_subMenu;
@@ -68,7 +67,7 @@ public:
 
 	UI_base* OnMouseMove(int x, int y, int prevx, int prevy);
 
-	void Callback(UI_base * pCallObject, unsigned char callIndex );
+	//void Callback(UI_base * pCallObject, unsigned char callIndex );
 
 	string GetString();
 

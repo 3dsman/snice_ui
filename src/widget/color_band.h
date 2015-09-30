@@ -60,6 +60,8 @@ private:
 		float pos;
 		float r,g,b,a;
 	};
+	
+	static bool compareColorbandItemsPos (const colorbandItem* first, const colorbandItem* second);
 
 	colorbandItem* NewColorbandItem(float position, float red, float green, float blue, float alpha);
 
@@ -68,7 +70,7 @@ private:
 
 	char interpolation;
 
-	List listofcolorbandItems;
+	std::list<colorbandItem*> listofcolorbandItems;
 
 	colorbandItem* pActiveColorBandItem;
 	bool draggingcolorbandItem;
@@ -120,7 +122,7 @@ public:
 
 	void SaveXML(TiXmlElement* element);
 */
-	virtual void Set(char* order);
+	//virtual void Set(char* order);
 };
 
 #endif //_SNICE_COLORBAND_H_

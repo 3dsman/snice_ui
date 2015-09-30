@@ -65,6 +65,9 @@ UI_base::UI_base(int x, int y, int w, int h, float red, float green, float blue)
 
 UI_base::~UI_base()
 {
+	while(!childList.empty()) delete childList.front(), childList.pop_front();
+	childList.clear();
+	/*
 	if (childList.ToFirst())
 		do
 		{
@@ -72,6 +75,7 @@ UI_base::~UI_base()
 			childList.RemoveCurrent();
 			childList.ToNext();
 		}while(childList.GetCurrentObjectPointer());
+		*/
 };
 
 void UI_base::SetDefaultColor(float r, float g, float b)
@@ -119,11 +123,11 @@ void UI_base::SetPos(int x, int y)
 	posx = x;
 	posy = y;
 
-	if (childList.ToFirst())
-		do
-		{
-			((UI_base*)childList.GetCurrentObjectPointer())->SetParentPos(parentx + x, parenty + y);
-		}while(childList.ToNext());
+	for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
+	{
+		(*iter)->SetParentPos(parentx + x, parenty + y); 
+	}
+		
 	if(onMove) onMove(onMoveAsker, this, x, y);
 }
 
@@ -137,12 +141,11 @@ void UI_base::SetParentPos(int x, int y)
 {
 	parentx = x;
 	parenty = y;
-
-	if (childList.ToFirst())
-		do
-		{
-			((UI_base*)childList.GetCurrentObjectPointer())->SetParentPos(x + posx, y + posy);
-		}while(childList.ToNext());
+	
+	for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
+	{
+		(*iter)->SetParentPos(x + posx, y + posy); 
+	}
 }
 
 void UI_base::SetColor(float red, float green, float blue){
@@ -166,7 +169,7 @@ void UI_base::AddChild(UI_base * child)
 {
 	if (child)
 	{
-		childList.Add(child);
+		childList.push_back(child);
 		child->SetParentPos(posx,posy);
 		child->SetParentUIbase(this);
 	}
@@ -176,7 +179,7 @@ void UI_base::SupChild(UI_base * child)
 {
 	if (child)
 	{
-		childList.Remove(child);
+		childList.remove(child);
 		child->SetParentPos(0,0);
 		child->SetParentUIbase(0);
         if (pInterceptChild == child) {pInterceptChild=0;}
@@ -186,21 +189,39 @@ void UI_base::SupChild(UI_base * child)
 void UI_base::Draw()
 {
 	glTranslated(posx,posy,0);
-	if (childList.ToFirst())
-			do
-			{
-				((UI_base*)childList.GetCurrentObjectPointer())->Draw();
-			}while(childList.ToNext());
+	for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+	{
+		(*iter)->Draw(); 
+	}
+
 	glTranslated(-posx,-posy,0);
 }
+/*
+bool UI_base::Autokill(std::list<UI_base*>::iterator iter)
+{
+	UI_base * child = *iter;
+	if ((child!=0)&&(child->killMe))
+    {
+		//childList.erase(iter);
+		//childList.Remove(child);
+		child->SetParentPos(0,0);
+		child->SetParentUIbase(0);
+        if (pInterceptChild == child) {pInterceptChild=0;}
+        delete child;
+		return true;
+    }
+	return false;
+}*/
 
-void UI_base::Autokill(UI_base * child)
+bool UI_base::Autokill(UI_base * child)
 {
 	if ((child!=0)&&(child->killMe))
     {
         SupChild(child);
         delete child;
+		return true;
     }
+	return false;
 }
 
 void UI_base::SetVisible(bool v)
@@ -228,15 +249,13 @@ UI_base* UI_base::OnLButtonDown(int x, int y)
         else
             return 0;
     };
-	if (childList.ToFirst())
-		do
-		{
-			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonDown(x - posx, y - posy);
-			childList.Pop();
-            Autokill((UI_base*)childList.GetCurrentObjectPointer());
-            if (pInterceptChild) {return this;};
-		}while(childList.ToNext());
+	std::list<UI_base*>::iterator iter = childList.begin();
+	while (iter != childList.end())
+	{
+		pInterceptChild = (*iter)->OnLButtonDown(x - posx, y - posy);
+		Autokill(*iter++);
+		if (pInterceptChild) {return this;};
+	}
 	return 0;
 }
 
@@ -254,15 +273,14 @@ UI_base* UI_base::OnRButtonDown(int x, int y)
         else
             return 0;
     };
-	if (childList.ToFirst())
-		do
-		{
-			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnRButtonDown(x - posx, y - posy);
-			childList.Pop();
-            Autokill((UI_base*)childList.GetCurrentObjectPointer());
-			if (pInterceptChild) {return this;};
-		}while(childList.ToNext());
+	std::list<UI_base*>::iterator iter = childList.begin();
+	while (iter != childList.end())
+	{
+		pInterceptChild = (*iter)->OnRButtonDown(x - posx, y - posy);
+		Autokill(*iter++);
+		if (pInterceptChild) {return this;};
+	}
+	
 	return 0;
 }
 
@@ -280,16 +298,13 @@ UI_base* UI_base::OnLButtonUp(int x, int y)
         else
             return 0;
     };
-
-	if (childList.ToFirst())
-		do
-		{
-			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnLButtonUp(x - posx, y - posy);
-			childList.Pop();
-            Autokill((UI_base*)childList.GetCurrentObjectPointer());
-			if (pInterceptChild) {return this;};
-		}while(childList.ToNext());
+	std::list<UI_base*>::iterator iter = childList.begin();
+	while (iter != childList.end())
+	{
+		pInterceptChild = (*iter)->OnLButtonUp(x - posx, y - posy);
+		Autokill(*iter++);
+		if (pInterceptChild) {return this;};
+	}
 	return 0;
 }
 
@@ -307,15 +322,13 @@ UI_base* UI_base::OnRButtonUp(int x, int y)
         else
             return 0;
     };
-	if (childList.ToFirst())
-		do
-		{
-			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnRButtonUp(x - posx, y - posy);
-			childList.Pop();
-            Autokill((UI_base*)childList.GetCurrentObjectPointer());
-			if (pInterceptChild) {return this;};
-		}while(childList.ToNext());
+	std::list<UI_base*>::iterator iter = childList.begin();
+	while (iter != childList.end())
+	{
+		pInterceptChild = (*iter)->OnRButtonUp(x - posx, y - posy);
+		Autokill(*iter++);
+		if (pInterceptChild) {return this;};
+	}
 	return 0;
 }
 
@@ -333,15 +346,13 @@ UI_base* UI_base::OnMouseMove(int x, int y, int prevx, int prevy)
         else
             return 0;
     };
-	if (childList.ToFirst())
-		do
-		{
-			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnMouseMove(x - posx, y - posy, prevx - posx, prevy - posy);
-			childList.Pop();
-            Autokill((UI_base*)childList.GetCurrentObjectPointer());
-			if (pInterceptChild) {return this;};
-		}while(childList.ToNext());
+	std::list<UI_base*>::iterator iter = childList.begin();
+	while (iter != childList.end())
+	{
+		pInterceptChild = (*iter)->OnMouseMove(x - posx, y - posy, prevx - posx, prevy - posy);
+		Autokill(*iter++);
+		if (pInterceptChild) {return this;};
+	}
 	return 0;
 }
 
@@ -359,15 +370,19 @@ UI_base* UI_base::OnKeyPressed(int key, int action)
         else
             return 0;
     };
-	if (childList.ToFirst())
-		do
-		{
-			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnKeyPressed(key, action);
-			childList.Pop();
-            Autokill((UI_base*)childList.GetCurrentObjectPointer());
-			if (pInterceptChild) {return this;};
-		}while(childList.ToNext());
+	std::list<UI_base*>::iterator iter = childList.begin();
+	while (iter != childList.end())
+	{
+		pInterceptChild = (*iter)->OnKeyPressed(key, action);
+		Autokill(*iter++);
+		if (pInterceptChild) {return this;};
+	}/*
+	for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
+	{
+		pInterceptChild = (*iter)->OnKeyPressed(key, action);
+		Autokill((*iter));
+		if (pInterceptChild) {return this;};
+	}*/
 	return 0;
 }
 
@@ -385,15 +400,19 @@ UI_base* UI_base::OnCharPressed(int character)
         else
             return 0;
     };
-	if (childList.ToFirst())
-		do
-		{
-			childList.Push();
-			pInterceptChild = ((UI_base*)childList.GetCurrentObjectPointer())->OnCharPressed(character);
-			childList.Pop();
-            Autokill((UI_base*)childList.GetCurrentObjectPointer());
-			if (pInterceptChild) {return this;};
-		}while(childList.ToNext());
+	std::list<UI_base*>::iterator iter = childList.begin();
+	while (iter != childList.end())
+	{
+		pInterceptChild = (*iter)->OnCharPressed(character);
+		Autokill(*iter++);
+		if (pInterceptChild) {return this;};
+	}
+	/*for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
+	{
+		pInterceptChild = (*iter)->OnCharPressed(character);
+		Autokill((*iter));
+		if (pInterceptChild) {return this;};
+	}*/
 	return 0;
 }
 /*
@@ -447,6 +466,14 @@ void UI_base::Set(char* order)
 
 	 	UI_base* pChild;
 	 	char childRefName[256];
+		for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
+		{
+			pChild = (*iter);
+			pChild->GetRefName(childRefName);
+			if (strcmp(childRefName, childName) == 0)
+			   pChild->Set(order + separatorPos + 1);
+		}
+		/*
 		if (childList.ToFirst())
 		do
 		{
@@ -454,7 +481,7 @@ void UI_base::Set(char* order)
 			pChild->GetRefName(childRefName);
 			if (strcmp(childRefName, childName) == 0)
 			   pChild->Set(order + separatorPos + 1);
-		}while (childList.ToNext());
+		}while (childList.ToNext());*/
 	}
 };
 

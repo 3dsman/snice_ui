@@ -112,7 +112,7 @@ UI_base* W_menu::OnMouseMove(int x, int y, int prevx, int prevy)
 {
     return UI_widget::OnMouseMove(x, y, prevx, prevy);
 }
-
+/*
 void W_menu::Callback(UI_base * pCallObject, unsigned char callIndex )
 {
 
@@ -125,7 +125,7 @@ void W_menu::Callback(UI_base * pCallObject, unsigned char callIndex )
 //		pParentUI_base->Callback(this,callIndex);
 	}
 }
-
+*/
 string W_menu::GetString()
 {
 	if (childMenu)

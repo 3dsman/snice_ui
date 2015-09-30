@@ -64,16 +64,20 @@ W_colorBand::W_colorBand(int x, int y, int w, int h, string name)
 
 	draggingcolorbandItem = false;
 
-	listofcolorbandItems.Add(NewColorbandItem(0.0f,0.0f,0.0f,0.0f,1.0f));
-	listofcolorbandItems.Add(NewColorbandItem(1.0f,1.0f,1.0f,1.0f,1.0f));
-
-	pActiveColorBandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
+	listofcolorbandItems.push_back(NewColorbandItem(0.0f,0.0f,0.0f,0.0f,1.0f));
+	listofcolorbandItems.push_back(NewColorbandItem(1.0f,1.0f,1.0f,1.0f,1.0f));
+	pActiveColorBandItem = *listofcolorbandItems.end();
 
 }
 
 W_colorBand::~W_colorBand()
 {
 	FlushColorNode();
+}
+
+bool W_colorBand::compareColorbandItemsPos (const colorbandItem* first, const colorbandItem* second)
+{
+  return ( first->pos < second->pos );
 }
 
 double W_colorBand::LinearInterpolate1D(double a, double b, double x) {
@@ -87,7 +91,14 @@ double W_colorBand::CosineInterpolate1D(double a, double b, double x) {
 
 void W_colorBand::FlushColorNode()
 {
-	// delete the current nodes
+	std::list<colorbandItem*>::iterator i = listofcolorbandItems.begin();
+	while (i != listofcolorbandItems.end())
+	{
+			delete(*i);
+			listofcolorbandItems.erase(i++);
+	}
+	pActiveColorBandItem=NULL;
+	/*
 	listofcolorbandItems.ToFirst();
 	colorbandItem* pCurrentColourbandnode = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
 
@@ -98,65 +109,24 @@ void W_colorBand::FlushColorNode()
 
 
 		pCurrentColourbandnode = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
-	}
+	}*/
 }
 
 void W_colorBand::RemoveActiveColorNode()
 {
 	// go through the list until the active node is found and delete it
-	listofcolorbandItems.ToFirst();
-	if (!listofcolorbandItems.ToNext()) // prevent removing the last one
-		return;
-	listofcolorbandItems.ToFirst();
-	colorbandItem* pCurrentColorbandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
-
-	while (pCurrentColorbandItem != NULL)
+	if (listofcolorbandItems.size()>1)
 	{
-		if (pCurrentColorbandItem == pActiveColorBandItem)
-			break;
-
-		if (listofcolorbandItems.ToNext())
-			pCurrentColorbandItem = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
-		else
-			pCurrentColorbandItem = NULL;
+		listofcolorbandItems.remove(pActiveColorBandItem);
+		delete(pActiveColorBandItem);
+		pActiveColorBandItem = listofcolorbandItems.back();
+		
 	}
-
-	listofcolorbandItems.RemoveCurrent();
-	pActiveColorBandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
 }
 
 void W_colorBand::SortList()
 {
-	// go through list and sort it with the last in the list being the node with the largest pos
-	bool goon = true;
-
-	colorbandItem* pCurrentColorbandItem = NULL;
-	colorbandItem* pNextColorbandItem = NULL;
-
-	while(goon)
-	{
-		listofcolorbandItems.ToFirst();
-		pCurrentColorbandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
-
-		while (pCurrentColorbandItem != NULL)
-		{
-			if (listofcolorbandItems.ToNext() == true)
-			{
-				pNextColorbandItem = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
-				if (pCurrentColorbandItem->pos > pNextColorbandItem->pos)
-				{
-					listofcolorbandItems.MoveToBack(pCurrentColorbandItem);
-					break;
-				}
-				pCurrentColorbandItem = pNextColorbandItem;
-			}
-			else
-			{
-				pCurrentColorbandItem = NULL;
-				goon = false;
-			}
-		}
-	}
+	listofcolorbandItems.sort(compareColorbandItemsPos);
 }
 
 void W_colorBand::AddColorNode(float Pos, float Red, float Green, float Blue, float Alpha)
@@ -164,7 +134,7 @@ void W_colorBand::AddColorNode(float Pos, float Red, float Green, float Blue, fl
 	if ((Red<=1)&&(Red>=0)&&(Green<=1)&&(Green>=0)&&(Blue<=1)&&(Blue>=0)&&(Alpha<=1)&&(Alpha>=0)&&(Pos<=1)&&(Pos>=0))
 	{
 		colorbandItem* tempnode = NewColorbandItem(Pos,Red,Green,Blue,Alpha);
-		listofcolorbandItems.Add((void*) tempnode);
+		listofcolorbandItems.push_back( tempnode);
 		SortList();
 		pActiveColorBandItem = tempnode;
 	}
@@ -226,31 +196,26 @@ float W_colorBand::GetActiveColor(int RGBA)
 void W_colorBand::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, float pos)
 {
 
-	listofcolorbandItems.ToFirst();
+	/*listofcolorbandItems.ToFirst();
 	colorbandItem* pCurrentColourbandnode = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
 
 	listofcolorbandItems.ToNext();
 	colorbandItem* pNextColourbandnode = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
-
+*/
 	//******************************************  Remplissage du tableau *****************************************
-
-	//take the two Colourbandnode before and after our's position
-	while ((pNextColourbandnode->pos) < pos)
+	std::list<colorbandItem*>::iterator iter = listofcolorbandItems.begin();
+	colorbandItem* pCurrentColourbandnode = (*iter++);
+	colorbandItem* pNextColourbandnode = NULL;
+	if (listofcolorbandItems.size()>1)
 	{
-		if (listofcolorbandItems.ToNext() == true)
+		pNextColourbandnode = (*iter++);
+		while ((iter != listofcolorbandItems.end())&&(((*iter)->pos) < pos))
 		{
 			pCurrentColourbandnode = pNextColourbandnode;
-			pNextColourbandnode = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
-		}else
-		{
-			break;
+			pNextColourbandnode = (*iter++);
 		}
 	}
-
-	//if we are between 2 Colourbandnode compute
-	if ((pCurrentColourbandnode->pos) < pos)
-	{
-		if ((pNextColourbandnode->pos) > pos)
+		if ((pNextColourbandnode))
 		{
 			// we calculate the relative position of the input position between the previous and next Colourbandnode
 			float proportion;
@@ -280,13 +245,13 @@ void W_colorBand::GetColorAt(float* Red,float* Green,float* Blue,float* Alpha, f
 					break;
 				};
 			}
-		}else
+		/*}else
 		{
 			*Red =  pNextColourbandnode->r;
 			*Green = pNextColourbandnode->g;
 			*Blue = pNextColourbandnode->b;
 			*Alpha = pNextColourbandnode->a;
-		}
+		}*/
 
 	}else
 	{
@@ -372,8 +337,8 @@ void W_colorBand::Draw()
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// draw the colourband from 0.0 to 1.0
-	listofcolorbandItems.ToFirst();
-	colorbandItem* pCurrentColorbandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
+	std::list<colorbandItem*>::iterator iter = listofcolorbandItems.begin();
+	colorbandItem* pCurrentColorbandItem = *iter;
 
 	// first half of the first quad
 	glBegin(GL_QUADS);
@@ -381,8 +346,9 @@ void W_colorBand::Draw()
 		glVertex2d(0,-height);
 		glVertex2d(width-8,-height);
 
-	while (pCurrentColorbandItem != NULL)
+	while (iter != listofcolorbandItems.end())
 	{
+		pCurrentColorbandItem = *iter;
 		// second half of the quad
 			glColor4f(pCurrentColorbandItem->r,pCurrentColorbandItem->g,pCurrentColorbandItem->b,pCurrentColorbandItem->a);
 			glVertex2d(width-8,-height*(1-pCurrentColorbandItem->pos));
@@ -395,21 +361,12 @@ void W_colorBand::Draw()
 			glVertex2d(0,-height*(1-pCurrentColorbandItem->pos));
 			glVertex2d(width-8,-height*(1-pCurrentColorbandItem->pos));
 
-
-		if (listofcolorbandItems.ToNext() == true)
-		{
-			pCurrentColorbandItem = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
-		}
-		else
-		{
-			// close the quad
-				glVertex2d(width-8,0);
-				glVertex2d(0,0);
-			glEnd();
-
-			pCurrentColorbandItem = NULL;
-		}
+		iter++;
 	}
+		// close the quad
+		glVertex2d(width-8,0);
+		glVertex2d(0,0);
+	glEnd();
 
 	// draw the border
 	glColor4f(1.0f,1.0f,1.0f,0.7f);
@@ -512,8 +469,8 @@ void W_colorBand::Draw()
 	glDisable(GL_TEXTURE_2D);
 
 	// draw the trianlge and stripe to indicate a node
-	listofcolorbandItems.ToFirst();
-	pCurrentColorbandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
+	iter = listofcolorbandItems.begin();
+	pCurrentColorbandItem = *iter;
 
 	while (pCurrentColorbandItem != NULL)
 	{
@@ -537,8 +494,8 @@ void W_colorBand::Draw()
 		glEnd();
 		glTranslated(0, -(-height+(pCurrentColorbandItem->pos/1.0f)*height), 0);
 
-		if (listofcolorbandItems.ToNext() == true)
-			pCurrentColorbandItem = (colorbandItem*)(listofcolorbandItems.GetCurrentObjectPointer());
+		if (iter++ != listofcolorbandItems.end())
+			pCurrentColorbandItem = *iter;
 		else
 			pCurrentColorbandItem = NULL;
 	}
@@ -552,27 +509,22 @@ UI_base* W_colorBand::OnLButtonDown(int x, int y)
 
 	if (Hittest(x,y))
 	{
-	//if (x > posx && x < posx+width+8 && y > posy-height-4 && y < posy+4)
-	//{
 		colorbandItem* pCurrentColorbandItem;
-		if (listofcolorbandItems.ToFirst())
-			do
+		for(std::list<colorbandItem*>::iterator iter = listofcolorbandItems.begin(); iter != listofcolorbandItems.end(); iter ++)
 			{
-				pCurrentColorbandItem = (colorbandItem*) listofcolorbandItems.GetCurrentObjectPointer();
+				pCurrentColorbandItem = *iter;
 
 				if (y > posy - height+pCurrentColorbandItem->pos*height-4.0f && y < posy - height+pCurrentColorbandItem->pos*height+4.0f)
 				{
 					if (pActiveColorBandItem != pCurrentColorbandItem)
 					{
 						pActiveColorBandItem = pCurrentColorbandItem;
-						//if (pParentUI_base) pParentUI_base->Callback(this,1);
 					}
 					draggingcolorbandItem = true;
                     pInterceptChild = this;
                     return this;
-					//break;
 				}
-			}while (listofcolorbandItems.ToNext());
+			}
 
 
 		if (!draggingcolorbandItem)
@@ -581,7 +533,7 @@ UI_base* W_colorBand::OnLButtonDown(int x, int y)
 			GetColorAt(&r,&g,&b,&a,(float)(y+height-posy)/(float)(height));
 			colorbandItem* tempnode = NewColorbandItem((float)(y+height-posy)/(float)(height),r,g,b,a);
 
-			listofcolorbandItems.Add((void*) tempnode);
+			listofcolorbandItems.push_back( tempnode);
 			SortList();
 			pActiveColorBandItem = tempnode;
 
@@ -611,17 +563,9 @@ UI_base* W_colorBand::OnMouseMove(int x, int y, int prevx, int prevy)
         {
         if (draggingcolorbandItem)
         {
-        pActiveColorBandItem->pos = max(min(1+float(y-posy)/float(height),1.0f),0.0f);
-            //if ( y > posy - height && y < -posy )
-            //if ( y > posy - height && y < -posy )
-            //	pActiveColorBandItem->pos = max(min(((float)y+height-posy)/(float)height,1.0f),0.0f);
-    /*
-            if (pActiveColorBandItem->pos > 1.0f)
-                pActiveColorBandItem->pos = 1.0f;
-            if (pActiveColorBandItem->pos < 0.0f)
-                pActiveColorBandItem->pos = 0.0f;
-    */
-            if (x > posx + width + 50)
+			pActiveColorBandItem->pos = max(min(1+float(y-posy)/float(height),1.0f),0.0f);
+
+            if ((x > posx + width + 50)&&(listofcolorbandItems.size()>1))
             {
                 RemoveActiveColorNode();
                 draggingcolorbandItem=false;
@@ -714,7 +658,6 @@ void W_colorBand::SaveXML(TiXmlElement* element)
 	element->InsertEndChild( NodeColorBand );
 
 }
-*/
 void W_colorBand::Set(char* order)
 {
  	printf("->%s", refName.c_str());
@@ -763,4 +706,4 @@ void W_colorBand::Set(char* order)
 	  		}else printf("!!!! this bar dont exist");
 		};
 	}
-};
+};*/

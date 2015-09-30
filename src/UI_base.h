@@ -40,10 +40,10 @@
 
 		UI_base is the base class for all visible objects (dialogs, widget, nodes).
 	*/
-#include "mylist.h"
 //#include "tgafile.h"
 #include "UI_image.h"
 
+#include <list>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -96,14 +96,15 @@ protected:
     static struct Textures textures; /**< \brief creation of the static structure where textures are stored */
     static struct Font font; /**< \brief creation of the static structure where font is stored */
 
-	List childList; /**< \brief List of childs*/
+	std::list<UI_base*> childList; /**< \brief List of childs*/
 
 	void (*onResize)(UI_base * asker, UI_base* caller, int w, int h) = NULL; /**<		\brief resize callback function */
 	UI_base * onResizeAsker = NULL;
 	void (*onMove)(UI_base * asker, UI_base* caller, int x, int y) = NULL; /**<		\brief move callback function */
 	UI_base * onMoveAsker = NULL;
 	/**	\brief to check ant treat autokill on the child.*/
-	void Autokill(UI_base * child);
+	bool Autokill(UI_base * child);
+	//bool Autokill(std::list<UI_base*>::iterator iter);
 
 public:
 	bool killMe;

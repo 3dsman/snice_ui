@@ -71,7 +71,7 @@ public:
 
 	~W_fileSelector();
 
-	void GetSelectedList(List * filenames);
+	//void GetSelectedList(List * filenames);
 	string GetCurrentDirectory();
 	void SetCurrentDirectory(string dirName);
 	void SetExtensions(string extensions);

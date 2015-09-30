@@ -31,7 +31,6 @@
 #ifndef _SNICE_FILESYSTEM_H_
 #define _SNICE_FILESYSTEM_H_
 #include <string>
-#include "mylist.h"
 #include <list>
 #include <vector>
 

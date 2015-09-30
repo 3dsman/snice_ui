@@ -89,11 +89,17 @@ void Viewport::Draw()
 
 	glMatrixMode(GL_MODELVIEW);					// Select The Modelview Matrix
 	glLoadIdentity();						// Reset The Modelview Matrix
+	
+	for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+	{
+		(*iter)->Draw();
+	}
+	/*
 	if (childList.ToLast())
 		do
 		{
 			((UI_base*)childList.GetCurrentObjectPointer())->Draw();
-		}while(childList.ToPrevious());
+		}while(childList.ToPrevious());*/
 	glLoadIdentity();
 	
 	if(onDraw) onDraw(this);
@@ -105,6 +111,18 @@ void Viewport::Draw()
 bool Viewport::GetScreenToLocalMatrix(UI_base * object, float *x, float *y, float *zoom)
 {
 	//check if the object is not one of the childs of the viewport
+	
+	for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+	{
+		(*iter)->Draw();
+		if((*iter) == object)
+		{
+			*x += posx; 
+			*y += posy;
+			return true;
+		}
+	}
+	/*
 	childList.Push();
 	if (childList.ToFirst())
 	do
@@ -117,7 +135,7 @@ bool Viewport::GetScreenToLocalMatrix(UI_base * object, float *x, float *y, floa
 			return true;
 		}			
 	}while(childList.ToNext());
-	childList.Pop();
+	childList.Pop();*/
 
 	*x += (posx + scrollx); 
 	*y += (posy + scrolly);
