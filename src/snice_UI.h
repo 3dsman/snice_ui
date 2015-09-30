@@ -28,6 +28,7 @@
 #include "widget/file_selector.h"
 #include "widget/array.h"
 #include "dialog/color_picker.h"
+#include "dialog/file_picker.h"
 
 
 

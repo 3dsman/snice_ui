@@ -41,6 +41,7 @@ W_fileSelector* file_selector;
 
 UI_window* pwind;
 D_ColorPicker* pcpik;
+D_FilePicker* pfpik;
 W_subMenu* submenu;
 W_subMenu* submenu2;
 W_menu* menu;
@@ -175,11 +176,14 @@ void create_interface()
 	pcpik->OnClose(NULL,testwin);
 	pcpik->OnColorChange(NULL,colorPickerContent);
 	pViewport->AddChild(pcpik);
+	
+    pfpik = new D_FilePicker(50, 600, "tototot","/home/seb/", {"*.*","*.jpg"});
+	pViewport->AddChild(pfpik);
+	/*
 	string tot = "/home/seb/Documents/";
 	string tit = ".*";
-	//strcpy(&toti, tit.c_str());
 	file_selector = new W_fileSelector(50, 600, 400, 200,500,500, tot, tit);
-	pViewport->AddChild(file_selector);
+	pViewport->AddChild(file_selector);*/
 	
     slided_panel = new W_slidedPanel(50, 350, 300, 200,500,500);
 	pViewport->AddChild(slided_panel);

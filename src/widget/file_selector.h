@@ -52,8 +52,8 @@ private:
 
 	std::list<PathElement*> fileList;
 	std::vector<string> exts;
-	W_array* array;
-	DirInfo * directory;
+	W_array* array = nullptr;
+	DirInfo * directory = nullptr;
 	//GLuint displayList;
 	bool oneFile;
 	bool shift;

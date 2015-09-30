@@ -461,7 +461,7 @@ void UI_window::Draw()
 		{
 			//DrawInterface();
 			
-			for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+			for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
 			{
 				(*iter)->Draw(); 
 			}

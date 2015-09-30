@@ -99,7 +99,7 @@ public:
 
 	unsigned char GetOption();
 
-	bool SetOption(int v);
+	bool SetOption(unsigned int v);
 
 	bool SetOption(string text);
 

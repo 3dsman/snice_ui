@@ -48,15 +48,9 @@ W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, strin
 {
 	array = new W_array(0,0,sx,sy,2,30, 200,15);
 	array->setMargin(0,0,10,10);
-	childList.push_back(array);
-	//childList.Add(array);
+	AddChild(array);
 
 	oneFile = false;
-/*
-	if ((strlen(ext.c_str())) <= EXTMAXLENGTH)
-		strcpy(this->ext,ext.c_str());
-	else
-		ext="";*/
 
 	directory = new DirInfo(dir);
 	SetExtensions(ext);
@@ -71,7 +65,6 @@ W_fileSelector::~W_fileSelector(){
 	};
 	while(!fileList.empty()) delete fileList.front(), fileList.pop_front();
 	fileList.clear();
-	delete array;
 
 	/*
 	if (labelList.ToFirst())
@@ -275,8 +268,9 @@ string W_fileSelector::GetCurrentDirectory(){
 }
 
 void W_fileSelector::SetCurrentDirectory(string dirName){
-	free(directory);
-	if (directory = new DirInfo(dirName))
+	if (directory)
+		delete(directory);
+	if ((directory = new DirInfo(dirName)))
 	{
 		ListDirectory();
 	}

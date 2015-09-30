@@ -55,7 +55,7 @@ bool directoryExist(string name);
 bool fileExist(string name);
 
 /**	\brief Get the roots manes (\ for linux and C:\, D:\,... for windows).*/
-void rootsNames(std::list<string> rootsList);
+std::list<string> rootsNames();
 
 
 /**	\brief Base class of file and directory path.*/

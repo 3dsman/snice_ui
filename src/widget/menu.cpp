@@ -49,7 +49,7 @@
 W_menu::W_menu(int x, int y, int w, int h, string l, float red, float green, float blue)
 	   :W_button(x, y, w, h, l)
 {
-	childMenu = new W_subMenu(0,0,w,h);
+	childMenu = new W_subMenu(0,-h,w,h);
 	childMenu->SetVisible(false);
 	AddChild(childMenu);
 	//childMenu->OnPickOption(pickOption));
@@ -167,7 +167,8 @@ void W_menu::Flush() // delete all options
 
 void W_menu::OnPickOption(UI_base * asker, void (*function)(UI_base * asker, W_subMenu* caller, unsigned char option))
 {
-    childMenu->OnPickOption(asker, function);
+	if (childMenu)
+		childMenu->OnPickOption(asker, function);
 }
 /*
 void W_menu::LoadXML(TiXmlElement* element)

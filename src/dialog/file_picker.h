@@ -42,17 +42,16 @@ class D_FilePicker : public UI_dialog
 {
 	
 private:
-	W_menu* pStartDir;
-	W_fileSelector* pFileSelector;
-	//colordisplay* pFileView;
-	W_textbox* pSelectedFiles;
-	W_button* pValid;
-	W_button* pCancel;
-	W_menu* pFileExt;
+	W_menu* pStartDir = nullptr;
+	W_fileSelector* pFileSelector = nullptr;
+	W_textbox* pSelectedFiles = nullptr;
+	W_button* pValid = nullptr;
+	W_button* pCancel = nullptr;
+	W_menu* pFileExt = nullptr;
 	int surfacex;
 	int	surfacey;
-	List selectedFileList;
-	List extensions;
+	std::list<PathElement*> selectedFileList;
+	std::list<string> extensions;
 	char filesName[256];
 	
 	bool active;
@@ -60,11 +59,23 @@ public:
 
 	//D_FilePicker();
 /** the extension string is represented like that: "extDescription|*.ext;extDescription|*.ext|*.ext|*.ext|*.ext"*/
-	D_FilePicker(int x, int y, char * name, char * exts);
+	D_FilePicker(int x, int y, string name, string dir, std::list<string> exts);
 
 	~D_FilePicker();
+	
+	/**	\brief static function to handle children callbacks .*/
+	static void StatButtonValid(UI_base * asker, W_button* caller);
+	static void StatMenuChange(UI_base * asker, W_subMenu* caller, unsigned char option);
+	static void StatTextboxChange(UI_base * asker, W_textbox* caller, string content);
+	static void StatFileSelectorSelect(UI_base * asker, W_fileSelector* caller);
+	
+    /**	\brief the function called by StatCallback to push children callbacks to the good instance of D_FilePicker.*/
+    void ButtonValid( W_button* caller);
+    void MenuChange( W_subMenu* caller, unsigned char option);
+    void TextboxChange( W_textbox* caller, string content);
+    void FileSelectorSelect( W_fileSelector* caller);
 
-	virtual void Callback(UI_base * pCallObject, unsigned char callIndex );
+	//virtual void Callback(UI_base * pCallObject, unsigned char callIndex );
 
 	void SetSliders();
 	

@@ -88,7 +88,7 @@ public:
 	
     /**	\brief static function to handle children buttons callbacks .*/
 	static void StatChangeMode(UI_base * asker, W_button* caller);
-    /**	\brief the function called by StatChangeColorSliders to push children callbacks to the good instance of D_ColorPicker.*/
+    /**	\brief the function called by StatChangeMode to push children callbacks to the good instance of D_ColorPicker.*/
     void ChangeMode( W_button* caller);
 
 	void RefreshSelect();

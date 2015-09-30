@@ -169,7 +169,7 @@ void UI_base::AddChild(UI_base * child)
 {
 	if (child)
 	{
-		childList.push_back(child);
+		childList.push_front(child);
 		child->SetParentPos(posx,posy);
 		child->SetParentUIbase(this);
 	}
@@ -189,7 +189,7 @@ void UI_base::SupChild(UI_base * child)
 void UI_base::Draw()
 {
 	glTranslated(posx,posy,0);
-	for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+	for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
 	{
 		(*iter)->Draw(); 
 	}

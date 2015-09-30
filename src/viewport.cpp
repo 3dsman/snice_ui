@@ -90,7 +90,7 @@ void Viewport::Draw()
 	glMatrixMode(GL_MODELVIEW);					// Select The Modelview Matrix
 	glLoadIdentity();						// Reset The Modelview Matrix
 	
-	for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+	for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
 	{
 		(*iter)->Draw();
 	}
@@ -112,7 +112,7 @@ bool Viewport::GetScreenToLocalMatrix(UI_base * object, float *x, float *y, floa
 {
 	//check if the object is not one of the childs of the viewport
 	
-	for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+	for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
 	{
 		(*iter)->Draw();
 		if((*iter) == object)

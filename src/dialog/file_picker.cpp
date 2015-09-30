@@ -35,11 +35,12 @@
 #include "widget/button.h"
 #include "widget/text_box.h"
 #include "widget/menu.h"
+#include "widget/sub_menu.h"
 #include "widget/file_selector.h"
 
 #include "file_picker.h"
 
-D_FilePicker::D_FilePicker(int x, int y, char * name, char * exts)
+D_FilePicker::D_FilePicker(int x, int y, string name, string dir, std::list<string> exts)
 			 :UI_dialog(x, y, 450, 290, name, false, false)
 {
 
@@ -52,85 +53,50 @@ D_FilePicker::D_FilePicker(int x, int y, char * name, char * exts)
 	pStartDir = new W_menu(10, -30, 430, 20, "dir");
 	AddChild(pStartDir);
 
-	List rootlist;
-	rootsNames(&rootlist);
-	if(rootlist.ToFirst())
-		do
-		{
-			pStartDir->AddOption((char *) rootlist.GetCurrentObjectPointer(), 0);
-			delete (char *) rootlist.GetCurrentObjectPointer();
-			rootlist.RemoveCurrent();
-		}while (rootlist.ToFirst());
+	std::list<string> rootlist = rootsNames();
+	
+	for (std::list<string>::iterator iter=rootlist.begin(); iter!=rootlist.end(); iter++)
+	{
+		pStartDir->AddOption(*iter, 0);
+	}
+	string curDir = dir;
+	if (dir == "")curDir = pStartDir->GetString();
 		
 	pStartDir->SetOption(0);
 
-	pFileSelector = new W_fileSelector(10, -50, 430, 180,150,160,pStartDir->GetString(), "*.*");
+	pFileSelector = new W_fileSelector(10, -50, 430, 180,150,160,curDir, "*.*");
 	AddChild(pFileSelector);
 	
-	pSelectedFiles = new W_textbox(10, -235, 300, 20, _("File"), pStartDir->GetString());
+	pSelectedFiles = new W_textbox(10, -235, 300, 20, "File", curDir);
 	AddChild(pSelectedFiles);
+	pSelectedFiles->OnSetContent(this, D_FilePicker::StatTextboxChange);
 
 	
-	pValid = new W_button(320,-235, 120,20, _("OK"));
+	pValid = new W_button(320,-235, 120,20, "OK");
 	AddChild(pValid);
+	pValid->OnClick(this, D_FilePicker::StatButtonValid);
 
-	pCancel = new W_button(320,-260, 120,20, _("Cancel"));
+	pCancel = new W_button(320,-260, 120,20, "Cancel");
 	AddChild(pCancel);
+	pCancel->OnClick(this, D_FilePicker::StatButtonValid);
 	
 	
 	pFileExt = new W_menu(10, -260, 300, 20, "File Type");
 	AddChild(pFileExt);
+	
 
-	// separate the extensions strings into an extension list	
-	extensions.ToFirst();
-	char* extPos = exts;
-	char* pdest;
-	while (extPos)
+	extensions = exts;
+	for (std::list<string>::iterator iter=extensions.begin(); iter!=extensions.end(); iter++)
 	{
-		pdest = strchr(extPos, ';' );
-		if (pdest)
-		{
-			char * extString = new char[256];
-			strncpy(extString,extPos,pdest - extPos);
-			extString[pdest - extPos] = 0;
-			extensions.Add(extString);
-
-			extPos = pdest+1;
-		}
-		else
-		{
-			if (strlen(extPos))
-			{
-				char * extString = new char[256];
-				strcpy(extString,extPos);
-				extensions.Add(extString);
-			}
-			extPos = 0;
-		}
-	};
-	char * allFiles = new char[128];
-	strcpy(allFiles, "All Files *.*|.*");
-	extensions.Add(allFiles);
-
-	// add the options to the menu from the list extensions
-	char extText[256];
-	char * extString;
-	if(extensions.ToFirst())
-		do
-		{
-			extString =(char*) extensions.GetCurrentObjectPointer();
-
-			char * pTextEnd = strchr(extString, '|' );
-			if (pTextEnd)
-			{
-				strncpy(extText,extString,pTextEnd - extString);
-				extText[pTextEnd - extString] = 0;
-				pFileExt->AddOption(extText, 0);
-			}
-		}while(extensions.ToNext());
-
+		pFileExt->AddOption(*iter, 0);
+	}
+	pFileExt->OnPickOption(NULL,D_FilePicker::StatMenuChange);
+	
 	pFileExt->SetOption(0);
-
+	
+	std::list<string>::iterator iter=extensions.begin();
+	pFileSelector->SetExtensions(*iter);
+/*
 	//set the good extension to the file selector
 	if (extensions.ToFirst())
 	{
@@ -140,13 +106,14 @@ D_FilePicker::D_FilePicker(int x, int y, char * name, char * exts)
 		//set the extension
 		if (pdest)
 			pFileSelector->SetExtensions(&extString[pdest - extString+1]);
-	}
+	}*/
 }
 
 
 
 D_FilePicker::~D_FilePicker()
 {
+	/*
 	if(extensions.ToFirst())
 	do
 	{
@@ -161,9 +128,56 @@ D_FilePicker::~D_FilePicker()
 	  	delete ((PathElement*)(selectedFileList.GetCurrentObjectPointer()));
 		selectedFileList.RemoveCurrent();
 	}while(selectedFileList.ToFirst());
-	
+	*/
 }
 
+
+	void D_FilePicker::StatButtonValid(UI_base * asker, W_button* caller)
+	{
+		(dynamic_cast<D_FilePicker*> (asker))->ButtonValid(caller);
+	}
+	
+	void D_FilePicker::StatMenuChange(UI_base * asker, W_subMenu* caller, unsigned char option)
+	{
+		(dynamic_cast<D_FilePicker*> (asker))->MenuChange(caller, option);
+	}
+	
+	void D_FilePicker::StatTextboxChange(UI_base * asker, W_textbox* caller, string content)
+	{
+		(dynamic_cast<D_FilePicker*> (asker))->TextboxChange(caller, content);
+	}
+	
+	void D_FilePicker::StatFileSelectorSelect(UI_base * asker, W_fileSelector* caller)
+	{
+		(dynamic_cast<D_FilePicker*> (asker))->FileSelectorSelect(caller);
+	}
+	
+    void D_FilePicker::ButtonValid( W_button* caller)
+	{
+		killMe = true;
+		//if(onClose) onClose(onCloseAsker, this);
+    	pInterceptChild = 0;
+	}
+	
+    void D_FilePicker::MenuChange( W_subMenu* caller, unsigned char option)
+	{
+		if (pFileSelector)
+			pFileSelector->SetExtensions( caller->GetString());
+
+		std::cout<<caller->GetString()<<std::endl;
+	}
+	
+    void D_FilePicker::TextboxChange( W_textbox* caller, string content)
+	{
+		if (pFileSelector)
+			pFileSelector->SetCurrentDirectory(content);
+	}
+	
+    void D_FilePicker::FileSelectorSelect( W_fileSelector* caller)
+	{
+		
+	}
+/*
 void D_FilePicker::Callback(UI_base * pCallObject, unsigned char callIndex )
 {
 	
@@ -265,7 +279,7 @@ void D_FilePicker::Callback(UI_base * pCallObject, unsigned char callIndex )
 		}		
 	};
 };
-
+*/
 void D_FilePicker::GetFilesNames(char* filename){
 	 strcpy(filename,pSelectedFiles->GetContent());
 	 };

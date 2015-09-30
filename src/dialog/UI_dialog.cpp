@@ -50,7 +50,7 @@ void UI_dialog::DrawInterface()
 {
 	if((openclosing == false)&&(folded == false))
 		
-		for(std::list<UI_base*>::reverse_iterator iter = childList.rbegin(); iter != childList.rend(); iter ++)
+		for(std::list<UI_base*>::iterator iter = childList.begin(); iter != childList.end(); iter ++)
 		{
 			(*iter)->Draw();
 		}

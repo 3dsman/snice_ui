@@ -443,7 +443,7 @@ unsigned char W_subMenu::GetOption()
 	return 0;
 }
 
-bool W_subMenu::SetOption(int v)
+bool W_subMenu::SetOption(unsigned int v)
 {
 	if (options.size() <= v) return false;
 

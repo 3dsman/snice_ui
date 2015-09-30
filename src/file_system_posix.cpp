@@ -47,11 +47,13 @@ bool isDirectory(string name){
 bool directoryExist(string name){ return true;};
 bool fileExist(string name){return true;};
 
-void rootsNames(std::list<string> rootsList){
+std::list<string> rootsNames(){
 	/*char* plinuxRoot = new char[2];  // Allocate memory for the array
   	strcpy(plinuxRoot, "/");
 	rootsList->Add(plinuxRoot);*/
+	std::list<string> rootsList;
 	rootsList.push_back("/");
+	return rootsList;
 };
 
 PathElement::PathElement(const string name){
@@ -177,7 +179,7 @@ std::list<PathElement*> DirInfo::BrowseDirectory(const vector<string> exts)
             	printf("%s %s\n", "file stat problem : " , namelist[file]->d_name);
         	}else
         	if(S_ISREG(infos.st_mode)){
-				for(int i=0; i<exts.size(); ++i){
+				for(unsigned int i=0; i<exts.size(); ++i){
 					if((strstr(namelist[file]->d_name,(exts[i]).c_str()))||(exts[i]==".*"))
 					{
 						catNamePath = Path + namelist[file]->d_name;
