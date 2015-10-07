@@ -30,18 +30,19 @@
 
 #include <vector>
 
-#define colSize 300
+//#define colSize 300
 
 class W_array : public UI_widget
 {
 private:
 	struct cell
     {
-        UI_base* content;
+        UI_base* content = 0;
 		bool snapLeft = true;
 		bool snapRight = false;
 		bool snapTop = true;
 		bool snapBottom = false;
+        Color color;
     };
 	//unsigned int x, y = 0;
 	unsigned int marginX = 2;
@@ -55,14 +56,12 @@ private:
 	vector<float> xSizeArray;
 	vector<float> ySizeArray;
 	
-	void refreshContentPos(unsigned int x, unsigned int y, unsigned int cellPosx, unsigned int cellPosy);
-	void refreshContentPos(unsigned int x, unsigned int y);
-	void refreshContentPos();
+	std::function<void(UI_base * asker, W_array* caller, unsigned int x, unsigned int y)> onClickCell = NULL;
+	UI_base * onClickCellAsker = NULL;
 	
-	virtual void PanelOnLButtonDown(int x, int y, int px, int py);
-	virtual void PanelOnLButtonUp(int x, int y);
-	virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy);
-	virtual void PanelOnKeyPressed(int key, int action);
+	void RefreshContentPos(unsigned int x, unsigned int y, unsigned int cellPosx, unsigned int cellPosy);
+	void RefreshContentPos(unsigned int x, unsigned int y);
+	void RefreshContentPos();
 
 public:
 
@@ -76,15 +75,30 @@ public:
 	/**	\brief To set the height of the object.*/
 	virtual void SetHeight(int w);
 	
-	void setContent(unsigned int x, unsigned int y, UI_base* widget, bool snapLeft = true, bool snapRight = false, bool snapTop = false, bool snapBottom = false);
-	UI_base* getContent(unsigned int x, unsigned int y);
-	void setContentPos(unsigned int x, unsigned int y, bool snapLeft, bool snapRight, bool snapTop, bool snapBottom);
-	void setLineHeight(unsigned int y, unsigned int lineHeight);
-	void setcollumnWidth(unsigned int x, unsigned int colWidth);
-	void setMargin(unsigned int marginX, unsigned int marginY, unsigned int borderX, unsigned int borderY);
-	void resize(unsigned int sizeX, unsigned int sizeY);
+	void SetContent(unsigned int x, unsigned int y, UI_base* widget, bool snapLeft = true, bool snapRight = false, bool snapTop = false, bool snapBottom = false);
+	UI_base* GetContent(unsigned int x, unsigned int y);
+	void SetContentPos(unsigned int x, unsigned int y, bool snapLeft, bool snapRight, bool snapTop, bool snapBottom);
+
+    void ClearContent();
+
+	void SetLineHeight(unsigned int y, unsigned int lineHeight);
+	void SetcollumnWidth(unsigned int x, unsigned int colWidth);
+
+    void SetCellColor(unsigned int x, unsigned int y, Color color);
+
+	void SetMargin(unsigned int marginX, unsigned int marginY, unsigned int borderX, unsigned int borderY);
+	void Resize(unsigned int sizeX, unsigned int sizeY);
+
+    unsigned int getSizeX();
+    unsigned int getSizeY();
+	
+	void OnClickCell(UI_base * asker, void (*function)(UI_base * asker, W_array* caller, unsigned int x, unsigned int y));
+	
+	UI_base* OnLButtonUp(int x, int y);
 
 	void GetSelectedList();
+
+    void Draw();
 
 };
 

@@ -67,7 +67,11 @@ struct Textures{
 struct Font{
    UI_image texture;
    GLuint fontList;
-   unsigned char charWidth;
+   unsigned char charWidth = 8;
+};
+
+struct Color{
+   float r, g, b, a;
 };
 
 class UI_widget;

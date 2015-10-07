@@ -1,0 +1,5 @@
+build/*
+bin/*
+doxygen
+.codelite
+CMakeLists.txt.user

@@ -55,6 +55,9 @@ private:
 	char filesName[256];
 	
 	bool active;
+
+    std::function<void(UI_base * asker, D_FilePicker* caller, std::list<PathElement*> selection, bool valid)> onValid = NULL;
+    UI_base * onValidAsker = NULL;
 public:
 
 	//D_FilePicker();
@@ -67,19 +70,22 @@ public:
 	static void StatButtonValid(UI_base * asker, W_button* caller);
 	static void StatMenuChange(UI_base * asker, W_subMenu* caller, unsigned char option);
 	static void StatTextboxChange(UI_base * asker, W_textbox* caller, string content);
-	static void StatFileSelectorSelect(UI_base * asker, W_fileSelector* caller);
+    static void StatFileSelectorSelect(UI_base * asker, W_fileSelector* caller, std::list<PathElement*> selection);
 	
     /**	\brief the function called by StatCallback to push children callbacks to the good instance of D_FilePicker.*/
     void ButtonValid( W_button* caller);
     void MenuChange( W_subMenu* caller, unsigned char option);
     void TextboxChange( W_textbox* caller, string content);
-    void FileSelectorSelect( W_fileSelector* caller);
+    void FileSelectorSelect( W_fileSelector* caller, std::list<PathElement*> selection);
 
 	//virtual void Callback(UI_base * pCallObject, unsigned char callIndex );
 
 	void SetSliders();
 	
 	void GetFilesNames(char* filename);
+
+    void OnValid(UI_base * asker, std::function<void(UI_base * asker, D_FilePicker* caller, std::list<PathElement*> selection, bool valid)> function);
+
 
 };
 

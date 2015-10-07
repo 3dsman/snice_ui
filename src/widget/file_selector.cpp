@@ -36,25 +36,21 @@
  * ***** END GPL LICENSE BLOCK *****
  */
 
-//#include "snice.h"
-//#include "file_system.h"
 #include "../snice_UI.h"
 #include "widget/file_selector.h"
-
-
 
 W_fileSelector::W_fileSelector(int x, int y, int w, int h, int sx, int sy, string dir, string ext, float r, float g, float b)
              :W_slidedPanel(x, y, w, h, sx, sy, r, g, b)
 {
 	array = new W_array(0,0,sx,sy,2,30, 200,15);
-	array->setMargin(0,0,10,10);
+    array->SetMargin(0,0,10,10);
 	AddChild(array);
+	array->OnClickCell(this, W_fileSelector::StatArrayClickCell);
 
 	oneFile = false;
 
 	directory = new DirInfo(dir);
-	SetExtensions(ext);
-	//ListDirectory();
+    SetExtensions(ext);
 }
 
 W_fileSelector::~W_fileSelector(){
@@ -66,102 +62,73 @@ W_fileSelector::~W_fileSelector(){
 	while(!fileList.empty()) delete fileList.front(), fileList.pop_front();
 	fileList.clear();
 
-	/*
-	if (labelList.ToFirst())
-		do
-		{
-			delete (W_label*)(labelList.GetCurrentObjectPointer());
-			labelList.RemoveCurrent();
-		}while (labelList.ToFirst());
-	*/
-		/*
-		for (std::list<int>::iterator it = fifth.begin(); it != fifth.end(); it++)
-		do
-		{
-			delete (PathElement*)(fileList.GetCurrentObjectPointer());
-			fileList.RemoveCurrent();
-		}while (fileList.ToFirst());*/	
 }
 
-void W_fileSelector::RefreshSelectedFilesText(){};
-/*
-void W_fileSelector::GenDisplayList(){
+void W_fileSelector::StatArrayClickCell(UI_base * asker, W_array* caller, unsigned int x, unsigned int y)
+{
+	(dynamic_cast<W_fileSelector*> (asker))->ArrayClickCell(caller, x, y);
+}
 
-		glNewList(displayList,GL_COMPILE);		// Start Building A List
-		
-		//draw all the label
+void W_fileSelector::ArrayClickCell( W_array* caller, unsigned int x, unsigned int y)
+{
+	if (fileList.size() > y)
+	{
+		std::list<PathElement*>::iterator iter = std::next(fileList.begin(), y);
+		if (!shift||oneFile)
+        {
+            clearSelection();
+        }
+		selected.push_back(*iter);
+        for (unsigned int i=0; i<array->getSizeX(); i++)
+            array->SetCellColor(i,y,selColor);
 
-		if(labelList.ToFirst()&&fileList.ToFirst())
-		{
-			do
-			{
-				if (((PathElement*)(fileList.GetCurrentObjectPointer()))->IsDirectory()){
-					((W_label*)(labelList.GetCurrentObjectPointer()))->SetColor(0.5f,0.0f,0.0f);
-					//glColor4f(0.5f,0.0f,0.0f,0.6f);
-				}else
-					if (((PathElement*)(fileList.GetCurrentObjectPointer()))->IsSelected()){
-						((W_label*)(labelList.GetCurrentObjectPointer()))->SetColor(0.0f,0.0f,1.0f);
-						//glColor4f(0.0f,0.0f,1.0f,0.6f);
-					}else
-					{
-						((W_label*)(labelList.GetCurrentObjectPointer()))->SetColor(0.0f,0.0f,0.0f);
-						//glColor4f(0.0f,0.0f,0.0f,0.6f);
-					}
-				((W_label*)(labelList.GetCurrentObjectPointer()))->Draw();
+		if(onChangeSelect) onChangeSelect(onChangeSelectAsker, this, selected);
+	}
+}
 
-			}while (labelList.ToNext()&&fileList.ToNext());
-		}
+void W_fileSelector::clearSelection()
+{
+    selected.clear();
 
-		glEndList();							// Done Building The Display List
-		 
-};*/
+    Color color = {.r=0,.g=0,.b=0,.a=0};
+    for (unsigned int i=0; i<array->getSizeX(); i++)
+        for (unsigned int j=0; j<array->getSizeY(); j++)
+            array->SetCellColor(i,j,color);
+}
 
-
-//void fileSelector::listDirectory(char * dir, char * ext){
 void W_fileSelector::ListDirectory(){	
-
-	// delete the labelList content
-/*
-	if (childList.ToFirst())
-		do
-		{
-			delete ((UI_base*)childList.GetCurrentObjectPointer());
-			childList.RemoveCurrent();
-			childList.ToNext();
-		}while(childList.GetCurrentObjectPointer());
-*/
+    while(!fileList.empty()) delete fileList.front(), fileList.pop_front();
+    fileList.clear();
 
 	fileList = directory->BrowseDirectory(exts);
 
-	
 	std::list<PathElement*>::iterator it;
-	array->resize(2,fileList.size());
+    array->ClearContent();
+	array->Resize(2,fileList.size());
 	unsigned int i =0;
 	for (it=fileList.begin(); it!=fileList.end(); ++it)
 	{
 		string labelText = (*it)->GetName();
-		//W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
-		W_button * button = new W_button(0, 0, 10, 0, labelText.c_str());
+        W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
 		
 		DirInfo * dir = (dynamic_cast<DirInfo*> (*it));
 		if (dir)
 		{
-				button->SetColor(0.5f,0.0f,0.0f);
-				button->SetBold(true);
+            label->SetColor(0.5f,0.0f,0.0f);
+            label->SetBold(true);
 		}
-		array->setContent(0,i,button,true,true,true,true);
+        array->SetContent(0,i,label,true,true,true,true);
 		
 		FileInfo * file = (dynamic_cast<FileInfo*> (*it));
 		if (file)
 		{
 			string labelText = file->formatdate(file->wDate);
-			//W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
-			W_button * button = new W_button(0, 0, 10, 0, labelText.c_str());
-			array->setContent(1,i,button,true,true,true,true);
+            W_label * label = new W_label(0, 0, 10, 0, labelText.c_str());
+            array->SetContent(1,i,label,true,true,true,true);
 		}
 		i++;
-	}
-	//array->setLineHeight(3,10);
+    }
+    //array->setLineHeight(3,10);
 	//array->SetWidth(500);
 	/*
 	array->setContentPos(0,0,0,0,0,0);
@@ -174,94 +141,17 @@ void W_fileSelector::ListDirectory(){
 	SetPanelSurface(array->GetWidth(), array->GetHeight());
 };
 
-void W_fileSelector::PanelOnLButtonDown(int x, int y, int px, int py){
-/*
-	int pickedIndex;
-	//pickedIndex = (x/colSize)*13 + ((-y-6)/13);
-	pickedIndex = (x/colSize)*((surfacey-6)/13) + ((-y-6)/13);
-	fileList.ToFirst();
-	if ((!(shift))  || (oneFile))
-	do{
-		((PathElement*)(fileList.GetCurrentObjectPointer()))->Selected(false);
-
-	}while (fileList.ToNext());
-
-	//pickedIndex = (x/colSize)*13 + ((-y-6)/13);
-
-	fileList.ToFirst();
-	while (pickedIndex>0)
-	{
-		fileList.ToNext();
-		pickedIndex -=1;
-
-	};
-
-	if (((PathElement*)(fileList.GetCurrentObjectPointer()))->IsDirectory())
-	{
-		char dirName[256];
-		(((PathElement*)(fileList.GetCurrentObjectPointer()))->GetName(dirName));
-
-		if (strcmp(dirName,"..\\")&&strcmp(dirName,"../"))
-		{
-			((PathElement*)(fileList.GetCurrentObjectPointer()))->GetFullName(dirName);
-			SetCurrentDirectory(dirName);
-			//listDirectory();
-		}
-		else
-		{
-			//directory->getParentDir(dirName);
-			directory->GetDirectory(dirName);
-			//strcpy(dirName,directory->getPath());
-			SetCurrentDirectory(dirName);
-			//listDirectory();
-			//listDirectory(dirName, this->ext);
-		}
-		//if (pParentUI_base)
-		//		pParentUI_base->Callback(this,1);
-	}
-	else
-	{
-		((PathElement*)(fileList.GetCurrentObjectPointer()))->Selected(true);
-		//GenDisplayList();
-		//if (pParentUI_base)
-		//	pParentUI_base->Callback(this,1);
-	}
-*/
-};
-
-
-void W_fileSelector::PanelOnLButtonUp(int x, int y){};
-	
-void W_fileSelector::PanelOnMouseMove(int x, int y, int prevx, int prevy){};
-
-void W_fileSelector::PanelOnKeyPressed(int key, int action){
-	if ((key == SNICEUI_KEY_LEFT_SHIFT)||(key == SNICEUI_KEY_RIGHT_SHIFT))
+UI_base* W_fileSelector::OnKeyPressed(int key, int action){
+	UI_base* intercept = W_slidedPanel::OnKeyPressed( key,  action);
+	if ((!intercept)&&((key == SNICEUI_KEY_LEFT_SHIFT)||(key == SNICEUI_KEY_RIGHT_SHIFT)))
 		shift = (action == SNICEUI_PRESS);
-	printf( "fileSelector::panelOnKeyPressed\n" );
+	return intercept;
 };
-/*
-void W_fileSelector::GetSelectedList(List * filenames){
 
-
-	filenames->ToFirst();
-	do
-	{	
-		delete (PathElement*)(filenames->GetCurrentObjectPointer());
-		filenames->RemoveCurrent();
-	}while (filenames->ToFirst());
-
-	std::list<PathElement*>::iterator it;
-	for (it=fileList.begin(); it!=fileList.end(); ++it)
-	{
-		if ((*it)->IsSelected()){
-		
-		    string name = (*it)->GetFullName();
-			filenames->Add(new PathElement(name));
-		};
-
-	}
-
-};*/
+std::list<PathElement*> W_fileSelector::GetSelectedList()
+{
+    return selected;
+}
 
 string W_fileSelector::GetCurrentDirectory(){
 	return directory->GetFullName();
@@ -292,4 +182,13 @@ void W_fileSelector::SetExtensions(string extensions){
 		}
 
 		ListDirectory();
+}
+
+
+
+void W_fileSelector::OnChangeSelect(UI_base * asker, std::function<void(UI_base * asker, W_fileSelector* caller, std::list<PathElement*> selection)> function)
+{
+	onChangeSelect = function;
+	onChangeSelectAsker = asker;
+
 }

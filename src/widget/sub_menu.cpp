@@ -418,9 +418,7 @@ string W_subMenu::GetString()
 			return pSelectedOption->optionSubMenu->GetString();
 		return pSelectedOption->label;
 	}
-	return (*options.begin())->label;
-	//options.ToFirst();
-	//return ((Option*)(options.GetCurrentObjectPointer()))->label;
+    return (*options.begin())->label;
 }
 
 unsigned char W_subMenu::GetOption()

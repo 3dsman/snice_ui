@@ -48,37 +48,45 @@
 
 class W_fileSelector : public W_slidedPanel
 {
-private:
+protected:
 
 	std::list<PathElement*> fileList;
+	std::list<PathElement*> selected;
 	std::vector<string> exts;
 	W_array* array = nullptr;
-	DirInfo * directory = nullptr;
-	//GLuint displayList;
+    DirInfo * directory = nullptr;
+
+    //sel options
 	bool oneFile;
 	bool shift;
+    Color selColor = {.r=0.1,.g=0.1,.b=0.1,.a=0.2};
 
-	void RefreshSelectedFilesText();
+    void clearSelection();
 	void ListDirectory();
-	virtual void PanelOnLButtonDown(int x, int y, int px, int py);
-	virtual void PanelOnLButtonUp(int x, int y);
-	virtual void PanelOnMouseMove(int x, int y, int prevx, int prevy);
-	virtual void PanelOnKeyPressed(int key, int action);
+	
+	virtual UI_base* OnKeyPressed(int key, int action);
+	
+	
+	std::function<void(UI_base * asker, W_fileSelector* caller, std::list<PathElement*> selection)> onChangeSelect = NULL;
+    UI_base * onChangeSelectAsker = NULL;
 
 public:
 
 	W_fileSelector(int x, int y, int w, int h,int sx, int sy, string dir, string ext, float red = defaultR*2.5, float green = defaultG*2.5, float blue = defaultB*2.5);
 
 	~W_fileSelector();
+	
+    static void StatArrayClickCell(UI_base * asker, W_array* caller, unsigned int x, unsigned int y);
+    void ArrayClickCell( W_array* caller, unsigned int x, unsigned int y);
 
-	//void GetSelectedList(List * filenames);
+    std::list<PathElement*> GetSelectedList();
 	string GetCurrentDirectory();
 	void SetCurrentDirectory(string dirName);
 	void SetExtensions(string extensions);
+	
+	void OnChangeSelect(UI_base * asker, std::function<void(UI_base * asker, W_fileSelector* caller, std::list<PathElement*> selection)> function);
 
-	
-	
-/*	void Draw();
+/*
 	void setColor(float r, float g, float b);
 
 	void getColor(float * r, float * g, float * b);

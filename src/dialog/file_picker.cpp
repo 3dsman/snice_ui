@@ -66,6 +66,7 @@ D_FilePicker::D_FilePicker(int x, int y, string name, string dir, std::list<stri
 
 	pFileSelector = new W_fileSelector(10, -50, 430, 180,150,160,curDir, "*.*");
 	AddChild(pFileSelector);
+    pFileSelector->OnChangeSelect(this, D_FilePicker::StatFileSelectorSelect);
 	
 	pSelectedFiles = new W_textbox(10, -235, 300, 20, "File", curDir);
 	AddChild(pSelectedFiles);
@@ -90,7 +91,7 @@ D_FilePicker::D_FilePicker(int x, int y, string name, string dir, std::list<stri
 	{
 		pFileExt->AddOption(*iter, 0);
 	}
-	pFileExt->OnPickOption(NULL,D_FilePicker::StatMenuChange);
+	pFileExt->OnPickOption(this,D_FilePicker::StatMenuChange);
 	
 	pFileExt->SetOption(0);
 	
@@ -147,24 +148,23 @@ D_FilePicker::~D_FilePicker()
 		(dynamic_cast<D_FilePicker*> (asker))->TextboxChange(caller, content);
 	}
 	
-	void D_FilePicker::StatFileSelectorSelect(UI_base * asker, W_fileSelector* caller)
+    void D_FilePicker::StatFileSelectorSelect(UI_base * asker, W_fileSelector* caller, std::list<PathElement*> selection)
 	{
-		(dynamic_cast<D_FilePicker*> (asker))->FileSelectorSelect(caller);
+        (dynamic_cast<D_FilePicker*> (asker))->FileSelectorSelect(caller, selection);
 	}
 	
     void D_FilePicker::ButtonValid( W_button* caller)
 	{
 		killMe = true;
-		//if(onClose) onClose(onCloseAsker, this);
+        if(onValid) onValid(onValidAsker, this, pFileSelector->GetSelectedList(), caller==pValid);
     	pInterceptChild = 0;
 	}
 	
     void D_FilePicker::MenuChange( W_subMenu* caller, unsigned char option)
 	{
+        pFileExt->SetLabel("File Type");
 		if (pFileSelector)
 			pFileSelector->SetExtensions( caller->GetString());
-
-		std::cout<<caller->GetString()<<std::endl;
 	}
 	
     void D_FilePicker::TextboxChange( W_textbox* caller, string content)
@@ -173,9 +173,15 @@ D_FilePicker::~D_FilePicker()
 			pFileSelector->SetCurrentDirectory(content);
 	}
 	
-    void D_FilePicker::FileSelectorSelect( W_fileSelector* caller)
+    void D_FilePicker::FileSelectorSelect( W_fileSelector* caller, std::list<PathElement*> selection)
 	{
-		
+
+        for (std::list<PathElement*>::iterator iter=selection.begin(); iter!=selection.end(); iter++)
+        {
+
+            std::cout<<(*iter)->GetName()<<" ";
+        }
+        std::cout<<std::endl;
 	}
 /*
 void D_FilePicker::Callback(UI_base * pCallObject, unsigned char callIndex )
@@ -283,3 +289,10 @@ void D_FilePicker::Callback(UI_base * pCallObject, unsigned char callIndex )
 void D_FilePicker::GetFilesNames(char* filename){
 	 strcpy(filename,pSelectedFiles->GetContent());
 	 };
+
+void D_FilePicker::OnValid(UI_base * asker, std::function<void(UI_base * asker, D_FilePicker* caller, std::list<PathElement*> selection, bool valid)> function)
+{
+    onValid = function;
+    onValidAsker = asker;
+
+}

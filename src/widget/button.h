@@ -45,8 +45,7 @@ class W_button : public UI_widget
 {
 protected:
 
-	W_label* text;
-	//char name[256];
+    W_label* text;
 
 	bool pressed;
 	bool active;
@@ -56,9 +55,6 @@ protected:
 	UI_base * onMouseOutAsker = NULL; 
 	std::function<void(UI_base * asker, W_button* caller)> onClick = NULL;
 	UI_base * onClickAsker = NULL; 
-	/*void (*onMouseOver)(W_button* caller) = NULL;
-	void (*onMouseOut)(W_button* caller) = NULL;
-	void (*onClick)(W_button* caller) = NULL;*/
 
 	void SetLabel(string l);
 

@@ -68,14 +68,7 @@ void W_menu::pickOption(W_subMenu* caller, unsigned char option)
 
 void W_menu::SetLabel(string l)
 {
-
-/*	char optionText[256];
-		strcpy(optionText,l);
-		strcat(optionText,": ");
-		strcat(optionText,childMenu->GetString());
-	*/	text->SetText(l+": "+childMenu->GetString());
-		//delete text;
-		//text = new W_label(width/2-(strlen(optionText)*7)/2-4, -2, 0, 1, optionText);
+    text->SetText(l+": "+childMenu->GetString());
 }
 
 void W_menu::AddOption(string l, W_subMenu * optionsubMenu)
@@ -91,8 +84,7 @@ UI_base* W_menu::OnLButtonDown(int x, int y)
 	{
 		childMenu->SetVisible(true);
 		UI_widget::OnLButtonDown(x, y);
-    	pInterceptChild = childMenu;
-		//pViewports->setIntercept( childMenu);
+        pInterceptChild = childMenu;
 	}
     else
     {
@@ -112,20 +104,7 @@ UI_base* W_menu::OnMouseMove(int x, int y, int prevx, int prevy)
 {
     return UI_widget::OnMouseMove(x, y, prevx, prevy);
 }
-/*
-void W_menu::Callback(UI_base * pCallObject, unsigned char callIndex )
-{
 
-	if ((childMenu == pCallObject) && (callIndex == 1))
-	{
-		SetLabel(refName);
-	}
-	if ((pParentUI_base)&&(childMenu == pCallObject))
-	{
-//		pParentUI_base->Callback(this,callIndex);
-	}
-}
-*/
 string W_menu::GetString()
 {
 	if (childMenu)

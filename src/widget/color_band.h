@@ -72,7 +72,7 @@ private:
 
 	std::list<colorbandItem*> listofcolorbandItems;
 
-	colorbandItem* pActiveColorBandItem;
+	colorbandItem* pActiveColorBandItem = 0;
 	bool draggingcolorbandItem;
 
 	void SortList();
